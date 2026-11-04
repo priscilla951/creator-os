@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Live Multi-Cam Multi-Window Workspace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .cam-viewport { aspect-ratio: 16 / 9; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Multi-Cam Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Live Multi-Cam Multi-Window Workspace</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Connect multiple webcams or mobile camera feeds simultaneously in a dual-window split workspace without expensive hardware capture cards.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-4 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-video"></i> <span data-i18n="input_heading">1. Camera Sources</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="cam_a_label">Primary Camera (Face)</label>
+            <select id="camASelect" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-3 outline-none">
+              <option value="">Loading devices...</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="cam_b_label">Secondary Camera (Desk / Overhead)</label>
+            <select id="camBSelect" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-3 outline-none">
+              <option value="">Loading devices...</option>
+            </select>
+          </div>
+
+          <button onclick="startMultiCam()" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-500/25 transition flex items-center justify-center gap-2 mt-2">
+            <i class="fa-solid fa-play"></i> <span data-i18n="start_btn">Initialize Multi-Cam Streams</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Multi-Cam Workspace Column -->
+      <div class="lg:col-span-8 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-emerald-500/35 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Dual-Window Camera Matrix</span>
+            <span id="multicamStatusBadge" class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 font-semibold">Streams Offline</span>
+          </div>
+
+          <!-- Dual Video Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="w-full cam-viewport bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden relative flex items-center justify-center">
+              <video id="videoA" autoplay playsinline muted class="w-full h-full object-cover hidden"></video>
+              <div id="placeholderA" class="absolute text-center text-slate-500 text-xs">
+                <i class="fa-solid fa-video text-2xl mb-1"></i>
+                <p>Camera A Offline</p>
+              </div>
+              <span class="absolute bottom-2 left-2 bg-black/60 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-500/30">Primary Cam</span>
+            </div>
+
+            <div class="w-full cam-viewport bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden relative flex items-center justify-center">
+              <video id="videoB" autoplay playsinline muted class="w-full h-full object-cover hidden"></video>
+              <div id="placeholderB" class="absolute text-center text-slate-500 text-xs">
+                <i class="fa-solid fa-video text-2xl mb-1"></i>
+                <p>Camera B Offline</p>
+              </div>
+              <span class="absolute bottom-2 left-2 bg-black/60 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-500/30">Secondary Cam</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/20 text-xs text-emerald-200 flex items-start gap-3">
+            <i class="fa-solid fa-lightbulb text-emerald-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Multi-Cam Hardware Tip</p>
+              <p class="text-[11px] text-emerald-300 mt-0.5" data-i18n="tip_desc">You can connect your mobile phone as a secondary overhead camera by using free web-based IP camera routing apps or USB tethering.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Live Multi-Cam Multi-Window Workspace',
+        hero_desc: 'Connect multiple webcams or mobile camera feeds simultaneously in a dual-window split workspace without expensive hardware capture cards.',
+        input_heading: '1. Camera Sources',
+        cam_a_label: 'Primary Camera (Face)',
+        cam_b_label: 'Secondary Camera (Desk / Overhead)',
+        start_btn: 'Initialize Multi-Cam Streams',
+        summary_title: 'Dual-Window Camera Matrix',
+        tip_title: 'Multi-Cam Hardware Tip',
+        tip_desc: 'You can connect your mobile phone as a secondary overhead camera by using free web-based IP camera routing apps or USB tethering.'
+      },
+      es: {
+        hero_title: 'Espacio de Trabajo Multi-Cámara en Vivo',
+        hero_desc: 'Conecta múltiples cámaras simultáneamente en un espacio de trabajo dividido sin tarjetas capturadoras.',
+        input_heading: '1. Fuentes de Cámara',
+        cam_a_label: 'Cámara Principal (Rostro)',
+        cam_b_label: 'Cámara Secundaria (Escritorio)',
+        start_btn: 'Inicializar Transmisiones Multi-Cámara',
+        summary_title: 'Matriz de Cámara de Doble Ventana',
+        tip_title: 'Consejo de Hardware',
+        tip_desc: 'Puedes conectar tu teléfono móvil como cámara cenital usando aplicaciones de transmisión IP.'
+      },
+      fr: {
+        hero_title: 'Espace de Travail Multi-Caméras en Direct',
+        hero_desc: 'Connectez plusieurs webcams simultanément dans un espace de travail divisé sans carte d’acquisition.',
+        input_heading: '1. Sources Caméra',
+        cam_a_label: 'Caméra Principale (Visage)',
+        cam_b_label: 'Caméra Secondaire (Bureau / Zénithale)',
+        start_btn: 'Initialiser les Flux Multi-Caméras',
+        summary_title: 'Matrice de Caméra Double Fenêtre',
+        tip_title: 'Conseil Matériel',
+        tip_desc: 'Vous pouvez connecter votre smartphone comme caméra secondaire via des applications de flux IP.'
+      }
+    };
+
+    let streamA = null;
+    let streamB = null;
+
+    async function loadDevices() {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(d => d.kind === 'videoinput');
+        
+        const selectA = document.getElementById('camASelect');
+        const selectB = document.getElementById('camBSelect');
+        selectA.innerHTML = '';
+        selectB.innerHTML = '';
+
+        videoDevices.forEach((device, index) => {
+          const optionA = document.createElement('option');
+          optionA.value = device.deviceId;
+          optionA.innerText = device.label || `Camera ${index + 1}`;
+          selectA.appendChild(optionA);
+
+          const optionB = document.createElement('option');
+          optionB.value = device.deviceId;
+          optionB.innerText = device.label || `Camera ${index + 1}`;
+          if (index === 1) optionB.selected = true; // Default secondary to second camera if available
+          selectB.appendChild(optionB);
+        });
+      } catch (err) {
+        console.error('Error listing video devices:', err);
+      }
+    }
+
+    async function startMultiCam() {
+      const devA = document.getElementById('camASelect').value;
+      const devB = document.getElementById('camBSelect').value;
+      const badge = document.getElementById('multicamStatusBadge');
+
+      if (streamA) streamA.getTracks().forEach(t => t.stop());
+      if (streamB) streamB.getTracks().forEach(t => t.stop());
+
+      try {
+        if (devA) {
+          streamA = await navigator.mediaDevices.getUserMedia({ video: { deviceId: devA } });
+          const vA = document.getElementById('videoA');
+          vA.srcObject = streamA;
+          vA.classList.remove('hidden');
+          document.getElementById('placeholderA').classList.add('hidden');
+        }
+
+        if (devB) {
+          streamB = await navigator.mediaDevices.getUserMedia({ video: { deviceId: devB } });
+          const vB = document.getElementById('videoB');
+          vB.srcObject = streamB;
+          vB.classList.remove('hidden');
+          document.getElementById('placeholderB').classList.add('hidden');
+        }
+
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold";
+        badge.innerText = "Dual Feeds Active";
+      } catch (err) {
+        alert('Failed to access selected camera feeds. Check permissions.');
+      }
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      loadDevices();
+    };
+  </script>
+</body>
+</html>

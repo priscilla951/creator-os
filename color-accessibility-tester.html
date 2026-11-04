@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Color Harmony & Palette Accessibility Tester</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-medium">Design Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Color Harmony & Palette Accessibility Tester</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Generate mathematical color harmonies and verify WCAG contrast compliance for creator brand assets instantly.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Input Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-palette"></i> <span data-i18n="input_heading">1. Primary Brand Color</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="hex_label">Hex Color Code</label>
+            <div class="flex gap-2">
+              <input type="color" id="colorPicker" value="#6366f1" onchange="syncColor(this.value)" class="w-12 h-11 bg-slate-900 border border-slate-700 rounded-xl cursor-pointer p-1">
+              <input type="text" id="hexInput" value="#6366f1" oninput="syncColor(this.value)" class="flex-1 bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none font-mono uppercase">
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-circle-info text-indigo-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">WCAG 2.1 Standard</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">A contrast ratio of 4.5:1 is required for normal text to pass AA compliance standards across desktop and mobile screens.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Harmonic Palette & WCAG Audit</span>
+            <span id="wcagBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">WCAG AAA Pass</span>
+          </div>
+
+          <!-- Color Swatches Grid -->
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider" data-i18n="harmonies_title">Generated Color Theory Harmonies</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="paletteContainer"></div>
+          </div>
+
+          <!-- Contrast Preview Box -->
+          <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-indigo-300 uppercase tracking-wider" data-i18n="contrast_title">Legibility & Contrast Ratio</span>
+              <span id="contrastRatioDisplay" class="text-sm font-mono font-bold text-emerald-400">12.4:1</span>
+            </div>
+            <div id="contrastPreviewBox" class="p-4 rounded-xl text-center font-bold text-sm transition-all" style="background-color: #6366f1; color: #ffffff;">
+              Sample Brand Typography on Background Card
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Color Harmony & Palette Accessibility Tester',
+        hero_desc: 'Generate mathematical color harmonies and verify WCAG contrast compliance for creator brand assets instantly.',
+        input_heading: '1. Primary Brand Color',
+        hex_label: 'Hex Color Code',
+        tip_title: 'WCAG 2.1 Standard',
+        tip_desc: 'A contrast ratio of 4.5:1 is required for normal text to pass AA compliance standards across desktop and mobile screens.',
+        summary_title: 'Harmonic Palette & WCAG Audit',
+        harmonies_title: 'Generated Color Theory Harmonies',
+        contrast_title: 'Legibility & Contrast Ratio'
+      },
+      es: {
+        hero_title: 'Probador de Armonía de Color y Accesibilidad',
+        hero_desc: 'Genera armonías de color y verifica el cumplimiento de contraste WCAG al instante.',
+        input_heading: '1. Color de Marca Primario',
+        hex_label: 'Código Hexadecimal',
+        tip_title: 'Estándar WCAG 2.1',
+        tip_desc: 'Se requiere una relación de contraste de 4.5:1 para cumplir con los estándares de legibilidad.',
+        summary_title: 'Paleta Armónica y Auditoría WCAG',
+        harmonies_title: 'Harmonías de Color Generadas',
+        contrast_title: 'Legibilidad y Contraste'
+      },
+      fr: {
+        hero_title: 'Testeur d’Harmonie des Couleurs & Accessibilité',
+        hero_desc: 'Générez des harmonies des couleurs et vérifiez la conformité du contraste WCAG.',
+        input_heading: '1. Couleur de Marque Principale',
+        hex_label: 'Code Hexadécimal',
+        tip_title: 'Standard WCAG 2.1',
+        tip_desc: 'Un rapport de contraste de 4,5:1 est requis pour les textes normaux.',
+        summary_title: 'Palette Harmonique & Audit WCAG',
+        harmonies_title: 'Harmonies de Couleurs Générées',
+        contrast_title: 'Lisibilité & Rapport de Contraste'
+      }
+    };
+
+    function hexToRgb(hex) {
+      let cleanHex = hex.replace('#', '');
+      if (cleanHex.length === 3) {
+        cleanHex = cleanHex.split('').map(c => c + c).join('');
+      }
+      const num = parseInt(cleanHex, 16);
+      return {
+        r: (num >> 16) & 255,
+        g: (num >> 8) & 255,
+        b: num & 255
+      };
+    }
+
+    function rgbToHex(r, g, b) {
+      return '#' + [r, g, b].map(x => {
+        const hex = Math.max(0, Math.min(255, Math.round(x))).toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+      }).join('').toUpperCase();
+    }
+
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+
+      if (max === min) {
+        h = s = 0;
+      } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+      }
+      return { h: h * 360, s: s * 100, l: l * 100 };
+    }
+
+    function hslToRgb(h, s, l) {
+      h /= 360; s /= 100; l /= 100;
+      let r, g, b;
+
+      if (s === 0) {
+        r = g = b = l;
+      } else {
+        const hue2rgb = (p, q, t) => {
+          if (t < 0) t += 1;
+          if (t > 1) t -= 1;
+          if (t < 1/6) return p + (q - p) * 6 * t;
+          if (t < 1/2) return q;
+          if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+          return p;
+        };
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+      }
+      return { r: r * 255, g: g * 255, b: b * 255 };
+    }
+
+    function getLuminance(r, g, b) {
+      const a = [r, g, b].map(v => {
+        v /= 255;
+        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+      });
+      return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+    }
+
+    function getContrastRatio(rgb1, rgb2) {
+      const lum1 = getLuminance(rgb1.r, rgb1.g, rgb1.b);
+      const lum2 = getLuminance(rgb2.r, rgb2.g, rgb2.b);
+      const brightest = Math.max(lum1, lum2);
+      const darkest = Math.min(lum1, lum2);
+      return (brightest + 0.05) / (darkest + 0.05);
+    }
+
+    function syncColor(val) {
+      if (!val.startsWith('#') && val.length === 6) val = '#' + val;
+      if (/^#[0-9A-F]{6}$/i.test(val)) {
+        document.getElementById('colorPicker').value = val;
+        document.getElementById('hexInput').value = val;
+        generatePalette(val);
+      }
+    }
+
+    function generatePalette(hex) {
+      const rgb = hexToRgb(hex);
+      const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+
+      const compHsl = hslToRgb((hsl.h + 180) % 360, hsl.s, hsl.l);
+      const anal1Hsl = hslToRgb((hsl.h + 30) % 360, hsl.s, hsl.l);
+      const anal2Hsl = hslToRgb((hsl.h - 30 + 360) % 360, hsl.s, hsl.l);
+
+      const palette = [
+        { name: 'Primary', hex: hex },
+        { name: 'Complementary', hex: rgbToHex(compHsl.r, compHsl.g, compHsl.b) },
+        { name: 'Analogous A', hex: rgbToHex(anal1Hsl.r, anal1Hsl.g, anal1Hsl.b) },
+        { name: 'Analogous B', hex: rgbToHex(anal2Hsl.r, anal2Hsl.g, anal2Hsl.b) }
+      ];
+
+      const container = document.getElementById('paletteContainer');
+      container.innerHTML = '';
+
+      palette.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "p-3 bg-slate-900/90 rounded-xl border border-slate-800 text-center space-y-2";
+        card.innerHTML = `
+          <div class="h-12 w-full rounded-lg border border-slate-700 shadow-inner" style="background-color: ${item.hex};"></div>
+          <div>
+            <div class="text-[10px] text-slate-400 font-bold uppercase truncate">${item.name}</div>
+            <div class="text-xs font-mono font-bold text-slate-200 mt-0.5">${item.hex}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      const contrast = getContrastRatio(rgb, { r: 255, g: 255, b: 255 });
+      const contrastDisplay = document.getElementById('contrastRatioDisplay');
+      const badge = document.getElementById('wcagBadge');
+      const previewBox = document.getElementById('contrastPreviewBox');
+
+      contrastDisplay.innerText = `${contrast.toFixed(1)}:1`;
+      previewBox.style.backgroundColor = hex;
+
+      if (contrast >= 7.0) {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold";
+        badge.innerText = "WCAG AAA Pass";
+      } else if (contrast >= 4.5) {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-semibold";
+        badge.innerText = "WCAG AA Pass";
+      } else {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-semibold";
+        badge.innerText = "WCAG Fail (<4.5:1)";
+      }
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      generatePalette('#6366f1');
+    };
+  </script>
+</body>
+</html>

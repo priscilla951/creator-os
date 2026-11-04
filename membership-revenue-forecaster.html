@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Membership & Community Revenue Forecaster</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-medium">Community Engine</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+
+        <select id="currencySelector" onchange="updateCalculations()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Membership & Tier Revenue Forecaster</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Model your Monthly Recurring Revenue (MRR), annual projections, and net income across multi-tier community platforms without paying software cut fees.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Inputs Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-users text-indigo-400"></i> <span data-i18n="input_heading">1. Membership Tier Specs</span>
+          </h2>
+
+          <!-- Tier 1 -->
+          <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
+            <span class="text-xs font-bold text-slate-300">Tier 1 (e.g. Basic / Supporter)</span>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-1">Members</label>
+                <input type="number" id="t1Members" value="250" oninput="updateCalculations()" class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 outline-none">
+              </div>
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-1">Price / Mo ($)</label>
+                <input type="number" id="t1Price" value="5" oninput="updateCalculations()" class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- Tier 2 -->
+          <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
+            <span class="text-xs font-bold text-indigo-300">Tier 2 (e.g. VIP / Insider)</span>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-1">Members</label>
+                <input type="number" id="t2Members" value="80" oninput="updateCalculations()" class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 outline-none">
+              </div>
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-1">Price / Mo ($)</label>
+                <input type="number" id="t2Price" value="25" oninput="updateCalculations()" class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- Tier 3 -->
+          <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
+            <span class="text-xs font-bold text-purple-300">Tier 3 (e.g. Mastermind / Inner Circle)</span>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-1">Members</label>
+                <input type="number" id="t3Members" value="15" oninput="updateCalculations()" class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 outline-none">
+              </div>
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-1">Price / Mo ($)</label>
+                <input type="number" id="t3Price" value="150" oninput="updateCalculations()" class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 outline-none">
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="churn_rate">Estimated Monthly Churn Rate (%)</label>
+            <input type="number" id="churnRate" value="5" step="0.5" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Recurring Revenue Summary</span>
+            <span id="totalMembersBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">345 Total Active Members</span>
+          </div>
+
+          <div class="text-center py-6 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="mrr_label">Monthly Recurring Revenue (MRR)</div>
+            <div id="mrrDisplay" class="text-5xl font-black tracking-tight text-emerald-400 mb-2">$5,500</div>
+            <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider"><span data-i18n="arr_label">Annual Recurring Revenue (ARR):</span> <span id="arrDisplay" class="text-white">$66,000</span></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="arpu_label">Average Revenue Per User (ARPU)</div>
+              <div id="arpuDisplay" class="text-xl font-bold text-indigo-300 mt-1">$15.94 / mo</div>
+            </div>
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="churn_loss_label">Monthly Churn Revenue Loss</div>
+              <div id="churnLossDisplay" class="text-xl font-bold text-red-400 mt-1">-$275 / mo</div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-lightbulb text-amber-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Community Monetization Tip</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">High-ticket Tier 3 cohorts often generate 40%+ of total MRR while keeping member management focused on a smaller group of core supporters.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Membership & Tier Revenue Forecaster",
+        hero_desc: "Model your Monthly Recurring Revenue (MRR), annual projections, and net income across multi-tier community platforms without paying software cut fees.",
+        input_heading: "1. Membership Tier Specs",
+        churn_rate: "Estimated Monthly Churn Rate (%)",
+        summary_title: "Recurring Revenue Summary",
+        mrr_label: "Monthly Recurring Revenue (MRR)",
+        arr_label: "Annual Recurring Revenue (ARR):",
+        arpu_label: "Average Revenue Per User (ARPU)",
+        churn_loss_label: "Monthly Churn Revenue Loss",
+        tip_title: "Community Monetization Tip",
+        tip_desc: "High-ticket Tier 3 cohorts often generate 40%+ of total MRR while keeping member management focused on a smaller group of core supporters."
+      },
+      es: {
+        hero_title: "Pronosticador de Ingresos de Membresías",
+        hero_desc: "Calcula tus ingresos recurrentes mensuales (MRR) y proyecciones anuales sin pagar comisiones.",
+        input_heading: "1. Especificaciones de Niveles",
+        churn_rate: "Tasa de Cancelación Mensual (%)",
+        summary_title: "Resumen de Ingresos Recurrentes",
+        mrr_label: "Ingreso Recurrente Mensual (MRR)",
+        arr_label: "Ingreso Recurrente Anual (ARR):",
+        arpu_label: "Ingreso Promedio por Usuario (ARPU)",
+        churn_loss_label: "Pérdida Mensual por Cancelación",
+        tip_title: "Consejo de Comunidad",
+        tip_desc: "Los niveles VIP suelen representar más del 40% del ingreso recurrente total."
+      },
+      fr: {
+        hero_title: "Prévisionniste de Revenus de Membres et Communautés",
+        hero_desc: "Modélisez vos revenus récurrents mensuels (MRR) et annuels sans frais de plateforme.",
+        input_heading: "1. Spécifications des Niveaux",
+        churn_rate: "Taux d'Attrition Mensuel (%)",
+        summary_title: "Résumé des Revenus Récurrents",
+        mrr_label: "Revenu Récurrent Mensuel (MRR)",
+        arr_label: "Revenu Récurrent Annuel (ARR) :",
+        arpu_label: "Revenu Moyen par Utilisateur (ARPU)",
+        churn_loss_label: "Perte Mensuelle Dûe à l'Attrition",
+        tip_title: "Conseil Communautaire",
+        tip_desc: "Les offres VIP haut de gamme représentent souvent 40%+ du MRR total."
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function updateCalculations() {
+      const t1M = parseFloat(document.getElementById('t1Members').value) || 0;
+      const t1P = parseFloat(document.getElementById('t1Price').value) || 0;
+      const t2M = parseFloat(document.getElementById('t2Members').value) || 0;
+      const t2P = parseFloat(document.getElementById('t2Price').value) || 0;
+      const t3M = parseFloat(document.getElementById('t3Members').value) || 0;
+      const t3P = parseFloat(document.getElementById('t3Price').value) || 0;
+      const churnPct = (parseFloat(document.getElementById('churnRate').value) || 0) / 100;
+
+      const totalMembers = t1M + t2M + t3M;
+      const mrrUSD = (t1M * t1P) + (t2M * t2P) + (t3M * t3P);
+      const arrUSD = mrrUSD * 12;
+      const arpuUSD = totalMembers > 0 ? (mrrUSD / totalMembers) : 0;
+      const churnLossUSD = mrrUSD * churnPct;
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('totalMembersBadge').innerText = `${totalMembers.toLocaleString()} Total Active Members`;
+      document.getElementById('mrrDisplay').innerText = `${c}${Math.round(mrrUSD * r).toLocaleString()}`;
+      document.getElementById('arrDisplay').innerText = `${c}${Math.round(arrUSD * r).toLocaleString()}`;
+      document.getElementById('arpuDisplay').innerText = `${c}${(arpuUSD * r).toFixed(2)} / mo`;
+      document.getElementById('churnLossDisplay').innerText = `-${c}${Math.round(churnLossUSD * r).toLocaleString()} / mo`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateCalculations();
+    };
+  </script>
+</body>
+</html>

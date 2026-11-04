@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Product Profit Margin Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Unit Economics</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+
+        <select id="currencySelector" onchange="updateCalculations()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Merch & Digital Product Profit Calculator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Calculate net profit margins, payment gateway processing fees, fulfillment costs, and unit break-even points across storefront releases.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div class="lg:col-span-6 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-box-open"></i> <span data-i18n="input_heading">1. Product Cost Breakdown</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="product_type">Product Type</label>
+            <select id="typeInput" onchange="toggleTypeDefaults()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="digital">Digital Product (eBook / Course / Preset)</option>
+              <option value="physical">Physical Merch (Hoodie / Mug / Apparel)</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="retail_price">Retail Price</label>
+              <input type="number" id="retailPriceInput" value="49" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="unit_cost">Cost Per Unit (COGS)</label>
+              <input type="number" id="unitCostInput" value="0" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="gateway_fee">Payment Fee (Stripe %)</label>
+              <input type="number" id="gatewayFeeInput" value="2.9" step="0.1" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="platform_cut">Platform Cut (%)</label>
+              <input type="number" id="platformCutInput" value="5.0" step="0.1" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-2">
+              <span class="text-slate-300" data-i18n="expected_units">Expected Monthly Sales Volume</span>
+              <span id="unitsDisplay" class="text-indigo-400 font-bold text-sm">150 units</span>
+            </div>
+            <input type="range" id="unitsInput" min="10" max="2000" step="10" value="150" oninput="updateCalculations()" class="w-full accent-indigo-500 bg-slate-800 h-2 rounded-lg cursor-pointer">
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-6 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/30 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Unit Profitability Summary</span>
+            <span id="marginBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">91.3% Net Margin</span>
+          </div>
+
+          <div class="text-center py-5 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="net_profit_total">Monthly Net Profit</div>
+            <div id="monthlyNetDisplay" class="text-5xl font-black tracking-tight text-emerald-400 mb-2">$6,705</div>
+            <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider"><span data-i18n="gross_revenue">Gross Revenue:</span> <span id="grossRevDisplay" class="text-white">$7,350</span></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="unit_net_profit">Net Profit / Unit</div>
+              <div id="unitProfitDisplay" class="text-xl font-black text-white">$44.70</div>
+            </div>
+            <div class="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="total_fees">Total Fees & COGS / Unit</div>
+              <div id="unitFeesDisplay" class="text-xl font-bold text-rose-400">$4.30</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Merch & Digital Product Profit Calculator",
+        hero_desc: "Calculate net profit margins, payment gateway processing fees, fulfillment costs, and unit break-even points across storefront releases.",
+        input_heading: "1. Product Cost Breakdown",
+        product_type: "Product Type",
+        retail_price: "Retail Price",
+        unit_cost: "Cost Per Unit (COGS)",
+        gateway_fee: "Payment Fee (Stripe %)",
+        platform_cut: "Platform Cut (%)",
+        expected_units: "Expected Monthly Sales Volume",
+        summary_title: "Unit Profitability Summary",
+        net_profit_total: "Monthly Net Profit",
+        gross_revenue: "Gross Revenue:",
+        unit_net_profit: "Net Profit / Unit",
+        total_fees: "Total Fees & COGS / Unit"
+      },
+      es: {
+        hero_title: "Calculadora de Margen de Productos",
+        hero_desc: "Calcule márgenes netos, tarifas de procesamiento de pagos y costos de logística.",
+        input_heading: "1. Desglose de Costos de Producto",
+        product_type: "Tipo de Producto",
+        retail_price: "Precio de Venta",
+        unit_cost: "Costo por Unidad",
+        gateway_fee: "Comisión de Pago (%)",
+        platform_cut: "Comisión de Plataforma (%)",
+        expected_units: "Volumen Mensual de Ventas",
+        summary_title: "Resumen de Rentabilidad",
+        net_profit_total: "Ganancia Neta Mensual",
+        gross_revenue: "Ingresos Brutos:",
+        unit_net_profit: "Ganancia Neta / Unidad",
+        total_fees: "Tarifas y Costos / Unidad"
+      },
+      fr: {
+        hero_title: "Calculateur de Marge sur les Produits",
+        hero_desc: "Calculez les marges nettes, les frais de paiement et les coûts de livraison.",
+        input_heading: "1. Répartition des Coûts",
+        product_type: "Type de Produit",
+        retail_price: "Prix de Vente",
+        unit_cost: "Coût Unitaire",
+        gateway_fee: "Frais de Paiement (%)",
+        platform_cut: "Part de la Plateforme (%)",
+        expected_units: "Volume de Ventes Mensuel",
+        summary_title: "Résumé de Rentabilité",
+        net_profit_total: "Bénéfice Net Mensuel",
+        gross_revenue: "Chiffre d'Affaires Brut :",
+        unit_net_profit: "Bénéfice Net / Unité",
+        total_fees: "Frais & Coûts / Unité"
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function toggleTypeDefaults() {
+      const type = document.getElementById('typeInput').value;
+      if (type === 'digital') {
+        document.getElementById('unitCostInput').value = '0';
+        document.getElementById('platformCutInput').value = '5.0';
+      } else {
+        document.getElementById('unitCostInput').value = '18';
+        document.getElementById('platformCutInput').value = '10.0';
+      }
+      updateCalculations();
+    }
+
+    function updateCalculations() {
+      const units = parseInt(document.getElementById('unitsInput').value) || 0;
+      const priceUSD = parseFloat(document.getElementById('retailPriceInput').value) || 0;
+      const cogsUSD = parseFloat(document.getElementById('unitCostInput').value) || 0;
+      const gatewayPct = (parseFloat(document.getElementById('gatewayFeeInput').value) || 0) / 100;
+      const platformPct = (parseFloat(document.getElementById('platformCutInput').value) || 0) / 100;
+
+      document.getElementById('unitsDisplay').innerText = `${units} units`;
+
+      const gatewayFeeUSD = (priceUSD * gatewayPct) + 0.30;
+      const platformFeeUSD = priceUSD * platformPct;
+      const totalFeesPerUnitUSD = cogsUSD + gatewayFeeUSD + platformFeeUSD;
+      const unitProfitUSD = Math.max(0, priceUSD - totalFeesPerUnitUSD);
+
+      const marginPct = priceUSD > 0 ? ((unitProfitUSD / priceUSD) * 100).toFixed(1) : 0;
+      const grossRevUSD = priceUSD * units;
+      const monthlyNetUSD = unitProfitUSD * units;
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('monthlyNetDisplay').innerText = `${c}${Math.round(monthlyNetUSD * r).toLocaleString()}`;
+      document.getElementById('grossRevDisplay').innerText = `${c}${Math.round(grossRevUSD * r).toLocaleString()}`;
+      document.getElementById('unitProfitDisplay').innerText = `${c}${(unitProfitUSD * r).toFixed(2)}`;
+      document.getElementById('unitFeesDisplay').innerText = `${c}${(totalFeesPerUnitUSD * r).toFixed(2)}`;
+      document.getElementById('marginBadge').innerText = `${marginPct}% Net Margin`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateCalculations();
+    };
+  </script>
+</body>
+</html>

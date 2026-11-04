@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — YouTube Thumbnail Silhouette & Contrast Inspector</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .thumbnail-box { aspect-ratio: 16 / 9; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-pink-500/10 text-pink-400 border border-pink-500/20 font-medium">CTR Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Thumbnail Silhouette & Contrast Inspector</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Test your YouTube video thumbnails for mobile readability, contrast, and visual silhouette clarity at small scale.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-4 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-pink-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-image"></i> <span data-i18n="input_heading">1. Thumbnail Upload</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="upload_label">Upload Thumbnail (1280x720)</label>
+            <input type="file" id="thumbUpload" accept="image/*" onchange="loadThumbnail(event)" class="w-full bg-slate-900 border border-slate-700 text-slate-400 text-xs rounded-lg p-2.5 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-pink-600 file:text-white hover:file:bg-pink-500 cursor-pointer">
+          </div>
+
+          <div class="space-y-3 pt-2">
+            <label class="block text-xs font-semibold text-slate-300" data-i18n="filters_label">Inspection Filters</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="applyFilter('normal')" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition">Normal</button>
+              <button onclick="applyFilter('grayscale')" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition">Grayscale</button>
+              <button onclick="applyFilter('blur')" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition">Mobile Blur</button>
+              <button onclick="applyFilter('contrast')" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition">High Contrast</button>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-pink-950/40 border border-pink-500/20 text-xs text-pink-200 flex items-start gap-3">
+            <i class="fa-solid fa-lightbulb text-pink-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">The Blind Test</p>
+              <p class="text-[11px] text-pink-300 mt-0.5" data-i18n="tip_desc">If your thumbnail subject and text are not instantly clear under Mobile Blur or Grayscale, your CTR will drop on small mobile screens.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Column -->
+      <div class="lg:col-span-8 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-pink-500/35 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Thumbnail Inspector Viewport</span>
+            <span id="thumbStatusBadge" class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 font-semibold">Awaiting Upload</span>
+          </div>
+
+          <!-- Thumbnail Display Box -->
+          <div class="w-full thumbnail-box bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden relative flex items-center justify-center shadow-2xl">
+            <img id="thumbImage" src="" class="w-full h-full object-cover hidden transition-all duration-300">
+            <div id="thumbPlaceholder" class="absolute text-center text-slate-500 text-xs p-6">
+              <i class="fa-solid fa-photo-film text-3xl mb-2"></i>
+              <p>Upload a thumbnail image to begin visual inspection</p>
+            </div>
+          </div>
+
+          <!-- Mobile Feed Simulation Scale -->
+          <div class="flex items-center justify-between pt-2">
+            <span class="text-xs font-semibold text-slate-400" data-i18n="scale_label">Simulated Mobile Feed Size:</span>
+            <div class="flex gap-2">
+              <button onclick="setPreviewSize('large')" class="px-3 py-1 bg-slate-800 text-xs font-bold text-slate-300 rounded-lg">Desktop</button>
+              <button onclick="setPreviewSize('small')" class="px-3 py-1 bg-slate-800 text-xs font-bold text-slate-300 rounded-lg">Mobile Phone</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Thumbnail Silhouette & Contrast Inspector',
+        hero_desc: 'Test your YouTube video thumbnails for mobile readability, contrast, and visual silhouette clarity at small scale.',
+        input_heading: '1. Thumbnail Upload',
+        upload_label: 'Upload Thumbnail (1280x720)',
+        filters_label: 'Inspection Filters',
+        tip_title: 'The Blind Test',
+        tip_desc: 'If your thumbnail subject and text are not instantly clear under Mobile Blur or Grayscale, your CTR will drop on small mobile screens.',
+        summary_title: 'Thumbnail Inspector Viewport',
+        scale_label: 'Simulated Mobile Feed Size:'
+      },
+      es: {
+        hero_title: 'Inspector de Silueta y Contraste de Miniaturas',
+        hero_desc: 'Prueba la legibilidad de tus miniaturas de YouTube en dispositivos móviles.',
+        input_heading: '1. Subir Miniatura',
+        upload_label: 'Subir Miniatura (1280x720)',
+        filters_label: 'Filtros de Inspección',
+        tip_title: 'Prueba de Visibilidad',
+        tip_desc: 'Si el sujeto y el texto no son claros en escala de grises, tu CTR disminuirá.',
+        summary_title: 'Vista Previa de Miniatura',
+        scale_label: 'Tamaño Simulado:'
+      },
+      fr: {
+        hero_title: 'Inspecteur de Silhouette & Contraste pour Miniatures',
+        hero_desc: 'Testez la lisibilité de vos miniatures YouTube sur les petits écrans mobiles.',
+        input_heading: '1. Télécharger une Miniature',
+        upload_label: 'Télécharger (1280x720)',
+        filters_label: 'Filtres d’Inspection',
+        tip_title: 'Le Test de l’Aveugle',
+        tip_desc: 'Si le sujet n’est pas instantanément clair en nuances de gris, votre taux de clics baissera.',
+        summary_title: 'Aperçu de la Miniature',
+        scale_label: 'Taille Simulée :'
+      }
+    };
+
+    function loadThumbnail(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        const img = document.getElementById('thumbImage');
+        img.src = url;
+        img.classList.remove('hidden');
+        document.getElementById('thumbPlaceholder').classList.add('hidden');
+
+        const badge = document.getElementById('thumbStatusBadge');
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-pink-500/10 text-pink-400 border border-pink-500/20 font-semibold";
+        badge.innerText = "Thumbnail Loaded";
+      }
+    }
+
+    function applyFilter(filterType) {
+      const img = document.getElementById('thumbImage');
+      if (img.classList.contains('hidden')) return;
+
+      if (filterType === 'normal') {
+        img.style.filter = 'none';
+      } else if (filterType === 'grayscale') {
+        img.style.filter = 'grayscale(100%)';
+      } else if (filterType === 'blur') {
+        img.style.filter = 'blur(3px)';
+      } else if (filterType === 'contrast') {
+        img.style.filter = 'contrast(200%) saturate(150%)';
+      }
+    }
+
+    function setPreviewSize(size) {
+      const container = document.querySelector('.thumbnail-box');
+      if (size === 'small') {
+        container.style.maxWidth = '280px';
+        container.style.margin = '0 auto';
+      } else {
+        container.style.maxWidth = '100%';
+      }
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+    };
+  </script>
+</body>
+</html>

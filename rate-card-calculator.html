@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Sponsorship Rate Card Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-medium">Finance Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="mb-8 text-center">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Sponsorship Rate Card & Deal Calculator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Calculate professional brand deal pricing based on your average video views and engagement metrics.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+      
+      <!-- Input Parameters -->
+      <div class="glass-card p-6 rounded-2xl space-y-5">
+        <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+          <i class="fa-solid fa-chart-line"></i> <span data-i18n="metrics_heading">Channel Metrics</span>
+        </h2>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="views_label">Average Views Per Video (30-Day Avg)</label>
+          <input type="number" id="avgViews" value="25000" oninput="calculateRates()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none font-mono">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="eng_label">Audience Engagement Rate (%)</label>
+          <input type="number" id="engRate" value="4.5" step="0.1" oninput="calculateRates()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none font-mono">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="niche_label">Content Niche Multiplier</label>
+          <select id="nicheMultiplier" onchange="calculateRates()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            <option value="1.0" data-i18n="niche_1">General Lifestyle / Vlogs (1.0x)</option>
+            <option value="1.3" data-i18n="niche_2">Gaming & Entertainment (1.3x)</option>
+            <option value="1.6" data-i18n="niche_3">Tech, Software & Gadgets (1.6x)</option>
+            <option value="2.0" data-i18n="niche_4">Finance, Crypto & Business (2.0x)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Calculated Rate Card Output -->
+      <div class="glass-card p-6 rounded-2xl border-indigo-500/35 shadow-2xl space-y-6">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="output_heading">Estimated Brand Pricing</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold" data-i18n="badge_standard">Market Standard</span>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex justify-between items-center p-4 bg-slate-900 rounded-xl border border-slate-800">
+            <div>
+              <p class="text-xs font-bold text-slate-300" data-i18n="deal_1_title">Dedicated YouTube / Video Integration</p>
+              <p class="text-[10px] text-slate-500" data-i18n="deal_1_desc">Full dedicated segment or video review</p>
+            </div>
+            <span id="dedicatedPrice" class="text-lg font-mono font-extrabold text-indigo-400">$1,250</span>
+          </div>
+
+          <div class="flex justify-between items-center p-4 bg-slate-900 rounded-xl border border-slate-800">
+            <div>
+              <p class="text-xs font-bold text-slate-300" data-i18n="deal_2_title">Integrated Mention (60 Seconds)</p>
+              <p class="text-[10px] text-slate-500" data-i18n="deal_2_desc">Mid-roll or sponsor shoutout</p>
+            </div>
+            <span id="integratedPrice" class="text-lg font-mono font-extrabold text-indigo-400">$625</span>
+          </div>
+
+          <div class="flex justify-between items-center p-4 bg-slate-900 rounded-xl border border-slate-800">
+            <div>
+              <p class="text-xs font-bold text-slate-300" data-i18n="deal_3_title">Shorts / Reels / TikTok Post</p>
+              <p class="text-[10px] text-slate-500" data-i18n="deal_3_desc">Standalone vertical format clip</p>
+            </div>
+            <span id="shortsPrice" class="text-lg font-mono font-extrabold text-indigo-400">$450</span>
+          </div>
+        </div>
+
+        <button onclick="alert('Rate card values copied to clipboard!')" class="w-full py-3.5 rounded-xl accent-gradient text-white font-bold text-sm shadow-lg shadow-indigo-500/20 hover:opacity-95 transition flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-copy"></i> <span data-i18n="copy_btn">Copy Rate Card Summary</span>
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Sponsorship Rate Card & Deal Calculator',
+        hero_desc: 'Calculate professional brand deal pricing based on your average video views and engagement metrics.',
+        metrics_heading: 'Channel Metrics',
+        views_label: 'Average Views Per Video (30-Day Avg)',
+        eng_label: 'Audience Engagement Rate (%)',
+        niche_label: 'Content Niche Multiplier',
+        niche_1: 'General Lifestyle / Vlogs (1.0x)',
+        niche_2: 'Gaming & Entertainment (1.3x)',
+        niche_3: 'Tech, Software & Gadgets (1.6x)',
+        niche_4: 'Finance, Crypto & Business (2.0x)',
+        output_heading: 'Estimated Brand Pricing',
+        badge_standard: 'Market Standard',
+        deal_1_title: 'Dedicated YouTube / Video Integration',
+        deal_1_desc: 'Full dedicated segment or video review',
+        deal_2_title: 'Integrated Mention (60 Seconds)',
+        deal_2_desc: 'Mid-roll or sponsor shoutout',
+        deal_3_title: 'Shorts / Reels / TikTok Post',
+        deal_3_desc: 'Standalone vertical format clip',
+        copy_btn: 'Copy Rate Card Summary'
+      },
+      es: {
+        hero_title: 'Calculadora de Tarifas y Patrocinios',
+        hero_desc: 'Calcula precios profesionales para acuerdos con marcas según tus visualizaciones y métricas.',
+        metrics_heading: 'Métricas del Canal',
+        views_label: 'Visualizaciones Promedio por Video',
+        eng_label: 'Tasa de Interacción de la Audiencia (%)',
+        niche_label: 'Multiplicador de Nicho',
+        niche_1: 'Estilo de Vida / Vlogs (1.0x)',
+        niche_2: 'Juegos y Entretenimiento (1.3x)',
+        niche_3: 'Tecnología y Gadgets (1.6x)',
+        niche_4: 'Finanzas y Negocios (2.0x)',
+        output_heading: 'Precios Estimados',
+        badge_standard: 'Estándar de Mercado',
+        deal_1_title: 'Integración Dedicada en YouTube',
+        deal_1_desc: 'Segmento completo dedicado o reseña',
+        deal_2_title: 'Mención Integrada (60 Segundos)',
+        deal_2_desc: 'Mención publicitaria a mitad de video',
+        deal_3_title: 'Publicación en Shorts / Reels / TikTok',
+        deal_3_desc: 'Clip vertical independiente',
+        copy_btn: 'Copiar Resumen de Tarifas'
+      },
+      fr: {
+        hero_title: 'Calculateur de Tarifs & Partenariats',
+        hero_desc: 'Calculez des tarifs professionnels de parrainage de marque basés sur vos vues et votre engagement.',
+        metrics_heading: 'Métriques de la Chaîne',
+        views_label: 'Vues Moyennes par Vidéo',
+        eng_label: 'Taux d’Engagement de l’Audience (%)',
+        niche_label: 'Multiplicateur de Niche',
+        niche_1: 'Lifestyle / Vlogs (1.0x)',
+        niche_2: 'Gaming & Divertissement (1.3x)',
+        niche_3: 'Tech, Logiciels & Gadgets (1.6x)',
+        niche_4: 'Finance, Crypto & Business (2.0x)',
+        output_heading: 'Tarification Estimée',
+        badge_standard: 'Standard du Marché',
+        deal_1_title: 'Intégration Vidéo Dédiée sur YouTube',
+        deal_1_desc: 'Segment dédié ou test complet',
+        deal_2_title: 'Mention Intégrée (60 Secondes)',
+        deal_2_desc: 'Placement publicitaire au milieu',
+        deal_3_title: 'Publication Shorts / Reels / TikTok',
+        deal_3_desc: 'Clip vertical autonome',
+        copy_btn: 'Copier le Résumé des Tarifs'
+      }
+    };
+
+    function calculateRates() {
+      const views = parseFloat(document.getElementById('avgViews').value) || 0;
+      const eng = parseFloat(document.getElementById('engRate').value) || 1;
+      const niche = parseFloat(document.getElementById('nicheMultiplier').value) || 1.0;
+
+      const baseCPM = 35; 
+      const multiplier = (eng / 4.0) * niche;
+
+      const dedicated = (views / 1000) * baseCPM * multiplier;
+      const integrated = dedicated * 0.5;
+      const shorts = dedicated * 0.35;
+
+      document.getElementById('dedicatedPrice').innerText = `$${Math.round(dedicated).toLocaleString()}`;
+      document.getElementById('integratedPrice').innerText = `$${Math.round(integrated).toLocaleString()}`;
+      document.getElementById('shortsPrice').innerText = `$${Math.round(shorts).toLocaleString()}`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      calculateRates();
+    };
+  </script>
+</body>
+</html>

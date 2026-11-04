@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Complete 60-Tool Suite</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .tool-card:hover { transform: translateY(-3px); border-color: rgba(99, 102, 241, 0.4); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <!-- Header Hub Navigation -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-medium">60/60 Descending</span>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 text-center">
+    <div class="max-w-3xl mx-auto space-y-4">
+      <span class="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-xs font-bold tracking-wide uppercase">
+        🚀 Enterprise Client-Side Suite
+      </span>
+      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight">
+        The Ultimate <span class="text-transparent bg-clip-text accent-gradient">Creator OS</span> Command Center
+      </h1>
+      <p class="text-slate-400 text-base sm:text-lg">
+        All 60 zero-dependency web utilities, streaming labs, financial calculators, and viral design engines ordered from #60 down to #1.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Tools Grid Hub (Descending Order: 60 -> 1) -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-12">
+    
+    <!-- SECTION: Tools 60 down to 50 -->
+    <div class="space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h2 class="text-lg font-bold text-slate-200 flex items-center gap-2">
+          <i class="fa-solid fa-fire text-pink-400"></i> Advanced Labs & Viral Engines (Tools 60–50)
+        </h2>
+        <span class="text-xs font-mono text-slate-500">Descending Order</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="master-hook-generator.html" class="tool-card glass-card p-6 rounded-2xl transition space-y-3 block">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-wand-magic-sparkles text-indigo-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">Tool #60</span></div>
+          <h3 class="text-base font-bold text-slate-100">Master Viral Hook & Idea Generator</h3>
+          <p class="text-xs text-slate-400">Generate high-retention video hooks, titles, and viral content concepts.</p>
+        </a>
+
+        <a href="contract-invoice-generator.html" class="tool-card glass-card p-6 rounded-2xl transition space-y-3 block">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-file-contract text-emerald-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Tool #59</span></div>
+          <h3 class="text-base font-bold text-slate-100">Contract & Invoice Generator</h3>
+          <p class="text-xs text-slate-400">Draft professional brand partnership agreements and invoices instantly.</p>
+        </a>
+
+        <a href="teleprompter-studio.html" class="tool-card glass-card p-6 rounded-2xl transition space-y-3 block">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-file-lines text-cyan-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">Tool #58</span></div>
+          <h3 class="text-base font-bold text-slate-100">Live Teleprompter Studio</h3>
+          <p class="text-xs text-slate-400">Scrolling prompter with word-count duration estimates and mirror display mode.</p>
+        </a>
+
+        <a href="thumbnail-contrast-inspector.html" class="tool-card glass-card p-6 rounded-2xl transition space-y-3 block">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-image text-pink-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-pink-500/20 text-pink-300">Tool #57</span></div>
+          <h3 class="text-base font-bold text-slate-100">Thumbnail Contrast Inspector</h3>
+          <p class="text-xs text-slate-400">Test YouTube thumbnails for mobile readability, grayscale, and silhouette clarity.</p>
+        </a>
+
+        <a href="bio-link-rotator.html" class="tool-card glass-card p-6 rounded-2xl transition space-y-3 block">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-link text-indigo-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">Tool #56</span></div>
+          <h3 class="text-base font-bold text-slate-100">Bio Link Rotator & UTM Generator</h3>
+          <p class="text-xs text-slate-400">Build mobile bio links with automated traffic tracking UTM parameters.</p>
+        </a>
+
+        <a href="rate-card-calculator.html" class="tool-card glass-card p-6 rounded-2xl transition space-y-3 block">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-chart-line text-emerald-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Tool #55</span></div>
+          <h3 class="text-base font-bold text-slate-100">Sponsorship Rate Card Calculator</h3>
+          <p class="text-xs text-slate-400">Calculate professional brand deal pricing based on views and engagement.</p>
+        </a>
+
+        <a href="streamer-soundboard.html" class="tool-card glass-card p-6 rounded-2xl transition space-y-3 block">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-volume-high text-cyan-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">Tool #54</span></div>
+          <h3 class="text-base font-bold text-slate-100">Live Stream Soundboard</h3>
+          <p class="text-xs text-slate-400">Trigger custom sound effects and meme audio pads via keyboard hotkeys.</p>
+        </a>
+
+        <a href="retention-speed-ramper.html" class="tool-card glass-card p-6 rounded-2xl transition space-y-3 block">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-gauge-high text-indigo-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">Tool #53</span></div>
+          <h3 class="text-base font-bold text-slate-100">Retention Speed-Ramp Editor</h3>
+          <p class="text-xs text-slate-400">Automatically speed-ramp silent pauses in video clips to maximize viewer retention.</p>
+        </a>
+
+        <a href="vtuber-puppet-animator.html" class="tool-card glass-card p-6 rounded-2xl transition space-y-3 block">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-masks-theater text-pink-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-pink-500/20 text-pink-300">Tool #52</span></div>
+          <h3 class="text-base font-bold text-slate-100">VTuber & Faceless Puppet Animator</h3>
+          <p class="text-xs text-slate-400">Animate static avatars and 2D logos in real time using microphone voice volume.</p>
+        </a>
+
+        <a href="carousel-splitter.html" class="tool-card glass-card p-6 rounded-2xl transition space-y-3 block">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-scissors text-purple-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">Tool #51</span></div>
+          <h3 class="text-base font-bold text-slate-100">Multi-Platform Carousel Splitter</h3>
+          <p class="text-xs text-slate-400">Slice long vertical infographics into mobile 1:1 or 4:5 swipeable carousel slides.</p>
+        </a>
+
+        <a href="instant-replay-buffer.html" class="tool-card glass-card p-6 rounded-2xl transition space-y-3 block">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-clapperboard text-red-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-red-500/20 text-red-300">Tool #50</span></div>
+          <h3 class="text-base font-bold text-slate-100">Live Instant Replay Buffer Trigger</h3>
+          <p class="text-xs text-slate-400">Stream desktop video to a RAM rolling memory buffer for 15-second clipping.</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- SECTION: Tools 49 down to 1 (Foundational Suite) -->
+    <div class="space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h2 class="text-lg font-bold text-slate-200 flex items-center gap-2">
+          <i class="fa-solid fa-layer-group text-indigo-400"></i> Core Creator Suite & Financial Utilities (Tools 49–1)
+        </h2>
+        <span class="text-xs font-mono text-slate-500">Foundational Modules</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass-card p-6 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-shield-halved text-emerald-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Tools #49–#36</span></div>
+          <h3 class="text-base font-bold text-slate-100">Security & Growth Utilities</h3>
+          <p class="text-xs text-slate-400">Network packet audit tools, URL state serialization, hardware benchmarks, and SEO checkers.</p>
+        </div>
+
+        <div class="glass-card p-6 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-video text-pink-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-pink-500/20 text-pink-300">Tools #35–#21</span></div>
+          <h3 class="text-base font-bold text-slate-100">Media & Video Production Labs</h3>
+          <p class="text-xs text-slate-400">Audio sync routers, waveform analyzers, canvas multiplexers, and frame renderers.</p>
+        </div>
+
+        <div class="glass-card p-6 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between"><i class="fa-solid fa-calculator text-indigo-400 text-lg"></i><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">Tools #20–#1</span></div>
+          <h3 class="text-base font-bold text-slate-100">Financial & Business Calculators</h3>
+          <p class="text-xs text-slate-400">Sponsorship estimators, tax take-home calculators, retainer math, and currency converters.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-slate-800 py-8 text-center text-xs text-slate-500">
+    CreatorOS Studio Architecture • Descending Order Active (60 to 1)
+  </footer>
+
+  <script>
+    function changeLanguage(langKey) {
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Sponsorship Pitch & Outreach Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .text-gradient { background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <!-- Header Navigation -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-medium">Brand Relations</span>
+        </div>
+      </a>
+      
+      <!-- Global Controls -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Hero Banner -->
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Sponsorship Pitch & Outreach Generator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Draft compelling, data-backed cold emails and brand collaboration proposals tailored to your metrics and target partners.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-paper-plane"></i> <span data-i18n="input_heading">1. Pitch Inputs</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="brand_name">Target Brand Name</label>
+            <input type="text" id="brandInput" value="Notion" oninput="generatePitch()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="channel_niche">Primary Niche / Category</label>
+            <input type="text" id="nicheInput" value="Tech & Productivity" oninput="generatePitch()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="audience_size">Audience Reach</label>
+              <input type="text" id="reachInput" value="45,000 subscribers" oninput="generatePitch()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="avg_views">Avg Views per Video</label>
+              <input type="text" id="viewsInput" value="12,500 views" oninput="generatePitch()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="pitch_angle">Partnership Goal / Angle</label>
+            <select id="angleSelect" onchange="generatePitch()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="dedicated" selected>Dedicated Sponsored Video</option>
+              <option value="integration">60-Second Mid-Roll Integration</option>
+              <option value="multi_platform">Multi-Platform Bundle (YouTube + Shorts)</option>
+            </select>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Output Preview Column -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/30 sticky top-20 shadow-2xl space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="preview_title">Generated Cold Outreach Template</span>
+            <button onclick="copyToClipboard()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-1.5">
+              <i class="fa-regular fa-copy"></i> <span id="copyBtnText" data-i18n="copy_btn">Copy Pitch</span>
+            </button>
+          </div>
+
+          <div class="bg-slate-900/90 rounded-xl p-5 border border-slate-800 font-mono text-xs text-slate-300 leading-relaxed whitespace-pre-wrap selection:bg-indigo-500 selection:text-white" id="pitchOutput">
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-2.5">
+            <i class="fa-solid fa-paper-plane text-indigo-400 mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="pro_tip_title">Outreach Best Practice</p>
+              <p class="text-[11px] text-indigo-300" data-i18n="pro_tip_desc">Always address the email to the Influencer Marketing Manager or Brand Partnerships Lead on LinkedIn for 3x higher response rates.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Sponsorship Pitch & Outreach Generator",
+        hero_desc: "Draft compelling, data-backed cold emails and brand collaboration proposals tailored to your metrics and target partners.",
+        input_heading: "1. Pitch Inputs",
+        brand_name: "Target Brand Name",
+        channel_niche: "Primary Niche / Category",
+        audience_size: "Audience Reach",
+        avg_views: "Avg Views per Video",
+        pitch_angle: "Partnership Goal / Angle",
+        preview_title: "Generated Cold Outreach Template",
+        copy_btn: "Copy Pitch",
+        pro_tip_title: "Outreach Best Practice",
+        pro_tip_desc: "Always address the email to the Influencer Marketing Manager or Brand Partnerships Lead on LinkedIn for 3x higher response rates."
+      },
+      es: {
+        hero_title: "Generador de Propuestas de Patrocinio",
+        hero_desc: "Redacte correos electrónicos convincentes respaldados por datos para colaboraciones con marcas.",
+        input_heading: "1. Datos de la Propuesta",
+        brand_name: "Nombre de la Marca Objetiva",
+        channel_niche: "Nicho Principal / Categoría",
+        audience_size: "Alcance de la Audiencia",
+        avg_views: "Promedio de Vistas",
+        pitch_angle: "Ángulo de la Asociación",
+        preview_title: "Plantilla de Correo Generada",
+        copy_btn: "Copiar Propuesta",
+        pro_tip_title: "Mejor Práctica de Contacto",
+        pro_tip_desc: "Dirija siempre el correo al Gerente de Marketing de Influencers en LinkedIn para obtener el triple de respuestas."
+      },
+      fr: {
+        hero_title: "Générateur de Pitchs de Partenariat",
+        hero_desc: "Rédigez des e-mails d'approche convaincants et fondés sur des données pour vos partenariats.",
+        input_heading: "1. Entrées du Pitch",
+        brand_name: "Nom de la Marque Cible",
+        channel_niche: "Niche Principale / Catégorie",
+        audience_size: "Portée de l'Audience",
+        avg_views: "Vues Moyennes par Vidéo",
+        pitch_angle: "Objectif du Partenariat",
+        preview_title: "Modèle d'E-mail Généré",
+        copy_btn: "Copier le Pitch",
+        pro_tip_title: "Bonne Pratique d'Approche",
+        pro_tip_desc: "Adressez toujours l'e-mail au Responsable Marketing d'Influence sur LinkedIn pour obtenir 3x plus de réponses."
+      }
+    };
+
+    function generatePitch() {
+      const brand = document.getElementById('brandInput').value || 'Brand';
+      const niche = document.getElementById('nicheInput').value || 'content';
+      const reach = document.getElementById('reachInput').value || 'your audience';
+      const views = document.getElementById('viewsInput').value || 'high engagement';
+      const angleType = document.getElementById('angleSelect').value;
+
+      let formatText = "a dedicated integrated segment";
+      if (angleType === 'dedicated') formatText = "a full dedicated spotlight feature";
+      if (angleType === 'multi_platform') formatText = "a multi-platform campaign package across YouTube & Short-form video";
+
+      const template = `Subject: Collaboration Proposal: ${brand} x Creator OS Studio (${reach})
+
+Hi ${brand} Marketing Team,
+
+I'm a long-time advocate of ${brand} and produce content in the ${niche} space for a growing community of ${reach}, averaging ${views} per release.
+
+Given our audience's strong interest in tools that streamline their workflow, I would love to partner with ${brand} for ${formatText} in an upcoming content release.
+
+Key Audience Metrics:
+• Total Reach: ${reach}
+• Avg Video Retention/Views: ${views}
+• Audience Primary Niche: ${niche}
+
+We can also include 30-day digital ad usage rights and tracking link integration to ensure measurable campaign ROI for ${brand}.
+
+Are you open to reviewing our media kit and rate card for next month's production schedule?
+
+Best regards,
+
+Creator OS Studio
+[Your Channel/Portfolio Link]`;
+
+      document.getElementById('pitchOutput').innerText = template;
+    }
+
+    function copyToClipboard() {
+      const pitchText = document.getElementById('pitchOutput').innerText;
+      navigator.clipboard.writeText(pitchText);
+      const btnText = document.getElementById('copyBtnText');
+      btnText.innerText = 'Copied!';
+      setTimeout(() => {
+        btnText.innerText = i18n[localStorage.getItem('creator_os_lang') || 'en'].copy_btn;
+      }, 2000);
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+      generatePitch();
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+    };
+  </script>
+</body>
+</html>

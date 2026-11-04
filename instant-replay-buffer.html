@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Live Instant Replay Buffer Trigger</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .preview-container { aspect-ratio: 16 / 9; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-medium">Replay Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Live "Instant Replay" Buffer Trigger</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Stream your desktop or gameplay screen into a rolling browser memory buffer to clip the last 15 seconds instantly without heavy background software.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-bolt"></i> <span data-i18n="input_heading">1. Buffer Stream Controls</span>
+          </h2>
+
+          <button onclick="startScreenCapture()" id="captureBtn" class="w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-500/20 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-desktop"></i> <span data-i18n="start_capture">Start Screen Buffer Stream</span>
+          </button>
+
+          <div class="pt-2">
+            <button onclick="saveBufferClip()" id="clipBtn" disabled class="w-full py-4 rounded-xl bg-slate-800 text-slate-500 font-extrabold text-sm transition flex items-center justify-center gap-2 cursor-not-allowed">
+              <i class="fa-solid fa-clapperboard text-lg"></i> <span data-i18n="save_clip">Clip Last 15 Seconds (Hotkey: Space)</span>
+            </button>
+          </div>
+
+          <div class="p-4 rounded-xl bg-red-950/40 border border-red-500/20 text-xs text-red-200 flex items-start gap-3">
+            <i class="fa-solid fa-memory text-red-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">RAM Rolling Buffer</p>
+              <p class="text-[11px] text-red-300 mt-0.5" data-i18n="tip_desc">Video chunks older than 15 seconds are automatically purged from system memory to maintain zero impact on gaming performance.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Live Captured Stream Buffer</span>
+            <span id="bufferStatusBadge" class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 font-semibold">Stream Offline</span>
+          </div>
+
+          <!-- Video Display Frame -->
+          <div class="w-full preview-container bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden relative flex items-center justify-center">
+            <video id="screenVideo" autoplay playsinline muted class="w-full h-full object-cover hidden"></video>
+            <div id="streamPlaceholder" class="absolute text-center text-slate-500 text-xs p-6">
+              <i class="fa-solid fa-display text-3xl mb-2"></i>
+              <p>Click "Start Screen Buffer Stream" to select a window or display feed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Live "Instant Replay" Buffer Trigger',
+        hero_desc: 'Stream your desktop or gameplay screen into a rolling browser memory buffer to clip the last 15 seconds instantly without heavy background software.',
+        input_heading: '1. Buffer Stream Controls',
+        start_capture: 'Start Screen Buffer Stream',
+        save_clip: 'Clip Last 15 Seconds (Hotkey: Space)',
+        summary_title: 'Live Captured Stream Buffer',
+        tip_title: 'RAM Rolling Buffer',
+        tip_desc: 'Video chunks older than 15 seconds are automatically purged from system memory to maintain zero impact on gaming performance.'
+      },
+      es: {
+        hero_title: 'Disparador de Memoria de Repetición Instantánea',
+        hero_desc: 'Transmite tu pantalla a una memoria búfer para guardar los últimos 15 segundos.',
+        input_heading: '1. Controles de Búfer',
+        start_capture: 'Iniciar Transmisión de Búfer',
+        save_clip: 'Guardar Útimos 15 Segundos (Tecla: Espacio)',
+        summary_title: 'Búfer de Transmisión en Vivo',
+        tip_title: 'Búfer de Memoria RAM',
+        tip_desc: 'Los fragmentos más antiguos se eliminan automáticamente.'
+      },
+      fr: {
+        hero_title: 'Déclencheur de Replay Instantané en Direct',
+        hero_desc: 'Capturez votre écran dans un tampon mémoire pour sauvegarder les 15 dernières secondes.',
+        input_heading: '1. Commandes du Tampon',
+        start_capture: 'Démarrer le Tampon d’Écran',
+        save_clip: 'Sauvegarder les 15 Dernières Sec (Touche : Espace)',
+        summary_title: 'Tampon de Diffusion en Direct',
+        tip_title: 'Tampon Mémoire RAM',
+        tip_desc: 'Les segments de plus de 15 secondes sont purgés automatiquement.'
+      }
+    };
+
+    let mediaRecorder = null;
+    let rollingBuffer = [];
+    let isBuffering = false;
+
+    async function startScreenCapture() {
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+        const video = document.getElementById('screenVideo');
+        video.srcObject = stream;
+        video.classList.remove('hidden');
+        document.getElementById('streamPlaceholder').classList.add('hidden');
+
+        // Setup Media Recorder with 1-second timeslices
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+        rollingBuffer = [];
+
+        mediaRecorder.ondataavailable = function(e) {
+          if (e.data && e.data.size > 0) {
+            rollingBuffer.push(e.data);
+            // Keep buffer trimmed to ~15 seconds (15 chunks at 1000ms slices)
+            if (rollingBuffer.length > 15) {
+              rollingBuffer.shift();
+            }
+          }
+        };
+
+        mediaRecorder.start(1000); // collect 1 second chunks
+        isBuffering = true;
+
+        const badge = document.getElementById('bufferStatusBadge');
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-semibold";
+        badge.innerText = "Buffering Active (15s Window)";
+
+        const clipBtn = document.getElementById('clipBtn');
+        clipBtn.disabled = false;
+        clipBtn.className = "w-full py-4 rounded-xl accent-gradient text-white font-extrabold text-sm shadow-lg shadow-indigo-500/25 hover:opacity-95 transition flex items-center justify-center gap-2 cursor-pointer";
+      } catch (err) {
+        alert('Screen capture cancelled or unavailable.');
+      }
+    }
+
+    function saveBufferClip() {
+      if (!isBuffering || rollingBuffer.length === 0) return;
+
+      const blob = new Blob(rollingBuffer, { type: 'video/webm' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `instant-replay-clip-${Date.now()}.webm`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    // Trigger clip via Spacebar keypress
+    window.addEventListener('keydown', function(e) {
+      if (e.code === 'Space' && isBuffering) {
+        e.preventDefault();
+        saveBufferClip();
+      }
+    });
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+    };
+  </script>
+</body>
+</html>

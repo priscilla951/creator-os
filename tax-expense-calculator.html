@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Post-Tax Take-Home & Expense Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Tax & Expense Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+        <select id="currencySelector" onchange="updateTaxCalc()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Post-Tax "Take-Home" & Expense Calculator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Calculate your true liquid income after deducting agent commissions, production overhead, and estimated tax brackets.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Inputs Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-calculator"></i> <span data-i18n="input_heading">1. Revenue & Deductions</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="gross_revenue">Gross Monthly Revenue ($)</label>
+            <input type="number" id="grossRevenueInput" value="8500" oninput="updateTaxCalc()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="agent_cut">Agent / Manager Commission (%)</label>
+            <input type="number" id="agentCutInput" value="15" step="1" oninput="updateTaxCalc()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="tax_bracket">Estimated Income Tax Rate (%)</label>
+            <input type="number" id="taxBracketInput" value="25" step="1" oninput="updateTaxCalc()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="overhead_costs">Monthly Production & Software Overhead ($)</label>
+            <input type="number" id="overheadInput" value="650" oninput="updateTaxCalc()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Financial Waterfall Audit</span>
+            <span id="takehomeBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Liquid Cash Flow</span>
+          </div>
+
+          <div class="text-center py-6 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="takehome_label">True Liquid Take-Home Pay</div>
+            <div id="takehomeDisplay" class="text-5xl font-black tracking-tight text-emerald-400 mb-2">$5,375</div>
+            <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider"><span data-i18n="retention_label">Net Income Retention:</span> <span id="retentionDisplay" class="text-white">63.2%</span></div>
+          </div>
+
+          <!-- Breakdown Grid -->
+          <div class="grid grid-cols-3 gap-3">
+            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-center">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="agent_fee_label">Agent Cut</div>
+              <div id="agentFeeDisplay" class="text-sm font-bold text-red-400 mt-1">-$1,275</div>
+            </div>
+            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-center">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="tax_reserve_label">Tax Reserve</div>
+              <div id="taxReserveDisplay" class="text-sm font-bold text-amber-400 mt-1">-$2,125</div>
+            </div>
+            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-center">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="overhead_label">Overhead</div>
+              <div id="overheadDisplay" class="text-sm font-bold text-purple-300 mt-1">-$650</div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-amber-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Tax Separation Rule</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">Automatically transfer your estimated tax reserve into a separate business savings account the moment brand deal payouts hit your account.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Post-Tax "Take-Home" & Expense Calculator',
+        hero_desc: 'Calculate your true liquid income after deducting agent commissions, production overhead, and estimated tax brackets.',
+        input_heading: '1. Revenue & Deductions',
+        gross_revenue: 'Gross Monthly Revenue ($)',
+        agent_cut: 'Agent / Manager Commission (%)',
+        tax_bracket: 'Estimated Income Tax Rate (%)',
+        overhead_costs: 'Monthly Production & Software Overhead ($)',
+        summary_title: 'Financial Waterfall Audit',
+        takehome_label: 'True Liquid Take-Home Pay',
+        retention_label: 'Net Income Retention:',
+        agent_fee_label: 'Agent Cut',
+        tax_reserve_label: 'Tax Reserve',
+        overhead_label: 'Overhead',
+        tip_title: 'Tax Separation Rule',
+        tip_desc: 'Automatically transfer your estimated tax reserve into a separate business savings account the moment brand deal payouts hit your account.'
+      },
+      es: {
+        hero_title: 'Calculadora de Ingresos Netos Post-Impuestos',
+        hero_desc: 'Calcula tus ingresos líquidos reales después de comisiones de agentes y retenciones de impuestos.',
+        input_heading: '1. Ingresos y Deducciones',
+        gross_revenue: 'Ingreso Bruto Mensual ($)',
+        agent_cut: 'Comisión del Agente (%)',
+        tax_bracket: 'Tasa Estimada de Impuestos (%)',
+        overhead_costs: 'Gastos Operativos Mensuales ($)',
+        summary_title: 'Auditoría Financiera',
+        takehome_label: 'Ingreso Neto Real',
+        retention_label: 'Retención Neta:',
+        agent_fee_label: 'Comisión',
+        tax_reserve_label: 'Impuestos',
+        overhead_label: 'Gastos',
+        tip_title: 'Regla de Separación de Impuestos',
+        tip_desc: 'Transfiere tus reservas de impuestos a una cuenta separada de inmediato.'
+      },
+      fr: {
+        hero_title: 'Calculateur de Revenu Net Après Impôts',
+        hero_desc: 'Calculez votre véritable revenu disponible après commissions d’agents et charges fiscales.',
+        input_heading: '1. Revenus & Déductions',
+        gross_revenue: 'Revenu Brut Mensuel ($)',
+        agent_cut: 'Commission d’Agent / Manager (%)',
+        tax_bracket: "Taux d'Impôt Estimé (%)",
+        overhead_costs: 'Frais de Production & Logiciels ($)',
+        summary_title: 'Audit Financier Waterfall',
+        takehome_label: 'Revenu Net Disponible',
+        retention_label: 'Taux de Rétention Net :',
+        agent_fee_label: 'Commission',
+        tax_reserve_label: 'Réserve Fiscale',
+        overhead_label: 'Frais Fixes',
+        tip_title: 'Règle d’Isolation Fiscale',
+        tip_desc: 'Transférez immédiatement votre réserve fiscale sur un compte professionnel séparé.'
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function updateTaxCalc() {
+      const gross = parseFloat(document.getElementById('grossRevenueInput').value) || 0;
+      const agentPct = (parseFloat(document.getElementById('agentCutInput').value) || 0) / 100;
+      const taxPct = (parseFloat(document.getElementById('taxBracketInput').value) || 0) / 100;
+      const overhead = parseFloat(document.getElementById('overheadInput').value) || 0;
+
+      const agentFee = gross * agentPct;
+      const taxReserve = gross * taxPct;
+      const netTakeHome = Math.max(0, gross - agentFee - taxReserve - overhead);
+      const retentionPct = gross > 0 ? ((netTakeHome / gross) * 100).toFixed(1) : 0;
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('takehomeDisplay').innerText = `${c}${Math.round(netTakeHome * r).toLocaleString()}`;
+      document.getElementById('retentionDisplay').innerText = `${retentionPct}%`;
+      document.getElementById('agentFeeDisplay').innerText = `-${c}${Math.round(agentFee * r).toLocaleString()}`;
+      document.getElementById('taxReserveDisplay').innerText = `-${c}${Math.round(taxReserve * r).toLocaleString()}`;
+      document.getElementById('overheadDisplay').innerText = `-${c}${Math.round(overhead * r).toLocaleString()}`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateTaxCalc();
+    };
+  </script>
+</body>
+</html>

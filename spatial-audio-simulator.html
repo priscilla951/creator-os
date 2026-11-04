@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Spatial ASMR 3D Audio Pan Simulator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .soundstage { aspect-ratio: 1 / 1; max-height: 380px; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-medium">Spatial Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Spatial ASMR 3D Audio Pan Simulator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Upload an audio track and manipulate 3D spatial panner coordinates in real time to simulate binaural 360-degree sound.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-headphones"></i> <span data-i18n="input_heading">1. Audio Source Setup</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="upload_label">Upload MP3 / Audio File</label>
+            <input type="file" id="audioUpload" accept="audio/*" onchange="loadAudio(event)" class="w-full bg-slate-900 border border-slate-700 text-slate-400 text-xs rounded-lg p-2.5 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-500 cursor-pointer">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 pt-2">
+            <button onclick="playAudio()" id="playBtn" disabled class="py-3 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs transition flex items-center justify-center gap-2 cursor-not-allowed">
+              <i class="fa-solid fa-play"></i> <span data-i18n="play_btn">Play Spatial Audio</span>
+            </button>
+            <button onclick="stopAudio()" id="stopBtn" disabled class="py-3 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs transition flex items-center justify-center gap-2 cursor-not-allowed">
+              <i class="fa-solid fa-stop"></i> <span data-i18n="stop_btn">Stop Audio</span>
+            </button>
+          </div>
+
+          <div class="p-4 rounded-xl bg-cyan-950/40 border border-cyan-500/20 text-xs text-cyan-200 flex items-start gap-3">
+            <i class="fa-solid fa-lightbulb text-cyan-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Headphones Recommended</p>
+              <p class="text-[11px] text-cyan-300 mt-0.5" data-i18n="tip_desc">Wear stereo headphones to clearly experience the 3D binaural soundstage panning around your ears as you drag the sound source.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Soundstage Grid Column -->
+      <div class="lg:col-span-7 flex justify-center">
+        <div class="glass-card p-6 rounded-3xl border-cyan-500/35 shadow-2xl relative w-full max-w-sm soundstage flex flex-col items-center justify-center bg-slate-900 overflow-hidden select-none">
+          <div class="text-[10px] uppercase font-bold tracking-widest text-slate-500 absolute top-4">Front (0°)</div>
+          <div class="text-[10px] uppercase font-bold tracking-widest text-slate-500 absolute bottom-4">Back (180°)</div>
+
+          <!-- Central Head Icon -->
+          <div class="absolute h-16 w-16 rounded-full bg-slate-800 border-2 border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-inner">
+            <i class="fa-solid fa-head-side-headphones text-2xl"></i>
+          </div>
+
+          <!-- Interactive Sound Source Node -->
+          <div id="soundNode" onmousedown="startDrag(event)" ontouchstart="startDrag(event)" class="absolute h-10 w-10 rounded-full accent-gradient border-2 border-white shadow-lg cursor-grab flex items-center justify-center text-white text-xs font-bold" style="left: 60%; top: 40%;">
+            <i class="fa-solid fa-volume-high"></i>
+          </div>
+
+          <div class="absolute bottom-2 right-3 text-[9px] font-mono text-slate-400" id="coordsDisplay">X: 0.5, Y: -0.2</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Spatial ASMR 3D Audio Pan Simulator',
+        hero_desc: 'Upload an audio track and manipulate 3D spatial panner coordinates in real time to simulate binaural 360-degree sound.',
+        input_heading: '1. Audio Source Setup',
+        upload_label: 'Upload MP3 / Audio File',
+        play_btn: 'Play Spatial Audio',
+        stop_btn: 'Stop Audio',
+        tip_title: 'Headphones Recommended',
+        tip_desc: 'Wear stereo headphones to clearly experience the 3D binaural soundstage panning around your ears as you drag the sound source.'
+      },
+      es: {
+        hero_title: 'Simulador de Paneo de Audio 3D Espacial',
+        hero_desc: 'Sube una pista de audio y manipula coordenadas espaciales 3D en tiempo real.',
+        input_heading: '1. Configuración de Audio',
+        upload_label: 'Subir Archivo MP3',
+        play_btn: 'Reproducir Audio Espacial',
+        stop_btn: 'Detener Audio',
+        tip_title: 'Auriculares Recomendados',
+        tip_desc: 'Usa auriculares estéreo para experimentar el sonido binaural 3D.'
+      },
+      fr: {
+        hero_title: 'Simulateur Panoramique Audio 3D Spatial',
+        hero_desc: 'Téléchargez une piste audio et manipulez les coordonnées spatiales 3D en temps réel.',
+        input_heading: '1. Paramètres Audio',
+        upload_label: 'Télécharger un Fichier MP3',
+        play_btn: 'Lire l’Audio Spatial',
+        stop_btn: 'Arrêter l’Audio',
+        tip_title: 'Casque Recommandé',
+        tip_desc: 'Portez un casque stéréo pour percevoir clairement la spatialisation sonore 3D.'
+      }
+    };
+
+    let audioCtx, pannerNode, audioSourceNode, audioBuffer;
+    let isPlaying = false;
+    let isDragging = false;
+
+    function loadAudio(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const arrayBuffer = e.target.result;
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          audioCtx.decodeAudioData(arrayBuffer, buffer => {
+            audioBuffer = buffer;
+            const playBtn = document.getElementById('playBtn');
+            playBtn.disabled = false;
+            playBtn.className = "py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/20";
+          });
+        }
+        reader.readAsArrayBuffer(file);
+      }
+    }
+
+    function playAudio() {
+      if (!audioBuffer || isPlaying) return;
+
+      audioSourceNode = audioCtx.createBufferSource();
+      audioSourceNode.buffer = audioBuffer;
+      audioSourceNode.loop = true;
+
+      pannerNode = audioCtx.createPanner();
+      pannerNode.pannerModel = 'HRTF';
+      pannerNode.distanceModel = 'inverse';
+      pannerNode.setPosition(0.5, 0, 0);
+
+      audioSourceNode.connect(pannerNode);
+      pannerNode.connect(audioCtx.destination);
+
+      audioSourceNode.start(0);
+      isPlaying = true;
+
+      document.getElementById('playBtn').disabled = true;
+      document.getElementById('playBtn').className = "py-3 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs transition flex items-center justify-center gap-2 cursor-not-allowed";
+
+      const stopBtn = document.getElementById('stopBtn');
+      stopBtn.disabled = false;
+      stopBtn.className = "py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-red-500/20";
+    }
+
+    function stopAudio() {
+      if (isPlaying && audioSourceNode) {
+        audioSourceNode.stop();
+        isPlaying = false;
+
+        document.getElementById('stopBtn').disabled = true;
+        document.getElementById('stopBtn').className = "py-3 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs transition flex items-center justify-center gap-2 cursor-not-allowed";
+
+        const playBtn = document.getElementById('playBtn');
+        playBtn.disabled = false;
+        playBtn.className = "py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/20";
+      }
+    }
+
+    // Drag and Drop Sound Node Logic
+    const node = document.getElementById('soundNode');
+    const container = node.parentElement;
+
+    function startDrag(e) {
+      isDragging = true;
+      e.preventDefault();
+    }
+
+    window.onmousemove = function(e) {
+      if (!isDragging) return;
+      moveNode(e.clientX, e.clientY);
+    };
+
+    window.ontouchmove = function(e) {
+      if (!isDragging) return;
+      moveNode(e.touches[0].clientX, e.touches[0].clientY);
+    };
+
+    window.onmouseup = function() { isDragging = false; };
+    window.ontouchend = function() { isDragging = false; };
+
+    function moveNode(clientX, clientY) {
+      const rect = container.getBoundingClientRect();
+      let x = clientX - rect.left - 20;
+      let y = clientY - rect.top - 20;
+
+      x = Math.max(10, Math.min(rect.width - 50, x));
+      y = Math.max(10, Math.min(rect.height - 50, y));
+
+      node.style.left = `${x}px`;
+      node.style.top = `${y}px`;
+
+      // Map pixel coordinates to 3D Audio space (-3 to 3)
+      const normalizedX = ((x / rect.width) - 0.5) * 6;
+      const normalizedY = ((y / rect.height) - 0.5) * -6;
+
+      document.getElementById('coordsDisplay').innerText = `X: ${normalizedX.toFixed(1)}, Y: ${normalizedY.toFixed(1)}`;
+
+      if (pannerNode) {
+        pannerNode.setPosition(normalizedX, 0, normalizedY);
+      }
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+    };
+  </script>
+</body>
+</html>

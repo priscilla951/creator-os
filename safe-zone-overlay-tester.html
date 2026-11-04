@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Reels & TikTok Safe Zone UI Overlay Tester</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .phone-screen { aspect-ratio: 9 / 16; max-height: 580px; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-pink-500/10 text-pink-400 border border-pink-500/20 font-medium">Viral Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Short-Form UI Safe Zone Overlay Tester</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Upload your vertical video frame or creative asset to verify if critical text and captions are blocked by native app buttons.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-mobile-screen"></i> <span data-i18n="input_heading">1. Media & Platform Setup</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="upload_label">Upload Vertical Image / Frame</label>
+            <input type="file" id="mediaUpload" accept="image/*" onchange="loadMedia(event)" class="w-full bg-slate-900 border border-slate-700 text-slate-400 text-xs rounded-xl p-2.5 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="platform_label">Target Platform UI</label>
+            <select id="platformSelect" onchange="switchPlatform()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="tiktok">TikTok Interface Overlay</option>
+              <option value="reels">Instagram Reels Interface Overlay</option>
+              <option value="shorts">YouTube Shorts Interface Overlay</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl bg-pink-950/40 border border-pink-500/20 text-xs text-pink-200 flex items-start gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-pink-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Safe Zone Rule</p>
+              <p class="text-[11px] text-pink-300 mt-0.5" data-i18n="tip_desc">Keep all primary text titles at least 150px away from the right edge and bottom bar to prevent native UI buttons from covering your content.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Screen Column -->
+      <div class="lg:col-span-7 flex justify-center">
+        <div class="glass-card p-4 rounded-3xl border-indigo-500/35 shadow-2xl relative w-full max-w-sm phone-screen flex flex-col justify-between overflow-hidden bg-slate-900">
+          
+          <!-- Base Media Preview -->
+          <div id="mediaPreviewContainer" class="absolute inset-0 z-0 flex items-center justify-center bg-slate-950">
+            <div id="placeholderText" class="text-center p-6 text-slate-500 text-xs">
+              <i class="fa-regular fa-image text-3xl mb-2"></i>
+              <p>Upload a 9:16 vertical image to preview safe zones</p>
+            </div>
+          </div>
+
+          <!-- Top Safe Zone Indicator -->
+          <div class="relative z-20 w-full pt-4 px-4 flex justify-between items-center pointer-events-none">
+            <span class="text-[9px] uppercase tracking-wider font-bold bg-black/60 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30">Top Safe Header</span>
+            <span class="text-[9px] font-mono text-white bg-black/60 px-2 py-0.5 rounded">9:16 Frame</span>
+          </div>
+
+          <!-- Platform UI Overlay Layer (Injected dynamically) -->
+          <div id="uiOverlayLayer" class="absolute inset-0 z-10 pointer-events-none flex flex-col justify-between p-4">
+            <!-- Populated by JavaScript -->
+          </div>
+
+          <!-- Bottom Safe Zone Indicator -->
+          <div class="relative z-20 w-full pb-3 px-4 flex justify-center pointer-events-none">
+            <span class="text-[9px] uppercase tracking-wider font-bold bg-black/60 text-red-400 px-2.5 py-1 rounded border border-red-500/30">Danger Zone (UI Buttons Below)</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Short-Form UI Safe Zone Overlay Tester',
+        hero_desc: 'Upload your vertical video frame or creative asset to verify if critical text and captions are blocked by native app buttons.',
+        input_heading: '1. Media & Platform Setup',
+        upload_label: 'Upload Vertical Image / Frame',
+        platform_label: 'Target Platform UI',
+        tip_title: 'Safe Zone Rule',
+        tip_desc: 'Keep all primary text titles at least 150px away from the right edge and bottom bar to prevent native UI buttons from covering your content.'
+      },
+      es: {
+        hero_title: 'Probador de Zonas Seguras para Reels y TikTok',
+        hero_desc: 'Sube tu fotograma vertical para verificar si los botones de las apps bloquean tu texto.',
+        input_heading: '1. Configuración de Medios',
+        upload_label: 'Subir Imagen Vertical',
+        platform_label: 'Interfaz de Plataforma',
+        tip_title: 'Regla de Zona Segura',
+        tip_desc: 'Mantén los títulos alejados del borde derecho y la barra inferior.'
+      },
+      fr: {
+        hero_title: 'Testeur de Zones Sûres Reels & TikTok',
+        hero_desc: 'Téléchargez votre visuel vertical pour vérifier qu’il n’est pas masqué par les boutons des applications.',
+        input_heading: '1. Paramètres Médias',
+        upload_label: 'Télécharger une Image Verticale',
+        platform_label: 'Interface de la Plateforme',
+        tip_title: 'Règle de Sécurité',
+        tip_desc: 'Gardez vos textes principaux loin du bord droit et de la barre du bas.'
+      }
+    };
+
+    function loadMedia(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const container = document.getElementById('mediaPreviewContainer');
+          container.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function switchPlatform() {
+      const platform = document.getElementById('platformSelect').value;
+      const layer = document.getElementById('uiOverlayLayer');
+
+      if (platform === 'tiktok') {
+        layer.innerHTML = `
+          <div class="flex justify-between text-white text-xs font-bold pt-6 px-2 opacity-80">
+            <span>Stem</span>
+            <span class="border-b-2 border-white pb-1">For You</span>
+            <span>Following</span>
+          </div>
+          <div class="flex justify-between items-end pb-8">
+            <div class="space-y-1 text-white text-xs max-w-[70%] drop-shadow-md">
+              <div class="font-bold">@creator_os</div>
+              <div class="text-[11px] opacity-90">Building the ultimate offline-creator workspace suite #indiehacker #creatoros</div>
+              <div class="text-[10px] opacity-75 flex items-center gap-1 pt-1"><i class="fa-solid fa-music"></i> Original Audio - CreatorOS</div>
+            </div>
+            <div class="flex flex-col items-center gap-4 text-white">
+              <div class="flex flex-col items-center"><div class="h-10 w-10 rounded-full bg-slate-800 border border-white flex items-center justify-center text-xs"><i class="fa-solid fa-user"></i></div><span class="text-[9px] mt-0.5">+</span></div>
+              <div class="flex flex-col items-center"><i class="fa-solid fa-heart text-2xl text-red-500 drop-shadow"></i><span class="text-[10px]">124.5K</span></div>
+              <div class="flex flex-col items-center"><i class="fa-solid fa-comment-dots text-2xl drop-shadow"></i><span class="text-[10px]">842</span></div>
+              <div class="flex flex-col items-center"><i class="fa-solid fa-bookmark text-2xl drop-shadow"></i><span class="text-[10px]">4.1K</span></div>
+              <div class="flex flex-col items-center"><i class="fa-solid fa-share text-2xl drop-shadow"></i><span class="text-[10px]">1.2K</span></div>
+              <div class="h-8 w-8 rounded-full bg-black border border-slate-700 animate-spin flex items-center justify-center text-[10px]"><i class="fa-solid fa-compact-disc"></i></div>
+            </div>
+          </div>
+        `;
+      } else if (platform === 'reels') {
+        layer.innerHTML = `
+          <div class="flex justify-between text-white text-xs font-bold pt-6 px-2 opacity-90">
+            <span>Instagram</span>
+            <i class="fa-solid fa-camera"></i>
+          </div>
+          <div class="flex justify-between items-end pb-8">
+            <div class="space-y-1 text-white text-xs max-w-[70%] drop-shadow-md">
+              <div class="flex items-center gap-2"><div class="h-6 w-6 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600"></div><span class="font-bold">creator_os</span> <button class="px-2 py-0.5 bg-white/20 rounded text-[10px]">Follow</button></div>
+              <div class="text-[11px] opacity-90">Automating the creator workflow with 100 free utilities.</div>
+              <div class="text-[10px] opacity-75 flex items-center gap-1 pt-1"><i class="fa-solid fa-music"></i> Audio Track - CreatorOS</div>
+            </div>
+            <div class="flex flex-col items-center gap-5 text-white">
+              <div class="flex flex-col items-center"><i class="fa-solid fa-heart text-2xl text-red-500"></i><span class="text-[10px]">45.2K</span></div>
+              <div class="flex flex-col items-center"><i class="fa-solid fa-comment text-2xl"></i><span class="text-[10px]">312</span></div>
+              <div class="flex flex-col items-center"><i class="fa-solid fa-paper-plane text-2xl"></i><span class="text-[10px]">9.4K</span></div>
+              <div class="flex flex-col items-center"><i class="fa-solid fa-ellipsis-vertical text-xl"></i></div>
+            </div>
+          </div>
+        `;
+      } else {
+        layer.innerHTML = `
+          <div class="flex justify-between text-white text-xs font-bold pt-6 px-2 opacity-90">
+            <span>Shorts</span>
+            <div class="flex gap-3"><i class="fa-solid fa-search"></i> <i class="fa-solid fa-ellipsis-vertical"></i></div>
+          </div>
+          <div class="flex justify-between items-end pb-8">
+            <div class="space-y-1 text-white text-xs max-w-[70%] drop-shadow-md">
+              <div class="flex items-center gap-2"><div class="h-6 w-6 rounded-full bg-red-600 flex items-center justify-center text-[10px] font-bold">C</div><span class="font-bold">CreatorOS</span></div>
+              <div class="text-[11px] opacity-90">The ultimate creator toolkit #shorts</div>
+            </div>
+            <div class="flex flex-col items-center gap-5 text-white">
+              <div class="flex flex-col items-center"><i class="fa-solid fa-thumbs-up text-2xl"></i><span class="text-[10px]">18K</span></div>
+              <div class="flex flex-col items-center"><i class="fa-solid fa-thumbs-down text-2xl"></i><span class="text-[10px]">Dislike</span></div>
+              <div class="flex flex-col items-center"><i class="fa-solid fa-comment text-2xl"></i><span class="text-[10px]">512</span></div>
+              <div class="flex flex-col items-center"><i class="fa-solid fa-share text-2xl"></i><span class="text-[10px]">Share</span></div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      switchPlatform();
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Newsletter Sponsor Ad Slot Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Newsletter Monetization</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+
+        <select id="currencySelector" onchange="updateCalculations()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Newsletter Sponsor Ad Slot Calculator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Calculate optimal sponsorship rates for primary sponsor banners and classified spots based on your subscriber count and open rates.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Inputs Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-envelope-open-text"></i> <span data-i18n="input_heading">1. Newsletter Metrics</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="sub_count">Total Active Subscribers</label>
+            <input type="number" id="subCountInput" value="15000" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="open_rate">Average Open Rate (%)</label>
+            <input type="number" id="openRateInput" value="45" step="1" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="ctr_rate">Expected Click-Through Rate (CTR %)</label>
+            <input type="number" id="ctrInput" value="3.5" step="0.1" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="frequency_select">Sending Frequency</label>
+            <select id="frequencySelect" onchange="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="weekly" selected>Weekly (4 Editions / Month)</option>
+              <option value="biweekly">Bi-Weekly (2 Editions / Month)</option>
+              <option value="monthly">Monthly (1 Edition / Month)</option>
+              <option value="daily">Daily (20 Editions / Month)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Suggested Ad Slot Pricing</span>
+            <span id="uniqueViewsBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">6,750 Avg Opens</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[11px] uppercase font-bold text-slate-500" data-i18n="primary_sponsor">Primary Sponsor Banner (Per Edition)</div>
+              <div id="primaryBannerDisplay" class="text-2xl font-black text-indigo-400 mt-1">$350</div>
+            </div>
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[11px] uppercase font-bold text-slate-500" data-i18n="classified_spot">Classified Text Spot (Per Edition)</div>
+              <div id="classifiedDisplay" class="text-2xl font-black text-emerald-400 mt-1">$120</div>
+            </div>
+          </div>
+
+          <div class="text-center py-5 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="monthly_pot_label">Total Potential Monthly Ad Revenue</div>
+            <div id="monthlyAdRevDisplay" class="text-4xl font-black tracking-tight text-emerald-400 mb-1">$1,880</div>
+            <div class="text-xs text-slate-400" data-i18n="editions_calc_label">Based on selected publishing frequency</div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-circle-info text-indigo-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Newsletter Monetization Tip</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">Bundle your primary newsletter banner with a social shoutout or X/Twitter thread for a 30% package rate premium.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Newsletter Sponsor Ad Slot Calculator",
+        hero_desc: "Calculate optimal sponsorship rates for primary sponsor banners and classified spots based on your subscriber count and open rates.",
+        input_heading: "1. Newsletter Metrics",
+        sub_count: "Total Active Subscribers",
+        open_rate: "Average Open Rate (%)",
+        ctr_rate: "Expected Click-Through Rate (CTR %)",
+        frequency_select: "Sending Frequency",
+        summary_title: "Suggested Ad Slot Pricing",
+        primary_sponsor: "Primary Sponsor Banner (Per Edition)",
+        classified_spot: "Classified Text Spot (Per Edition)",
+        monthly_pot_label: "Total Potential Monthly Ad Revenue",
+        editions_calc_label: "Based on selected publishing frequency",
+        tip_title: "Newsletter Monetization Tip",
+        tip_desc: "Bundle your primary newsletter banner with a social shoutout or X/Twitter thread for a 30% package rate premium."
+      },
+      es: {
+        hero_title: "Calculadora de Patrocinios para Newsletter",
+        hero_desc: "Calcule tarifas de patrocinio óptimas para banners principales y espacios clasificados.",
+        input_heading: "1. Métricas del Newsletter",
+        sub_count: "Suscriptores Activos Totales",
+        open_rate: "Tasa de Apertura Promedio (%)",
+        ctr_rate: "Tasa de Clics Esperada (CTR %)",
+        frequency_select: "Frecuencia de Envío",
+        summary_title: "Precios Sugeridos de Espacios Publicitarios",
+        primary_sponsor: "Banner de Patrocinador Principal",
+        classified_spot: "Espacio de Texto Clasificado",
+        monthly_pot_label: "Ingresos Mensuales Potenciales",
+        editions_calc_label: "Basado en la frecuencia seleccionada",
+        tip_title: "Consejo de Monetización",
+        tip_desc: "Combine su banner principal con una mención en redes sociales por un 30% más."
+      },
+      fr: {
+        hero_title: "Calculateur de Sponsoring pour Newsletter",
+        hero_desc: "Calculez les tarifs optimaux de vos bannières publicitaires et encarts sponsorisés.",
+        input_heading: "1. Métriques de la Newsletter",
+        sub_count: "Abonnés Actifs Totaux",
+        open_rate: "Taux d'Ouverture Moyen (%)",
+        ctr_rate: "Taux de Clics Attendu (CTR %)",
+        frequency_select: "Fréquence d'Envoi",
+        summary_title: "Tarifs Suggérés des Espaces Pub",
+        primary_sponsor: "Bannière Sponsor Principale",
+        classified_spot: "Encart Texte Classé",
+        monthly_pot_label: "Revenu Publicitaire Mensuel Potentiel",
+        editions_calc_label: "Basé sur la fréquence de publication",
+        tip_title: "Conseil de Monétisation",
+        tip_desc: "Associez votre bannière principale à un post sur les réseaux sociaux pour une prime de 30%."
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function updateCalculations() {
+      const subs = parseFloat(document.getElementById('subCountInput').value) || 0;
+      const openPct = (parseFloat(document.getElementById('openRateInput').value) || 0) / 100;
+      const freqVal = document.getElementById('frequencySelect').value;
+
+      let editionsPerMonth = 4;
+      if (freqVal === 'biweekly') editionsPerMonth = 2;
+      if (freqVal === 'monthly') editionsPerMonth = 1;
+      if (freqVal === 'daily') editionsPerMonth = 20;
+
+      const avgOpens = subs * openPct;
+      
+      // CPM baseline for newsletters (~$40 to $60 per 1k opens)
+      const primaryBannerUSD = (avgOpens / 1000) * 50;
+      const classifiedUSD = primaryBannerUSD * 0.35;
+      
+      const monthlyTotalUSD = (primaryBannerUSD + classifiedUSD) * editionsPerMonth;
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('uniqueViewsBadge').innerText = `${Math.round(avgOpens).toLocaleString()} Avg Opens`;
+      document.getElementById('primaryBannerDisplay').innerText = `${c}${Math.round(primaryBannerUSD * r).toLocaleString()}`;
+      document.getElementById('classifiedDisplay').innerText = `${c}${Math.round(classifiedUSD * r).toLocaleString()}`;
+      document.getElementById('monthlyAdRevDisplay').innerText = `${c}${Math.round(monthlyTotalUSD * r).toLocaleString()}`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateCalculations();
+    };
+  </script>
+</body>
+</html>

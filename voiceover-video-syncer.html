@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — TikTok & Shorts Voiceover Dubbing Syncer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .video-container { aspect-ratio: 9 / 16; max-height: 480px; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-pink-500/10 text-pink-400 border border-pink-500/20 font-medium">Dubbing Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">TikTok & Shorts Voiceover Dubbing Syncer</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Upload a silent video clip, record synchronized voiceovers in real time, and record waveforms directly inside your browser.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-pink-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-microphone"></i> <span data-i18n="input_heading">1. Video & Recording Controls</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="upload_label">Upload Silent MP4 Video</label>
+            <input type="file" id="videoUpload" accept="video/mp4,video/webm" onchange="loadVideo(event)" class="w-full bg-slate-900 border border-slate-700 text-slate-400 text-xs rounded-lg p-2.5 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-pink-600 file:text-white hover:file:bg-pink-500 cursor-pointer">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 pt-2">
+            <button onclick="startVoiceover()" id="recordBtn" disabled class="py-3 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs transition flex items-center justify-center gap-2 cursor-not-allowed">
+              <i class="fa-solid fa-circle text-red-500 animate-pulse"></i> <span data-i18n="record_btn">Record Voiceover</span>
+            </button>
+            <button onclick="stopVoiceover()" id="stopBtn" disabled class="py-3 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs transition flex items-center justify-center gap-2 cursor-not-allowed">
+              <i class="fa-solid fa-stop"></i> <span data-i18n="stop_btn">Stop & Sync</span>
+            </button>
+          </div>
+
+          <!-- Waveform Canvas -->
+          <div class="space-y-1.5 pt-2">
+            <label class="block text-xs font-semibold text-slate-300" data-i18n="waveform_label">Live Audio Waveform Stream</label>
+            <div class="w-full h-16 bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center">
+              <canvas id="waveformCanvas" width="400" height="60" class="w-full h-full"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video Preview Column -->
+      <div class="lg:col-span-7 flex justify-center">
+        <div class="glass-card p-4 rounded-3xl border-indigo-500/35 shadow-2xl relative w-full max-w-sm video-container flex flex-col items-center justify-center bg-slate-950 overflow-hidden">
+          <video id="previewVideo" class="w-full h-full object-cover rounded-2xl" loop muted playsinline></video>
+          <audio id="previewAudio" class="hidden"></audio>
+          <div id="videoPlaceholder" class="absolute text-center text-slate-500 text-xs p-6">
+            <i class="fa-solid fa-video text-3xl mb-2"></i>
+            <p>Upload a silent vertical video to begin dubbing</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'TikTok & Shorts Voiceover Dubbing Syncer',
+        hero_desc: 'Upload a silent video clip, record synchronized voiceovers in real time, and record waveforms directly inside your browser.',
+        input_heading: '1. Video & Recording Controls',
+        upload_label: 'Upload Silent MP4 Video',
+        record_btn: 'Record Voiceover',
+        stop_btn: 'Stop & Sync',
+        waveform_label: 'Live Audio Waveform Stream'
+      },
+      es: {
+        hero_title: 'Sincronizador de Voz en Off para TikTok y Shorts',
+        hero_desc: 'Sube un video sin sonido y graba locuciones sincronizadas en tiempo real.',
+        input_heading: '1. Controles de Video y Grabación',
+        upload_label: 'Subir Video MP4 Silencioso',
+        record_btn: 'Grabar Locución',
+        stop_btn: 'Detener y Sincronizar',
+        waveform_label: 'Forma de Onda de Audio en Vivo'
+      },
+      fr: {
+        hero_title: 'Synchroniseur de Voix Off TikTok & Shorts',
+        hero_desc: 'Téléchargez une vidéo muette, enregistrez des voix off synchronisées et visualisez la forme d’onde.',
+        input_heading: '1. Commandes Vidéo & Enregistrement',
+        upload_label: 'Télécharger une Vidéo MP4 Muette',
+        record_btn: 'Enregistrer la Voix Off',
+        stop_btn: 'Arrêter & Synchroniser',
+        waveform_label: 'Forme d’Onde Audio en Direct'
+      }
+    };
+
+    let mediaRecorder;
+    let audioChunks = [];
+    let audioContext, analyser, microphone, javascriptNode;
+    let isRecording = false;
+
+    function loadVideo(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        const video = document.getElementById('previewVideo');
+        video.src = url;
+        video.play();
+        document.getElementById('videoPlaceholder').classList.add('hidden');
+
+        const recBtn = document.getElementById('recordBtn');
+        recBtn.disabled = false;
+        recBtn.className = "py-3 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-pink-500/20";
+      }
+    }
+
+    function startVoiceover() {
+      const video = document.getElementById('previewVideo');
+      video.currentTime = 0;
+      video.play();
+
+      navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        .then(stream => {
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+
+          mediaRecorder.ondataavailable = event => {
+            audioChunks.push(event.data);
+          };
+
+          mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audioElem = document.getElementById('previewAudio');
+            audioElem.src = audioUrl;
+            video.currentTime = 0;
+            video.play();
+            audioElem.play();
+          };
+
+          mediaRecorder.start();
+          isRecording = true;
+
+          // Setup Audio Analyzer for Waveform
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          analyser = audioContext.createAnalyser();
+          microphone = audioContext.createMediaStreamSource(stream);
+          analyser.fftSize = 64;
+          microphone.connect(analyser);
+
+          drawWaveform();
+
+          document.getElementById('recordBtn').disabled = true;
+          document.getElementById('recordBtn').className = "py-3 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs transition flex items-center justify-center gap-2 cursor-not-allowed";
+
+          const stopBtn = document.getElementById('stopBtn');
+          stopBtn.disabled = false;
+          stopBtn.className = "py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-red-500/20";
+        })
+        .catch(err => {
+          alert('Microphone access denied or unavailable.');
+        });
+    }
+
+    function stopVoiceover() {
+      if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        isRecording = false;
+
+        if (audioContext) audioContext.close();
+
+        document.getElementById('stopBtn').disabled = true;
+        document.getElementById('stopBtn').className = "py-3 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs transition flex items-center justify-center gap-2 cursor-not-allowed";
+
+        const recBtn = document.getElementById('recordBtn');
+        recBtn.disabled = false;
+        recBtn.className = "py-3 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-pink-500/20";
+      }
+    }
+
+    function drawWaveform() {
+      if (!isRecording) return;
+
+      const canvas = document.getElementById('waveformCanvas');
+      const ctx = canvas.getContext('2d');
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      analyser.getByteTimeDomainData(dataArray);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#ec4899';
+      ctx.beginPath();
+
+      const sliceWidth = canvas.width / bufferLength;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const v = dataArray[i] / 128.0;
+        const y = v * (canvas.height / 2);
+
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+
+        x += sliceWidth;
+      }
+
+      ctx.lineTo(canvas.width, canvas.height / 2);
+      ctx.stroke();
+
+      requestAnimationFrame(drawWaveform);
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Sponsorship Contract & Invoice Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Legal Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Sponsorship Contract & Invoice Generator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Draft brand partnership agreements and professional invoices instantly for client sign-offs and billing.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Input Parameters Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-file-contract"></i> <span data-i18n="input_heading">1. Deal Terms & Parties</span>
+          </h2>
+
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="brand_label">Brand / Sponsor Name</label>
+              <input type="text" id="brandName" value="Acme Tech Corp" oninput="updateDocument()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-3 outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="creator_label">Creator Legal Name / Handle</label>
+              <input type="text" id="creatorName" value="Alex Creates Media" oninput="updateDocument()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-3 outline-none">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="fee_label">Total Fee ($ USD)</label>
+                <input type="number" id="dealFee" value="1250" oninput="updateDocument()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-3 outline-none font-mono">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="date_label">Due Date</label>
+                <input type="date" id="dueDate" oninput="updateDocument()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-3 outline-none font-mono text-xs">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="deliverable_label">Deliverable Scope</label>
+              <input type="text" id="deliverableScope" value="1x Dedicated 60s YouTube Integration & 1x Instagram Reel" oninput="updateDocument()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-3 outline-none">
+            </div>
+          </div>
+
+          <button onclick="window.print()" class="w-full py-3.5 rounded-xl accent-gradient text-white font-bold text-sm shadow-lg shadow-emerald-500/20 hover:opacity-95 transition flex items-center justify-center gap-2 cursor-pointer mt-2">
+            <i class="fa-solid fa-print"></i> <span data-i18n="print_btn">Print / Export PDF Document</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Document Preview Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-8 rounded-2xl border-emerald-500/35 shadow-2xl space-y-6 bg-slate-900 text-slate-200 font-sans">
+          <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+            <div>
+              <h3 id="previewTitle" class="text-lg font-black text-white">SPONSORSHIP AGREEMENT & INVOICE</h3>
+              <p class="text-[11px] text-slate-400">CreatorOS Professional Legal Suite</p>
+            </div>
+            <span class="text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Verified Terms</span>
+          </div>
+
+          <div class="space-y-4 text-xs leading-relaxed text-slate-300">
+            <p><strong>Parties:</strong> This agreement is entered into between <span id="spanCreator" class="text-indigo-400 font-bold">Alex Creates Media</span> ("Creator") and <span id="spanBrand" class="text-indigo-400 font-bold">Acme Tech Corp</span> ("Sponsor").</p>
+            
+            <p><strong>Scope of Work:</strong> Creator agrees to produce and publish the following promotional deliverables: <span id="spanDeliverable" class="text-white font-semibold">1x Dedicated 60s YouTube Integration & 1x Instagram Reel</span>.</p>
+            
+            <p><strong>Compensation & Terms:</strong> Sponsor agrees to pay the total agreed fee of <span id="spanFee" class="text-emerald-400 font-mono font-bold">$1,250</span> Net-30 upon final content approval.</p>
+
+            <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-[11px]">
+              <div>
+                <p class="font-bold text-white">Payment Due Date:</p>
+                <p id="spanDate" class="font-mono text-slate-400">Upon Receipt</p>
+              </div>
+              <div class="text-right">
+                <p class="font-bold text-white">Status:</p>
+                <p class="text-emerald-400 font-semibold">Ready for Signature</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Sponsorship Contract & Invoice Generator',
+        hero_desc: 'Draft brand partnership agreements and professional invoices instantly for client sign-offs and billing.',
+        input_heading: '1. Deal Terms & Parties',
+        brand_label: 'Brand / Sponsor Name',
+        creator_label: 'Creator Legal Name / Handle',
+        fee_label: 'Total Fee ($ USD)',
+        date_label: 'Due Date',
+        deliverable_label: 'Deliverable Scope',
+        print_btn: 'Print / Export PDF Document'
+      },
+      es: {
+        hero_title: 'Generador de Contratos y Facturas de Patrocinio',
+        hero_desc: 'Redacta acuerdos de asociación de marca y facturas profesionales al instante.',
+        input_heading: '1. Términos del Acuerdo y Partes',
+        brand_label: 'Nombre de la Marca',
+        creator_label: 'Nombre Legal del Creador',
+        fee_label: 'Tarifa Total ($ USD)',
+        date_label: 'Fecha de Vencimiento',
+        deliverable_label: 'Alcance de Entregables',
+        print_btn: 'Imprimir / Exportar PDF'
+      },
+      fr: {
+        hero_title: 'Générateur de Contrats & Factures de Partenariat',
+        hero_desc: 'Rédigez des contrats de parrainage et des factures professionnelles en un clin d’œil.',
+        input_heading: '1. Conditions & Parties du Contrat',
+        brand_label: 'Nom de la Marque / Sponsor',
+        creator_label: 'Nom Légal du Créateur',
+        fee_label: 'Tarif Total ($ USD)',
+        date_label: 'Date d’Échéance',
+        deliverable_label: 'Portée des Livrables',
+        print_btn: 'Imprimer / Exporter en PDF'
+      }
+    };
+
+    function updateDocument() {
+      const brand = document.getElementById('brandName').value;
+      const creator = document.getElementById('creatorName').value;
+      const fee = document.getElementById('dealFee').value;
+      const date = document.getElementById('dueDate').value;
+      const deliverable = document.getElementById('deliverableScope').value;
+
+      document.getElementById('spanBrand').innerText = brand || '[Brand Name]';
+      document.getElementById('spanCreator').innerText = creator || '[Creator Name]';
+      document.getElementById('spanFee').innerText = `$${parseFloat(fee || 0).toLocaleString()}`;
+      document.getElementById('spanDate').innerText = date || 'Upon Receipt';
+      document.getElementById('spanDeliverable').innerText = deliverable || '[Deliverable Scope]';
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateDocument();
+    };
+  </script>
+</body>
+</html>

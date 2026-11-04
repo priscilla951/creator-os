@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — YouTube Thumbnail Silhouette & Contrast Checker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .thumb-preview { aspect-ratio: 16 / 9; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-medium">Viral Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">YouTube Thumbnail Silhouette & Contrast Checker</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Test your video thumbnails in grayscale silhouette mode and micro mobile dimensions before publishing to maximize CTR.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-image"></i> <span data-i18n="input_heading">1. Thumbnail Artwork Setup</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="upload_label">Upload Thumbnail Image (16:9)</label>
+            <input type="file" id="thumbUpload" accept="image/*" onchange="loadThumbnail(event)" class="w-full bg-slate-900 border border-slate-700 text-slate-400 text-xs rounded-xl p-2.5 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-red-600 file:text-white hover:file:bg-red-500 cursor-pointer">
+          </div>
+
+          <div class="space-y-3 pt-2">
+            <label class="block text-xs font-semibold text-slate-300" data-i18n="filters_label">Diagnostic Toggle Filters</label>
+            
+            <div class="flex items-center justify-between p-3 bg-slate-900 rounded-xl border border-slate-800">
+              <span class="text-xs text-slate-300 font-medium" data-i18n="grayscale_toggle">Grayscale Silhouette Mode</span>
+              <input type="checkbox" id="grayscaleCheck" onchange="applyFilters()" class="w-4 h-4 accent-red-500 cursor-pointer">
+            </div>
+
+            <div class="flex items-center justify-between p-3 bg-slate-900 rounded-xl border border-slate-800">
+              <span class="text-xs text-slate-300 font-medium" data-i18n="contrast_boost">High Contrast Boost</span>
+              <input type="checkbox" id="contrastCheck" onchange="applyFilters()" class="w-4 h-4 accent-red-500 cursor-pointer">
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-red-950/40 border border-red-500/20 text-xs text-red-200 flex items-start gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-red-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Silhouette Rule</p>
+              <p class="text-[11px] text-red-300 mt-0.5" data-i18n="tip_desc">If your subject disappears into the background in grayscale mode, mobile viewers scrolling quickly will skip your video.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Full-Size Diagnostic Preview</span>
+            <span id="statusBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Ready for Testing</span>
+          </div>
+
+          <!-- Full Preview Container -->
+          <div class="w-full thumb-preview bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden flex items-center justify-center relative">
+            <div id="previewPlaceholder" class="text-center p-6 text-slate-500 text-xs">
+              <i class="fa-regular fa-image text-3xl mb-2"></i>
+              <p>Upload a 16:9 thumbnail artwork to begin testing</p>
+            </div>
+            <img id="thumbImage" class="w-full h-full object-cover hidden transition-all duration-300" alt="Thumbnail Preview">
+          </div>
+
+          <!-- Micro Mobile Feed Simulator (80x45px simulation) -->
+          <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800 space-y-3">
+            <div class="text-xs font-bold text-slate-300 uppercase tracking-wider" data-i18n="micro_title">Mobile Feed Scaling Test (Tiny Viewport)</div>
+            <div class="flex items-center gap-4 bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <div class="w-24 h-14 bg-slate-900 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center border border-slate-800">
+                <img id="microThumbImage" class="w-full h-full object-cover hidden" alt="Micro Thumbnail">
+                <span id="microPlaceholder" class="text-[9px] text-slate-600">80x45</span>
+              </div>
+              <div class="space-y-1">
+                <div class="w-36 h-2.5 bg-slate-800 rounded animate-pulse"></div>
+                <div class="w-24 h-2 bg-slate-800 rounded animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'YouTube Thumbnail Silhouette & Contrast Checker',
+        hero_desc: 'Test your video thumbnails in grayscale silhouette mode and micro mobile dimensions before publishing to maximize CTR.',
+        input_heading: '1. Thumbnail Artwork Setup',
+        upload_label: 'Upload Thumbnail Image (16:9)',
+        filters_label: 'Diagnostic Toggle Filters',
+        grayscale_toggle: 'Grayscale Silhouette Mode',
+        contrast_boost: 'High Contrast Boost',
+        tip_title: 'Silhouette Rule',
+        tip_desc: 'If your subject disappears into the background in grayscale mode, mobile viewers scrolling quickly will skip your video.',
+        summary_title: 'Full-Size Diagnostic Preview',
+        micro_title: 'Mobile Feed Scaling Test (Tiny Viewport)'
+      },
+      es: {
+        hero_title: 'Verificador de Contraste y Silueta para Miniaturas de YouTube',
+        hero_desc: 'Prueba tus miniaturas en modo escala de grises y dimensiones móviles antes de publicar.',
+        input_heading: '1. Configuración de Miniatura',
+        upload_label: 'Subir Imagen de Miniatura (16:9)',
+        filters_label: 'Filtros de Diagnóstico',
+        grayscale_toggle: 'Modo Silueta en Escala de Grises',
+        contrast_boost: 'Aumento de Contraste',
+        tip_title: 'Regla de Silueta',
+        tip_desc: 'Si tu sujeto se desvanece en el fondo en escala de grises, los usuarios lo ignorarán.',
+        summary_title: 'Vista Previa de Diagnóstico',
+        micro_title: 'Prueba de Escala en Feed Móvil'
+      },
+      fr: {
+        hero_title: 'Testeur de Silhouette & Contraste pour Miniatures YouTube',
+        hero_desc: 'Testez vos miniatures en mode silhouette et en dimensions mobiles avant publication.',
+        input_heading: '1. Paramètres de la Miniature',
+        upload_label: 'Télécharger une Miniature (16:9)',
+        filters_label: 'Filtres de Diagnostic',
+        grayscale_toggle: 'Mode Silhouette (Niveaux de Gris)',
+        contrast_boost: 'Boost de Contraste Élevé',
+        tip_title: 'Règle de la Silhouette',
+        tip_desc: 'Si votre sujet se fond dans l’arrière-plan en nuances de gris, les spectateurs l’ignoreront.',
+        summary_title: 'Aperçu du Diagnostic',
+        micro_title: 'Test d’Échelle Mobile'
+      }
+    };
+
+    function loadThumbnail(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const mainImg = document.getElementById('thumbImage');
+          const microImg = document.getElementById('microThumbImage');
+          
+          mainImg.src = e.target.result;
+          mainImg.classList.remove('hidden');
+          document.getElementById('previewPlaceholder').classList.add('hidden');
+
+          microImg.src = e.target.result;
+          microImg.classList.remove('hidden');
+          document.getElementById('microPlaceholder').classList.add('hidden');
+
+          applyFilters();
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function applyFilters() {
+      const isGrayscale = document.getElementById('grayscaleCheck').checked;
+      const isContrast = document.getElementById('contrastCheck').checked;
+      const mainImg = document.getElementById('thumbImage');
+      const microImg = document.getElementById('microThumbImage');
+
+      let filters = [];
+      if (isGrayscale) filters.push('grayscale(100%)');
+      if (isContrast) filters.push('contrast(180%)');
+
+      const filterVal = filters.length > 0 ? filters.join(' ') : 'none';
+      mainImg.style.filter = filterVal;
+      microImg.style.filter = filterVal;
+
+      const badge = document.getElementById('statusBadge');
+      if (isGrayscale) {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-semibold";
+        badge.innerText = "Silhouette Mode Active";
+      } else {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold";
+        badge.innerText = "Full Color Mode";
+      }
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+    };
+  </script>
+</body>
+</html>

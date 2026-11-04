@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Multi-Variable Brand Deal Engine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .text-gradient { background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <!-- Navigation Header with Language & Currency Switchers -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+        </div>
+      </div>
+      
+      <!-- Global Switchers: Language & Currency -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+
+        <select id="currencySelector" onchange="updateCalculations()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Hero Banner -->
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Multi-Variable Brand Deal Engine</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Value contractual usage rights, category exclusivity, production labor, and niche engagement factors with transparent proof for sponsor negotiations.
+      </p>
+    </div>
+
+    <!-- Mode Alert Banner -->
+    <div id="clientViewAlert" class="hidden mb-6 p-4 rounded-xl bg-indigo-950/60 border border-indigo-500/30 text-indigo-200 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-lock text-indigo-400 text-xl"></i>
+        <div>
+          <p class="font-bold text-sm" data-i18n="client_view_title">Verified Sponsor Proposal View</p>
+          <p class="text-xs text-indigo-300" data-i18n="client_view_desc">This quote was locked by the creator using current analytics and contract parameters.</p>
+        </div>
+      </div>
+      <button onclick="exitClientView()" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-lg transition" data-i18n="edit_variables_btn">Edit Variables</button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Left Column: Variable Controls -->
+      <div id="controlsContainer" class="lg:col-span-7 space-y-6">
+        
+        <!-- Platform & Niche -->
+        <div class="glass-card p-6 rounded-2xl">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-sliders"></i> <span data-i18n="baseline_heading">1. Baseline Footprint</span>
+          </h2>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="content_niche">Content Niche</label>
+              <select id="nicheSelect" onchange="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+                <option value="tech_software">Tech & B2B Software</option>
+                <option value="finance_crypto">Personal Finance & Business</option>
+                <option value="beauty_fashion">Beauty & Lifestyle</option>
+                <option value="fitness_health">Fitness & Wellness</option>
+                <option value="gaming_esports">Gaming & Esports</option>
+                <option value="food_cooking">Food & Culinary</option>
+                <option value="travel_vlog">Travel & Experience</option>
+                <option value="general_ent" selected>General Entertainment</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="primary_platform">Primary Platform</label>
+              <select id="platformSelect" onchange="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+                <option value="youtube_long">YouTube (Dedicated / Integrated)</option>
+                <option value="youtube_shorts">YouTube Shorts</option>
+                <option value="instagram_reels">Instagram Reels / Post</option>
+                <option value="tiktok">TikTok Video</option>
+                <option value="newsletter">Email Newsletter</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Sliders -->
+          <div class="mt-6 space-y-5">
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-2">
+                <span class="text-slate-300" data-i18n="avg_views_label">Average Views / Reach (30-day avg)</span>
+                <span id="avgViewsDisplay" class="text-indigo-400 font-bold text-sm">50,000</span>
+              </div>
+              <input type="range" id="avgViewsInput" min="1000" max="1000000" step="1000" value="50000" oninput="updateCalculations()" class="w-full accent-indigo-500 bg-slate-800 h-2 rounded-lg cursor-pointer">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-2">
+                <span class="text-slate-300" data-i18n="engagement_label">Audience Engagement Rate (%)</span>
+                <span id="engagementDisplay" class="text-indigo-400 font-bold text-sm">4.5%</span>
+              </div>
+              <input type="range" id="engagementInput" min="0.5" max="15.0" step="0.1" value="4.5" oninput="updateCalculations()" class="w-full accent-indigo-500 bg-slate-800 h-2 rounded-lg cursor-pointer">
+            </div>
+          </div>
+        </div>
+
+        <!-- Contractual Modifiers & Production Add-ons -->
+        <div class="glass-card p-6 rounded-2xl">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-file-contract"></i> <span data-i18n="contract_heading">2. Contractual Terms & Modifiers</span>
+          </h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="paid_usage_label">Paid Usage Rights</label>
+              <select id="usageSelect" onchange="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+                <option value="organic_only">Organic Posting Only (+0%)</option>
+                <option value="ads_30_days">30-Day Paid Usage (+30%)</option>
+                <option value="ads_60_days">60-Day Paid Usage (+45%)</option>
+                <option value="ads_90_days">90-Day Paid Usage (+60%)</option>
+                <option value="perpetual">Perpetual Buyout (+150%)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="exclusivity_label">Category Exclusivity Lockout</label>
+              <select id="exclusivitySelect" onchange="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+                <option value="none">None / Non-exclusive (+0%)</option>
+                <option value="category_1mo">1 Month Exclusivity (+25%)</option>
+                <option value="category_3mo">3 Month Exclusivity (+50%)</option>
+                <option value="category_6mo">6 Month Exclusivity (+85%)</option>
+                <option value="full_lockout_1yr">1 Year Full Industry Lockout (+150%)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Production Complexity Add-ons -->
+          <div class="mt-6">
+            <label class="block text-xs font-semibold text-slate-300 mb-3" data-i18n="production_addons_label">Production & Delivery Add-ons</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label class="flex items-center gap-3 p-3 bg-slate-900/60 rounded-xl border border-slate-800 hover:border-slate-700 cursor-pointer text-xs">
+                <input type="checkbox" id="addonRush" onchange="updateCalculations()" class="rounded border-slate-700 text-indigo-600 focus:ring-indigo-500 w-4 h-4">
+                <span data-i18n="addon_rush">Rush Delivery (&lt;48 Hours)</span>
+              </label>
+              <label class="flex items-center gap-3 p-3 bg-slate-900/60 rounded-xl border border-slate-800 hover:border-slate-700 cursor-pointer text-xs">
+                <input type="checkbox" id="addonCrew" onchange="updateCalculations()" class="rounded border-slate-700 text-indigo-600 focus:ring-indigo-500 w-4 h-4">
+                <span data-i18n="addon_crew">Studio / External Crew</span>
+              </label>
+              <label class="flex items-center gap-3 p-3 bg-slate-900/60 rounded-xl border border-slate-800 hover:border-slate-700 cursor-pointer text-xs">
+                <input type="checkbox" id="addonTravel" onchange="updateCalculations()" class="rounded border-slate-700 text-indigo-600 focus:ring-indigo-500 w-4 h-4">
+                <span data-i18n="addon_travel">Travel & Shoot Location</span>
+              </label>
+              <label class="flex items-center gap-3 p-3 bg-slate-900/60 rounded-xl border border-slate-800 hover:border-slate-700 cursor-pointer text-xs">
+                <input type="checkbox" id="addonRaw" onchange="updateCalculations()" class="rounded border-slate-700 text-indigo-600 focus:ring-indigo-500 w-4 h-4">
+                <span data-i18n="addon_raw">Raw Project Files Delivery</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Interactive Proposal & Output -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/30 sticky top-20 shadow-2xl">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="suggested_quote">Suggested Campaign Quote</span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> <span data-i18n="live_rate">Live Rate</span>
+            </span>
+          </div>
+
+          <!-- Main Quote Cards -->
+          <div class="my-6 text-center">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="target_rate">Target Rate</div>
+            <div id="targetRateDisplay" class="text-4xl sm:text-5xl font-black tracking-tight text-white mb-4">$2,450</div>
+            
+            <div class="grid grid-cols-2 gap-3 pt-4 border-t border-slate-800/80">
+              <div class="p-3 bg-slate-900/80 rounded-xl text-left border border-slate-800">
+                <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="walkaway_floor">Walkaway Floor</div>
+                <div id="floorRateDisplay" class="text-lg font-bold text-amber-400">$2,083</div>
+              </div>
+              <div class="p-3 bg-slate-900/80 rounded-xl text-left border border-slate-800">
+                <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="high_anchor">High Anchor Quote</div>
+                <div id="stretchRateDisplay" class="text-lg font-bold text-indigo-400">$2,940</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fee Breakdown -->
+          <div class="space-y-2.5 text-xs border-t border-slate-800 pt-4">
+            <div class="text-xs font-bold text-slate-400 mb-2" data-i18n="breakdown_title">Itemized Rate Breakdown</div>
+            <div class="flex justify-between text-slate-300">
+              <span data-i18n="breakdown_base">Baseline Media Value:</span>
+              <span id="breakdownBase" class="font-mono text-slate-100">$1,200</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span data-i18n="breakdown_usage">Usage Rights Markup:</span>
+              <span id="breakdownUsage" class="font-mono text-slate-100">+$360</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span data-i18n="breakdown_exclusivity">Exclusivity Lockout Fee:</span>
+              <span id="breakdownExclusivity" class="font-mono text-slate-100">+$600</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span data-i18n="breakdown_production">Production Add-ons:</span>
+              <span id="breakdownProduction" class="font-mono text-slate-100">+$290</span>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <div class="mt-6 space-y-3">
+            <button onclick="generateShareableQuoteLink()" class="w-full py-3.5 px-4 rounded-xl accent-gradient hover:opacity-95 transition font-bold text-xs text-white shadow-lg flex items-center justify-center gap-2">
+              <i class="fa-solid fa-link"></i> <span data-i18n="generate_btn">Generate Verified Client Quote Link</span>
+            </button>
+            <div id="copySuccessMsg" class="hidden text-center text-xs text-emerald-400 font-semibold">
+              <i class="fa-solid fa-check me-1"></i> <span data-i18n="copied_msg">Quote link copied to clipboard!</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Translation Dictionaries
+    const i18n = {
+      en: {
+        hero_title: "Multi-Variable Brand Deal Engine",
+        hero_desc: "Value contractual usage rights, category exclusivity, production labor, and niche engagement factors with transparent proof for sponsor negotiations.",
+        client_view_title: "Verified Sponsor Proposal View",
+        client_view_desc: "This quote was locked by the creator using current analytics and contract parameters.",
+        edit_variables_btn: "Edit Variables",
+        baseline_heading: "1. Baseline Footprint",
+        content_niche: "Content Niche",
+        primary_platform: "Primary Platform",
+        avg_views_label: "Average Views / Reach (30-day avg)",
+        engagement_label: "Audience Engagement Rate (%)",
+        contract_heading: "2. Contractual Terms & Modifiers",
+        paid_usage_label: "Paid Usage Rights",
+        exclusivity_label: "Category Exclusivity Lockout",
+        production_addons_label: "Production & Delivery Add-ons",
+        addon_rush: "Rush Delivery (<48 Hours)",
+        addon_crew: "Studio / External Crew",
+        addon_travel: "Travel & Shoot Location",
+        addon_raw: "Raw Project Files Delivery",
+        suggested_quote: "Suggested Campaign Quote",
+        live_rate: "Live Rate",
+        target_rate: "Target Rate",
+        walkaway_floor: "Walkaway Floor",
+        high_anchor: "High Anchor Quote",
+        breakdown_title: "Itemized Rate Breakdown",
+        breakdown_base: "Baseline Media Value:",
+        breakdown_usage: "Usage Rights Markup:",
+        breakdown_exclusivity: "Exclusivity Lockout Fee:",
+        breakdown_production: "Production Add-ons:",
+        generate_btn: "Generate Verified Client Quote Link",
+        copied_msg: "Quote link copied to clipboard!"
+      },
+      es: {
+        hero_title: "Motor de Acuerdos de Marca Multivariable",
+        hero_desc: "Valore los derechos contractuales de uso, exclusividad, trabajo de producción y factores de compromiso para negociaciones con patrocinadores.",
+        client_view_title: "Vista de Propuesta Verificada",
+        client_view_desc: "Esta cotización fue bloqueada por el creador utilizando parámetros actuales.",
+        edit_variables_btn: "Editar Variables",
+        baseline_heading: "1. Huella Base",
+        content_niche: "Nicho de Contenido",
+        primary_platform: "Plataforma Principal",
+        avg_views_label: "Visualizaciones Promedio / Alcance",
+        engagement_label: "Tasa de Interacción de Audiencia (%)",
+        contract_heading: "2. Términos Contractuales y Modificadores",
+        paid_usage_label: "Derechos de Uso Pagado",
+        exclusivity_label: "Bloqueo de Exclusividad",
+        production_addons_label: "Complementos de Producción",
+        addon_rush: "Entrega URGENTE (<48 Horas)",
+        addon_crew: "Equipo de Estudio Externo",
+        addon_travel: "Viaje y Localización",
+        addon_raw: "Entrega de Archivos Crudos",
+        suggested_quote: "Cotización Sugerida de Campaña",
+        live_rate: "Tarifa en Vivo",
+        target_rate: "Tarifa Objetivo",
+        walkaway_floor: "Límite Mínimo",
+        high_anchor: "Cotización de Anclaje Alto",
+        breakdown_title: "Desglose Detallado de Tarifas",
+        breakdown_base: "Valor Base de Medios:",
+        breakdown_usage: "Recargo por Derechos de Uso:",
+        breakdown_exclusivity: "Tarifa de Exclusividad:",
+        breakdown_production: "Complementos de Producción:",
+        generate_btn: "Generar Enlace de Cotización Verificado",
+        copied_msg: "¡Enlace copiado al portapapeles!"
+      },
+      fr: {
+        hero_title: "Moteur de Contrats de Marque Multivariable",
+        hero_desc: "Évaluez les droits d'utilisation contractuels, l'exclusivité, le travail de production et l'engagement pour les négociations.",
+        client_view_title: "Vue de Proposition Sponsorisée",
+        client_view_desc: "Ce devis a été verrouillé par le créateur à l'aide des paramètres actuels.",
+        edit_variables_btn: "Modifier les Variables",
+        baseline_heading: "1. Empreinte de Base",
+        content_niche: "Niche de Contenu",
+        primary_platform: "Plateforme Principale",
+        avg_views_label: "Vues Moyennes / Portée",
+        engagement_label: "Taux d'Engagement (%)",
+        contract_heading: "2. Conditions Contractuelles et Modificateurs",
+        paid_usage_label: "Droits d'Utilisation Payants",
+        exclusivity_label: "Exclusivité de Catégorie",
+        production_addons_label: "Options de Production",
+        addon_rush: "Livraison Rapide (<48 Heures)",
+        addon_crew: "Équipe de Tournage / Studio",
+        addon_travel: "Déplacement et Tournage",
+        addon_raw: "Livraison des Fichiers Bruts",
+        suggested_quote: "Devis de Campagne Suggéré",
+        live_rate: "Tarif en Direct",
+        target_rate: "Tarif Cible",
+        walkaway_floor: "Tarif Minimum",
+        high_anchor: "Tarif Élevé",
+        breakdown_title: "Ventilation Détaillée des Coûts",
+        breakdown_base: "Valeur Média de Base:",
+        breakdown_usage: "Majoration Droits d'Utilisation:",
+        breakdown_exclusivity: "Frais d'Exclusivité:",
+        breakdown_production: "Options de Production:",
+        generate_btn: "Générer un Lien de Devis Vérifié",
+        copied_msg: "Lien copié dans le presse-papiers !"
+      }
+    };
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    const CreatorEngineConfig = {
+      niches: {
+        tech_software: { multiplier: 1.85, baseCPM: 35.00 },
+        finance_crypto: { multiplier: 2.10, baseCPM: 45.00 },
+        beauty_fashion: { multiplier: 1.25, baseCPM: 20.00 },
+        fitness_health: { multiplier: 1.35, baseCPM: 22.00 },
+        gaming_esports: { multiplier: 0.90, baseCPM: 12.00 },
+        food_cooking: { multiplier: 1.15, baseCPM: 18.00 },
+        travel_vlog: { multiplier: 1.40, baseCPM: 25.00 },
+        general_ent: { multiplier: 0.80, baseCPM: 10.00 }
+      },
+      usageRights: { organic_only: 0.00, ads_30_days: 0.30, ads_60_days: 0.45, ads_90_days: 0.60, perpetual: 1.50 },
+      exclusivity: { none: 0.00, category_1mo: 0.25, category_3mo: 0.50, category_6mo: 0.85, full_lockout_1yr: 1.50 }
+    };
+
+    function updateCalculations() {
+      const avgViews = parseInt(document.getElementById('avgViewsInput').value);
+      const engagement = parseFloat(document.getElementById('engagementInput').value);
+      const nicheKey = document.getElementById('nicheSelect').value;
+      const usageKey = document.getElementById('usageSelect').value;
+      const exclusivityKey = document.getElementById('exclusivitySelect').value;
+      const currencyKey = document.getElementById('currencySelector').value;
+
+      document.getElementById('avgViewsDisplay').innerText = avgViews.toLocaleString();
+      document.getElementById('engagementDisplay').innerText = engagement.toFixed(1) + '%';
+
+      const niche = CreatorEngineConfig.niches[nicheKey] || CreatorEngineConfig.niches.general_ent;
+      let baseRateUSD = (avgViews / 1000) * niche.baseCPM * niche.multiplier;
+
+      const engagementFactor = Math.max(0.7, engagement / 3.5);
+      baseRateUSD *= engagementFactor;
+
+      const usageMarkup = CreatorEngineConfig.usageRights[usageKey] || 0;
+      const exclusivityMarkup = CreatorEngineConfig.exclusivity[exclusivityKey] || 0;
+      let totalMultiplier = 1 + usageMarkup + exclusivityMarkup;
+
+      // Production Add-ons Calculation
+      let flatAddonsUSD = 0;
+      let addonMarkup = 0;
+      if (document.getElementById('addonRush').checked) { flatAddonsUSD += 250; addonMarkup += 0.25; }
+      if (document.getElementById('addonCrew').checked) { flatAddonsUSD += 500; addonMarkup += 0.15; }
+      if (document.getElementById('addonTravel').checked) { flatAddonsUSD += 750; addonMarkup += 0.20; }
+      if (document.getElementById('addonRaw').checked) { flatAddonsUSD += 300; addonMarkup += 0.30; }
+
+      totalMultiplier += addonMarkup;
+      const totalUSD = (baseRateUSD * totalMultiplier) + flatAddonsUSD;
+
+      const curr = currencyRates[currencyKey] || currencyRates.USD;
+      const target = Math.round(totalUSD * curr.rate);
+      const floor = Math.round(target * 0.85);
+      const stretch = Math.round(target * 1.20);
+
+      const baseVal = Math.round(baseRateUSD * curr.rate);
+      const usageVal = Math.round(baseRateUSD * usageMarkup * curr.rate);
+      const exclusivityVal = Math.round(baseRateUSD * exclusivityMarkup * curr.rate);
+      const prodVal = Math.round(((baseRateUSD * addonMarkup) + flatAddonsUSD) * curr.rate);
+
+      document.getElementById('targetRateDisplay').innerText = `${curr.symbol}${target.toLocaleString()}`;
+      document.getElementById('floorRateDisplay').innerText = `${curr.symbol}${floor.toLocaleString()}`;
+      document.getElementById('stretchRateDisplay').innerText = `${curr.symbol}${stretch.toLocaleString()}`;
+
+      document.getElementById('breakdownBase').innerText = `${curr.symbol}${baseVal.toLocaleString()}`;
+      document.getElementById('breakdownUsage').innerText = `+${curr.symbol}${usageVal.toLocaleString()}`;
+      document.getElementById('breakdownExclusivity').innerText = `+${curr.symbol}${exclusivityVal.toLocaleString()}`;
+      document.getElementById('breakdownProduction').innerText = `+${curr.symbol}${prodVal.toLocaleString()}`;
+
+      localStorage.setItem('creator_os_state', JSON.stringify({ views: avgViews, currency: currencyKey }));
+    }
+
+    function generateShareableQuoteLink() {
+      const urlParams = new URLSearchParams(window.location.search);
+      urlParams.set('clientView', 'true');
+      const fullShareUrl = `${window.location.origin}${window.location.pathname}?${urlParams.toString()}`;
+      
+      navigator.clipboard.writeText(fullShareUrl).then(() => {
+        const msg = document.getElementById('copySuccessMsg');
+        msg.classList.remove('hidden');
+        setTimeout(() => msg.classList.add('hidden'), 3000);
+      });
+    }
+
+    function exitClientView() {
+      const urlParams = new URLSearchParams(window.location.search);
+      urlParams.delete('clientView');
+      window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+      document.getElementById('clientViewAlert').classList.add('hidden');
+      document.getElementById('controlsContainer').classList.remove('opacity-50', 'pointer-events-none');
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateCalculations();
+    };
+  </script>
+</body>
+</html>

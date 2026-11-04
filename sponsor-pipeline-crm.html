@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Sponsor Deal Pipeline & CRM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Sponsor CRM</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+
+        <select id="currencySelector" onchange="renderCrm()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Sponsor Deal Pipeline & CRM Tracker</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Manage your incoming sponsor leads, negotiate stages, deal sizes, and conversion pipeline completely free.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Input Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-handshake"></i> <span data-i18n="input_heading">1. Add Sponsor Deal</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="brand_label">Brand / Sponsor Name</label>
+            <input type="text" id="crmBrand" placeholder="e.g. Supabase" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="value_label">Proposed Deal Value ($)</label>
+            <input type="number" id="crmValue" placeholder="3500" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="stage_label">Pipeline Stage</label>
+            <select id="crmStage" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="Initial Outreach">Initial Outreach Sent</option>
+              <option value="Media Kit Sent">Media Kit / Rates Sent</option>
+              <option value="Negotiation">Active Negotiation</option>
+              <option value="Contract Signed">Contract Signed 🤝</option>
+              <option value="Closed Lost">Closed / Lost</option>
+            </select>
+          </div>
+
+          <button onclick="addCrmDeal()" class="w-full py-3 rounded-xl accent-gradient text-white font-bold text-sm shadow-lg shadow-indigo-500/20 hover:opacity-95 transition" data-i18n="add_btn">
+            Add Deal to CRM
+          </button>
+        </div>
+      </div>
+
+      <!-- Pipeline Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Pipeline Value Overview</span>
+            <span id="dealCountBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">0 Deals</span>
+          </div>
+
+          <div class="text-center py-5 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="total_pipeline_label">Total Active Pipeline Value</div>
+            <div id="totalPipelineDisplay" class="text-4xl font-black tracking-tight text-emerald-400">$0.00</div>
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider" data-i18n="ledger_title">Sponsor Negotiations</h3>
+            <div id="crmListContainer" class="space-y-2 max-h-[260px] overflow-y-auto pr-1">
+              <div class="text-center py-6 text-xs text-slate-500 italic" data-i18n="empty_state">No sponsor deals in pipeline. Add your first brand lead on the left!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Sponsor Deal Pipeline & CRM Tracker",
+        hero_desc: "Manage your incoming sponsor leads, negotiate stages, deal sizes, and conversion pipeline completely free.",
+        input_heading: "1. Add Sponsor Deal",
+        brand_label: "Brand / Sponsor Name",
+        value_label: "Proposed Deal Value ($)",
+        stage_label: "Pipeline Stage",
+        add_btn: "Add Deal to CRM",
+        summary_title: "Pipeline Value Overview",
+        total_pipeline_label: "Total Active Pipeline Value",
+        ledger_title: "Sponsor Negotiations",
+        empty_state: "No sponsor deals in pipeline. Add your first brand lead on the left!"
+      },
+      es: {
+        hero_title: "Embudo de Patrocinios y CRM",
+        hero_desc: "Gestiona tus prospectos de marcas y etapas de negociación gratis.",
+        input_heading: "1. Agregar Negocio de Patrocinio",
+        brand_label: "Nombre de la Marca",
+        value_label: "Valor Propuesto ($)",
+        stage_label: "Etapa del Embudo",
+        add_btn: "Agregar al CRM",
+        summary_title: "Resumen del Embudo",
+        total_pipeline_label: "Valor Total Activo",
+        ledger_title: "Negociaciones Activas",
+        empty_state: "No hay tratos en el embudo."
+      },
+      fr: {
+        hero_title: "Pipeline de Sponsoring & CRM",
+        hero_desc: "Gérez vos prospects de marques et vos négociations de contrats gratuitement.",
+        input_heading: "1. Ajouter un Contrat Sponsor",
+        brand_label: "Nom de la Marque",
+        value_label: "Valeur Proposée ($)",
+        stage_label: "Étape du Pipeline",
+        add_btn: "Ajouter au CRM",
+        summary_title: "Vue d'ensemble du Pipeline",
+        total_pipeline_label: "Valeur Totale Active",
+        ledger_title: "Négociations en Cours",
+        empty_state: "Aucun accord de sponsoring pour le moment."
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    let crmDeals = JSON.parse(localStorage.getItem('creator_os_crm')) || [
+      { brand: 'Supabase', value: 3000, stage: 'Active Negotiation' },
+      { brand: 'Raycast', value: 2500, stage: 'Contract Signed' }
+    ];
+
+    function addCrmDeal() {
+      const brand = document.getElementById('crmBrand').value.trim();
+      const value = parseFloat(document.getElementById('crmValue').value);
+      const stage = document.getElementById('crmStage').value;
+
+      if (!brand || isNaN(value) || value <= 0) {
+        alert('Please enter a valid brand name and deal value.');
+        return;
+      }
+
+      crmDeals.push({ brand, value, stage });
+      localStorage.setItem('creator_os_crm', JSON.stringify(crmDeals));
+
+      document.getElementById('crmBrand').value = '';
+      document.getElementById('crmValue').value = '';
+      renderCrm();
+    }
+
+    function deleteCrmDeal(index) {
+      crmDeals.splice(index, 1);
+      localStorage.setItem('creator_os_crm', JSON.stringify(crmDeals));
+      renderCrm();
+    }
+
+    function renderCrm() {
+      const container = document.getElementById('crmListContainer');
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      let totalUSD = 0;
+      container.innerHTML = '';
+
+      if (crmDeals.length === 0) {
+        container.innerHTML = `<div class="text-center py-6 text-xs text-slate-500 italic">No sponsor deals in pipeline. Add your first brand lead on the left!</div>`;
+        document.getElementById('totalPipelineDisplay').innerText = `${c}0.00`;
+        document.getElementById('dealCountBadge').innerText = `0 Deals`;
+        return;
+      }
+
+      crmDeals.forEach((item, index) => {
+        if (item.stage !== 'Closed Lost') {
+          totalUSD += item.value;
+        }
+
+        const convertedAmt = (item.value * r).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        
+        let badgeClass = "bg-indigo-500/10 text-indigo-300 border-indigo-500/20";
+        if (item.stage === 'Contract Signed') badgeClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+        if (item.stage === 'Closed Lost') badgeClass = "bg-red-500/10 text-red-400 border-red-500/20";
+
+        const div = document.createElement('div');
+        div.className = "flex items-center justify-between p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-xs";
+        div.innerHTML = `
+          <div>
+            <div class="font-bold text-slate-200">${item.brand}</div>
+            <div class="mt-1"><span class="px-2 py-0.5 rounded-full border text-[10px] font-semibold ${badgeClass}">${item.stage}</span></div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="font-bold text-emerald-400">${c}${convertedAmt}</span>
+            <button onclick="deleteCrmDeal(${index})" class="text-slate-500 hover:text-red-400 transition"><i class="fa-solid fa-trash-can"></i></button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      document.getElementById('totalPipelineDisplay').innerText = `${c}${(totalUSD * r).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      document.getElementById('dealCountBadge').innerText = `${crmDeals.length} Deals`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      renderCrm();
+    };
+  </script>
+</body>
+</html>

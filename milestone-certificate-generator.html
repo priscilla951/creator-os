@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Milestones Certificate & Badge Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Viral Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Creator Milestones Certificate Generator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Design high-resolution milestone graphics and celebration badges to share your channel achievements across social media.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-award"></i> <span data-i18n="input_heading">1. Milestone & Style Setup</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="creator_name">Creator or Channel Name</label>
+            <input type="text" id="creatorNameInput" value="Alex Rivers" oninput="drawCanvas()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="milestone_text">Milestone Achievement</label>
+            <input type="text" id="milestoneTextInput" value="100,000 Subscribers" oninput="drawCanvas()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="theme_style">Visual Theme Style</label>
+            <select id="themeStyleSelect" onchange="drawCanvas()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="gold">Sleek Gold Edition</option>
+              <option value="cyberpunk">Cyberpunk Neon Purple</option>
+              <option value="emerald">Executive Emerald Dark</option>
+            </select>
+          </div>
+
+          <button onclick="downloadCertificate()" class="w-full py-3 rounded-xl accent-gradient text-white font-bold text-sm shadow-lg shadow-indigo-500/20 hover:opacity-95 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-download"></i> <span data-i18n="download_btn">Download High-Res PNG</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Canvas Preview Column -->
+      <div class="lg:col-span-7 flex justify-center">
+        <div class="glass-card p-4 rounded-3xl border-indigo-500/35 shadow-2xl w-full flex flex-col items-center overflow-hidden">
+          <canvas id="milestoneCanvas" width="1200" height="675" class="w-full h-auto rounded-2xl shadow-inner border border-slate-800"></canvas>
+          <span class="text-[10px] text-slate-500 uppercase tracking-widest mt-3 font-semibold">Engineered by CreatorOS</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Creator Milestones Certificate Generator',
+        hero_desc: 'Design high-resolution milestone graphics and celebration badges to share your channel achievements across social media.',
+        input_heading: '1. Milestone & Style Setup',
+        creator_name: 'Creator or Channel Name',
+        milestone_text: 'Milestone Achievement',
+        theme_style: 'Visual Theme Style',
+        download_btn: 'Download High-Res PNG'
+      },
+      es: {
+        hero_title: 'Generador de Certificados de Hitos para Creadores',
+        hero_desc: 'Diseña gráficos de hitos de alta resolución para compartir los logros de tu canal.',
+        input_heading: '1. Configuración de Hitos',
+        creator_name: 'Nombre del Creador o Canal',
+        milestone_text: 'Logro Alcanzado',
+        theme_style: 'Estilo de Tema Visual',
+        download_btn: 'Descargar PNG de Alta Resolución'
+      },
+      fr: {
+        hero_title: 'Générateur de Certificats de Jalons pour Créateurs',
+        hero_desc: 'Concevez des graphiques de jalons haute résolution pour célébrer vos réussites.',
+        input_heading: '1. Paramètres du Jalon',
+        creator_name: 'Nom du Créateur ou de la Chaîne',
+        milestone_text: 'Jalon Atteint',
+        theme_style: 'Style Visuel',
+        download_btn: 'Télécharger le PNG Haute Résolution'
+      }
+    };
+
+    function drawCanvas() {
+      const canvas = document.getElementById('milestoneCanvas');
+      const ctx = canvas.getContext('2d');
+      const name = document.getElementById('creatorNameInput').value || 'Creator';
+      const milestone = document.getElementById('milestoneTextInput').value || 'Milestone Reached';
+      const theme = document.getElementById('themeStyleSelect').value;
+
+      // Clear Canvas & Background
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      let bgGradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      let accentColor = '#f59e0b';
+      let secondaryColor = '#d97706';
+
+      if (theme === 'cyberpunk') {
+        bgGradient.addColorStop(0, '#0f172a');
+        bgGradient.addColorStop(1, '#312e81');
+        accentColor = '#ec4899';
+        secondaryColor = '#8b5cf6';
+      } else if (theme === 'emerald') {
+        bgGradient.addColorStop(0, '#022c22');
+        bgGradient.addColorStop(1, '#0f172a');
+        accentColor = '#34d399';
+        secondaryColor = '#059669';
+      } else { // gold
+        bgGradient.addColorStop(0, '#1e293b');
+        bgGradient.addColorStop(1, '#0f172a');
+        accentColor = '#fbbf24';
+        secondaryColor = '#d97706';
+      }
+
+      ctx.fillStyle = bgGradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Border frame
+      ctx.strokeStyle = accentColor;
+      ctx.lineWidth = 6;
+      ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+
+      // Inner decorative glow line
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(55, 55, canvas.width - 110, canvas.height - 110);
+
+      // Header Label
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = 'bold 24px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.letterSpacing = '4px';
+      ctx.fillText('OFFICIAL CREATOR ACHIEVEMENT', canvas.width / 2, 140);
+
+      // Creator Name
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 64px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(name, canvas.width / 2, 230);
+
+      // Subtitle divider text
+      ctx.fillStyle = '#64748b';
+      ctx.font = '20px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('Has officially surpassed the milestone of', canvas.width / 2, 300);
+
+      // Milestone Value (Gradient text)
+      let textGradient = ctx.createLinearGradient(300, 350, 900, 420);
+      textGradient.addColorStop(0, accentColor);
+      textGradient.addColorStop(1, secondaryColor);
+      ctx.fillStyle = textGradient;
+      ctx.font = '800 64px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(milestone, canvas.width / 2, 400);
+
+      // Footer branding
+      ctx.fillStyle = '#64748b';
+      ctx.font = '16px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('VERIFIED & ENGINEERED BY CREATOR OS', canvas.width / 2, 550);
+    }
+
+    function downloadCertificate() {
+      const canvas = document.getElementById('milestoneCanvas');
+      const link = document.createElement('a');
+      link.download = 'creator-milestone-certificate.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      drawCanvas();
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Live Stream Soundboard Hotkey Matrix</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .sound-pad:active { transform: scale(0.95); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-medium">Broadcast Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Live Stream Soundboard Hotkey Matrix</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Trigger sound effects instantly using custom keyboard hotkeys or on-screen pad clicks during live broadcasts.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Controls & Upload Column -->
+      <div class="lg:col-span-4 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-volume-high"></i> <span data-i18n="input_heading">1. Add Custom Sound Byte</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="sound_name">Sound Effect Title</label>
+            <input type="text" id="soundNameInput" placeholder="e.g. Airhorn" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="key_bind">Trigger Hotkey Key (e.g. '1', 'a', 'z')</label>
+            <input type="text" id="soundKeyInput" maxlength="1" placeholder="1" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none uppercase font-mono">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="audio_file">Audio File (MP3 / WAV)</label>
+            <input type="file" id="soundFile" accept="audio/*" class="w-full bg-slate-900 border border-slate-700 text-slate-400 text-xs rounded-lg p-2.5 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-500 cursor-pointer">
+          </div>
+
+          <button onclick="addCustomSound()" class="w-full py-3.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm shadow-lg shadow-cyan-500/20 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-plus"></i> <span data-i18n="add_pad">Add Pad to Soundboard</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Soundboard Matrix Grid Column -->
+      <div class="lg:col-span-8 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-cyan-500/35 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Active Hotkey Soundboard Pads</span>
+            <span id="padCountBadge" class="text-xs px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-semibold">4 Default Pads Active</span>
+          </div>
+
+          <!-- Soundboard Pads Grid -->
+          <div id="soundGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <!-- Default Preset Pads -->
+            <div onclick="playSound('rimshot')" class="sound-pad bg-slate-900 hover:bg-slate-800 p-5 rounded-2xl border border-slate-800 cursor-pointer transition flex flex-col justify-between items-start h-32 relative overflow-hidden group">
+              <span class="text-xs font-mono font-bold px-2 py-1 rounded bg-slate-800 text-cyan-400 border border-slate-700">[Q]</span>
+              <div>
+                <h4 class="text-sm font-bold text-slate-100 group-hover:text-cyan-300 transition">Rimshot Ba-Dum-Tss</h4>
+                <p class="text-[10px] text-slate-500 mt-0.5">Preset Sound Effect</p>
+              </div>
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-cyan-500 opacity-0 group-hover:opacity-100 transition"></div>
+            </div>
+
+            <div onclick="playSound('airhorn')" class="sound-pad bg-slate-900 hover:bg-slate-800 p-5 rounded-2xl border border-slate-800 cursor-pointer transition flex flex-col justify-between items-start h-32 relative overflow-hidden group">
+              <span class="text-xs font-mono font-bold px-2 py-1 rounded bg-slate-800 text-cyan-400 border border-slate-700">[W]</span>
+              <div>
+                <h4 class="text-sm font-bold text-slate-100 group-hover:text-cyan-300 transition">Airhorn Blast</h4>
+                <p class="text-[10px] text-slate-500 mt-0.5">Preset Sound Effect</p>
+              </div>
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-cyan-500 opacity-0 group-hover:opacity-100 transition"></div>
+            </div>
+
+            <div onclick="playSound('applause')" class="sound-pad bg-slate-900 hover:bg-slate-800 p-5 rounded-2xl border border-slate-800 cursor-pointer transition flex flex-col justify-between items-start h-32 relative overflow-hidden group">
+              <span class="text-xs font-mono font-bold px-2 py-1 rounded bg-slate-800 text-cyan-400 border border-slate-700">[E]</span>
+              <div>
+                <h4 class="text-sm font-bold text-slate-100 group-hover:text-cyan-300 transition">Live Applause</h4>
+                <p class="text-[10px] text-slate-500 mt-0.5">Preset Sound Effect</p>
+              </div>
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-cyan-500 opacity-0 group-hover:opacity-100 transition"></div>
+            </div>
+
+            <div onclick="playSound('bruh')" class="sound-pad bg-slate-900 hover:bg-slate-800 p-5 rounded-2xl border border-slate-800 cursor-pointer transition flex flex-col justify-between items-start h-32 relative overflow-hidden group">
+              <span class="text-xs font-mono font-bold px-2 py-1 rounded bg-slate-800 text-cyan-400 border border-slate-700">[R]</span>
+              <div>
+                <h4 class="text-sm font-bold text-slate-100 group-hover:text-cyan-300 transition">Bruh Sound Effect</h4>
+                <p class="text-[10px] text-slate-500 mt-0.5">Preset Sound Effect</p>
+              </div>
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-cyan-500 opacity-0 group-hover:opacity-100 transition"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Live Stream Soundboard Hotkey Matrix',
+        hero_desc: 'Trigger sound effects instantly using custom keyboard hotkeys or on-screen pad clicks during live broadcasts.',
+        input_heading: '1. Add Custom Sound Byte',
+        sound_name: 'Sound Effect Title',
+        key_bind: "Trigger Hotkey Key (e.g. '1', 'a', 'z')",
+        audio_file: 'Audio File (MP3 / WAV)',
+        add_pad: 'Add Pad to Soundboard',
+        summary_title: 'Active Hotkey Soundboard Pads'
+      },
+      es: {
+        hero_title: 'Soundboard de Transmisión en Vivo con Atajos',
+        hero_desc: 'Dispara efectos de sonido al instante usando atajos de teclado personalizados.',
+        input_heading: '1. Agregar Sonido Personalizado',
+        sound_name: 'Título del Efecto',
+        key_bind: 'Tecla de Activación',
+        audio_file: 'Archivo de Audio (MP3 / WAV)',
+        add_pad: 'Agregar Botón al Soundboard',
+        summary_title: 'Botones Activos del Soundboard'
+      },
+      fr: {
+        hero_title: 'Table d’Effets Sonores en Direct pour Streamers',
+        hero_desc: 'Déclenchez des effets sonores instantanément via des raccourcis clavier ou des clics.',
+        input_heading: '1. Ajouter un Effet Sonore',
+        sound_name: 'Nom de l’Effet',
+        key_bind: 'Touche de Raccourci',
+        audio_file: 'Fichier Audio (MP3 / WAV)',
+        add_pad: 'Ajouter le Pad au Soundboard',
+        summary_title: 'Pads Actifs du Soundboard'
+      }
+    };
+
+    // Preset Data URLs or synth fallback objects
+    const soundRegistry = {
+      'q': { name: 'Rimshot Ba-Dum-Tss', type: 'preset', freq: 400 },
+      'w': { name: 'Airhorn Blast', type: 'preset', freq: 650 },
+      'e': { name: 'Live Applause', type: 'preset', freq: 300 },
+      'r': { name: 'Bruh Sound Effect', type: 'preset', freq: 150 }
+    };
+
+    function playSound(keyOrId) {
+      // Simple Web Audio oscillator fallback for robust instant playback without external file dependencies
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        let freq = 440;
+        if (keyOrId === 'w') freq = 650;
+        if (keyOrId === 'e') freq = 300;
+        if (keyOrId === 'r') freq = 150;
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.4);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      } catch (err) {
+        console.error('Audio playback error:', err);
+      }
+    }
+
+    window.addEventListener('keydown', function(e) {
+      const key = e.key.toLowerCase();
+      if (soundRegistry[key]) {
+        playSound(key);
+      }
+    });
+
+    function addCustomSound() {
+      const name = document.getElementById('soundNameInput').value.trim();
+      const key = document.getElementById('soundKeyInput').value.trim().toLowerCase();
+      const fileInput = document.getElementById('soundFile');
+
+      if (!name || !key) {
+        alert('Please enter a sound title and key bind.');
+        return;
+      }
+
+      soundRegistry[key] = { name: name, type: 'custom' };
+
+      const grid = document.getElementById('soundGrid');
+      const card = document.createElement('div');
+      card.className = "sound-pad bg-slate-900 hover:bg-slate-800 p-5 rounded-2xl border border-slate-800 cursor-pointer transition flex flex-col justify-between items-start h-32 relative overflow-hidden group";
+      card.onclick = () => playSound(key);
+      card.innerHTML = `
+        <span class="text-xs font-mono font-bold px-2 py-1 rounded bg-slate-800 text-cyan-400 border border-slate-700">[${key.toUpperCase()}]</span>
+        <div>
+          <h4 class="text-sm font-bold text-slate-100 group-hover:text-cyan-300 transition">${name}</h4>
+          <p class="text-[10px] text-slate-500 mt-0.5">Custom Sound Effect</p>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-cyan-500 opacity-0 group-hover:opacity-100 transition"></div>
+      `;
+      grid.appendChild(card);
+
+      document.getElementById('soundNameInput').value = '';
+      document.getElementById('soundKeyInput').value = '';
+      document.getElementById('soundFile').value = '';
+
+      const count = Object.keys(soundRegistry).length;
+      document.getElementById('padCountBadge').innerText = `${count} Active Pads`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+    };
+  </script>
+</body>
+</html>

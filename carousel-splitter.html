@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Multi-Platform Carousel Splitter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-medium">Design Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Vertical Thread & Carousel Splitter</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Drop a continuous vertical infographic or image script to slice it into mobile-optimized 1:1 or 4:5 carousel slides automatically.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-4 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-purple-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-scissors"></i> <span data-i18n="input_heading">1. Slice Configuration</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="upload_label">Upload Continuous Graphic Image</label>
+            <input type="file" id="imageUpload" accept="image/*" onchange="handleImageUpload(event)" class="w-full bg-slate-900 border border-slate-700 text-slate-400 text-xs rounded-xl p-2.5 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="ratio_label">Target Slide Aspect Ratio</label>
+            <select id="aspectRatioSelect" onchange="processSlice()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="1:1">1:1 Square (LinkedIn / Instagram / X)</option>
+              <option value="4:5">4:5 Portrait (Instagram Carousel)</option>
+            </select>
+          </div>
+
+          <button onclick="downloadAllSlides()" id="downloadBtn" disabled class="w-full py-3.5 rounded-xl bg-slate-800 text-slate-500 font-bold text-sm transition flex items-center justify-center gap-2 cursor-not-allowed">
+            <i class="fa-solid fa-download"></i> <span data-i18n="download_btn">Download All Slide Images</span>
+          </button>
+
+          <div class="p-4 rounded-xl bg-purple-950/40 border border-purple-500/20 text-xs text-purple-200 flex items-start gap-3">
+            <i class="fa-solid fa-lightbulb text-purple-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Seamless Swiping</p>
+              <p class="text-[11px] text-purple-300 mt-0.5" data-i18n="tip_desc">Design continuous graphics without gaps. This tool preserves pixel alignment across cuts for a seamless swipe animation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Column -->
+      <div class="lg:col-span-8 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-purple-500/35 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Sliced Carousel Grid Preview</span>
+            <span id="sliceCountBadge" class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 font-semibold">0 Slides Generated</span>
+          </div>
+
+          <!-- Slide Grid Container -->
+          <div id="slidesGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4 min-h-[260px] bg-slate-900/60 p-4 rounded-2xl border border-slate-800 items-center justify-center">
+            <div id="gridPlaceholder" class="col-span-full text-center text-slate-500 text-xs py-12">
+              <i class="fa-solid fa-images text-3xl mb-2"></i>
+              <p>Upload a tall graphic to generate split carousel slides</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Vertical Thread & Carousel Splitter',
+        hero_desc: 'Drop a continuous vertical infographic or image script to slice it into mobile-optimized 1:1 or 4:5 carousel slides automatically.',
+        input_heading: '1. Slice Configuration',
+        upload_label: 'Upload Continuous Graphic Image',
+        ratio_label: 'Target Slide Aspect Ratio',
+        download_btn: 'Download All Slide Images',
+        summary_title: 'Sliced Carousel Grid Preview',
+        tip_title: 'Seamless Swiping',
+        tip_desc: 'Design continuous graphics without gaps. This tool preserves pixel alignment across cuts for a seamless swipe animation.'
+      },
+      es: {
+        hero_title: 'Divisor de Carruseles y Hilos Verticales',
+        hero_desc: 'Sube una infografía continua y divídela automáticamente en diapositivas 1:1 o 4:5.',
+        input_heading: '1. Configuración de Corte',
+        upload_label: 'Subir Imagen Gráfica Continua',
+        ratio_label: 'Proporción de Aspecto Objetivo',
+        download_btn: 'Descargar Todas las Diapositivas',
+        summary_title: 'Vista Previa de la Cuadrícula',
+        tip_title: 'Desplazamiento Continuo',
+        tip_desc: 'Preserva la alineación exacta de píxeles en los cortes para una experiencia fluida.'
+      },
+      fr: {
+        hero_title: 'Découpeur de Carrousels & Threads Verticaux',
+        hero_desc: 'Déposez une infographie verticale pour la découper automatiquement en diapositives 1:1 ou 4:5.',
+        input_heading: '1. Configuration de Découpe',
+        upload_label: 'Télécharger une Image Continue',
+        ratio_label: 'Ratio d’Aspect Cible',
+        download_btn: 'Télécharger Toutes les Diapositives',
+        summary_title: 'Aperçu de la Grille Découpée',
+        tip_title: 'Balayage Fluide',
+        tip_desc: 'Préserve l’alignement exact des pixels pour une transition parfaite entre chaque slide.'
+      }
+    };
+
+    let uploadedImage = null;
+    let generatedDataUrls = [];
+
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          uploadedImage = new Image();
+          uploadedImage.onload = function() {
+            processSlice();
+          };
+          uploadedImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function processSlice() {
+      if (!uploadedImage) return;
+
+      const grid = document.getElementById('slidesGrid');
+      grid.innerHTML = '';
+      generatedDataUrls = [];
+
+      const ratioVal = document.getElementById('aspectRatioSelect').value;
+      const imgWidth = uploadedImage.width;
+      const imgHeight = uploadedImage.height;
+
+      // Calculate slice height based on selected aspect ratio
+      const sliceHeight = ratioVal === '4:5' ? (imgWidth * (5 / 4)) : imgWidth;
+      const totalSlides = Math.ceil(imgHeight / sliceHeight);
+
+      for (let i = 0; i < totalSlides; i++) {
+        const canvas = document.createElement('canvas');
+        canvas.width = imgWidth;
+        canvas.height = sliceHeight;
+
+        const ctx = canvas.getContext('2d');
+        // Fill background with dark template neutral in case final slice has bottom remainder
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const sy = i * sliceHeight;
+        const sh = Math.min(sliceHeight, imgHeight - sy);
+
+        ctx.drawImage(uploadedImage, 0, sy, imgWidth, sh, 0, 0, imgWidth, sh);
+
+        const dataUrl = canvas.toDataURL('image/png');
+        generatedDataUrls.push(dataUrl);
+
+        // Render visual slide card
+        const card = document.createElement('div');
+        card.className = "bg-slate-950 p-2 rounded-xl border border-slate-800 space-y-2 relative group flex flex-col items-center";
+        card.innerHTML = `
+          <img src="${dataUrl}" class="w-full h-auto rounded-lg border border-slate-800">
+          <div class="flex justify-between w-full px-1 items-center">
+            <span class="text-[10px] font-bold text-slate-400">Slide ${i + 1} of ${totalSlides}</span>
+            <a href="${dataUrl}" download="carousel-slide-${i + 1}.png" class="text-purple-400 hover:text-purple-300 text-xs"><i class="fa-solid fa-download"></i></a>
+          </div>
+        `;
+        grid.appendChild(card);
+      }
+
+      const badge = document.getElementById('sliceCountBadge');
+      badge.className = "text-xs px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-semibold";
+      badge.innerText = `${totalSlides} Slides Sliced`;
+
+      const dlBtn = document.getElementById('downloadBtn');
+      dlBtn.disabled = false;
+      dlBtn.className = "w-full py-3.5 rounded-xl accent-gradient text-white font-bold text-sm shadow-lg shadow-purple-500/20 hover:opacity-95 transition flex items-center justify-center gap-2 cursor-pointer";
+    }
+
+    function downloadAllSlides() {
+      generatedDataUrls.forEach((url, idx) => {
+        setTimeout(() => {
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `carousel-slide-${idx + 1}.png`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        }, idx * 250);
+      });
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+    };
+  </script>
+</body>
+</html>

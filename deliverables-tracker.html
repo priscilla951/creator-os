@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Sponsorship Deliverables Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-medium">Operations</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Sponsorship Deliverables Tracker</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Track brand campaign milestones, asset checklists, draft review deadlines, and publishing schedules in one place.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Add Deliverable Form -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-plus-circle"></i> <span data-i18n="form_heading">Add New Deliverable</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="brand_label">Brand / Campaign Name</label>
+            <input type="text" id="taskBrand" placeholder="e.g. NordVPN Campaign" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="asset_label">Deliverable Asset Type</label>
+            <select id="taskType" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="YouTube Integrated Video (60s)">YouTube Integrated Video (60s)</option>
+              <option value="Dedicated YouTube Video">Dedicated YouTube Video</option>
+              <option value="TikTok / IG Reel Short">TikTok / IG Reel Short</option>
+              <option value="Newsletter Sponsor Banner">Newsletter Sponsor Banner</option>
+              <option value="Twitter / X Thread">Twitter / X Thread</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="deadline_label">Publishing / Review Deadline</label>
+            <input type="date" id="taskDate" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="payout_label">Agreed Compensation Value ($)</label>
+            <input type="number" id="taskPayout" placeholder="2500" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <button onclick="addDeliverable()" class="w-full py-3 rounded-xl accent-gradient text-white font-bold text-sm shadow-lg shadow-indigo-500/20 hover:opacity-95 transition">
+            <span data-i18n="add_btn">Add to Tracking Matrix</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Deliverables List Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/30 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="list_title">Active Campaigns & Tasks</span>
+            <span id="taskCountBadge" class="text-xs px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-semibold">0 Active</span>
+          </div>
+
+          <div id="taskList" class="space-y-3">
+            <!-- Dynamic Tasks Appended Here -->
+          </div>
+
+          <div id="emptyState" class="text-center py-12 text-slate-500 text-xs">
+            <i class="fa-solid fa-clipboard-list text-3xl mb-2 text-slate-600"></i>
+            <p data-i18n="empty_text">No deliverables tracked yet. Add your first campaign on the left!</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Sponsorship Deliverables Tracker",
+        hero_desc: "Track brand campaign milestones, asset checklists, draft review deadlines, and publishing schedules in one place.",
+        form_heading: "Add New Deliverable",
+        brand_label: "Brand / Campaign Name",
+        asset_label: "Deliverable Asset Type",
+        deadline_label: "Publishing / Review Deadline",
+        payout_label: "Agreed Compensation Value ($)",
+        add_btn: "Add to Tracking Matrix",
+        list_title: "Active Campaigns & Tasks",
+        empty_text: "No deliverables tracked yet. Add your first campaign on the left!"
+      },
+      es: {
+        hero_title: "Rastreador de Entregables de Patrocinio",
+        hero_desc: "Rastree hitos de campañas y fechas límite de revisión en un solo lugar.",
+        form_heading: "Agregar Nuevo Entregable",
+        brand_label: "Nombre de Marca / Campaña",
+        asset_label: "Tipo de Activo",
+        deadline_label: "Fecha Límite",
+        payout_label: "Compensación Acordada ($)",
+        add_btn: "Agregar a la Matriz",
+        list_title: "Campañas Activas",
+        empty_text: "No hay entregables registrados."
+      },
+      fr: {
+        hero_title: "Suivi des Livrables de Sponsoring",
+        hero_desc: "Suivez les jalons de campagne et les dates limites de révision au même endroit.",
+        form_heading: "Ajouter un Livrable",
+        brand_label: "Nom de la Marque",
+        asset_label: "Type d'Actif",
+        deadline_label: "Date Limite",
+        payout_label: "Rémunération Convenue ($)",
+        add_btn: "Ajouter à la Matrice",
+        list_title: "Campagnes Actives",
+        empty_text: "Aucun livrable enregistré pour l'instant."
+      }
+    };
+
+    let tasks = JSON.parse(localStorage.getItem('creator_os_deliverables')) || [];
+
+    function addDeliverable() {
+      const brand = document.getElementById('taskBrand').value.trim();
+      const type = document.getElementById('taskType').value;
+      const date = document.getElementById('taskDate').value;
+      const payout = document.getElementById('taskPayout').value;
+
+      if (!brand) {
+        alert('Please enter a brand name.');
+        return;
+      }
+
+      tasks.push({
+        id: Date.now(),
+        brand,
+        type,
+        date: date || 'TBD',
+        payout: payout || '0',
+        completed: false
+      });
+
+      saveAndRender();
+      document.getElementById('taskBrand').value = '';
+      document.getElementById('taskPayout').value = '';
+    }
+
+    function toggleTask(id) {
+      tasks = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+      saveAndRender();
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      saveAndRender();
+    }
+
+    function saveAndRender() {
+      localStorage.setItem('creator_os_deliverables', JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    function renderTasks() {
+      const container = document.getElementById('taskList');
+      const emptyState = document.getElementById('emptyState');
+      const badge = document.getElementById('taskCountBadge');
+
+      container.innerHTML = '';
+      badge.innerText = `${tasks.length} Active`;
+
+      if (tasks.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      }
+      emptyState.style.display = 'none';
+
+      tasks.forEach(t => {
+        container.innerHTML += `
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" ${t.completed ? 'checked' : ''} onclick="toggleTask(${t.id})" class="h-4 w-4 accent-indigo-500 rounded cursor-pointer">
+              <div>
+                <h4 class="text-xs font-bold ${t.completed ? 'line-through text-slate-500' : 'text-slate-100'}">${t.brand}</h4>
+                <p class="text-[11px] text-slate-400">${t.type} • Due: ${t.date}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-bold text-emerald-400">$${parseInt(t.payout).toLocaleString()}</span>
+              <button onclick="deleteTask(${t.id})" class="text-slate-500 hover:text-rose-400 transition text-xs"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      renderTasks();
+    };
+  </script>
+</body>
+</html>

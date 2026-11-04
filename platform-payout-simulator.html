@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Platform Payout Simulator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .text-gradient { background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <!-- Header Navigation -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-medium">Platform Math</span>
+        </div>
+      </a>
+      
+      <!-- Global Controls -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+
+        <select id="currencySelector" onchange="updateCalculations()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Hero Banner -->
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Platform Payout Revenue Simulator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Simulate and compare native platform payouts across YouTube Long-Form, YouTube Shorts, and TikTok Creator Rewards based on viewer geography and audience retention.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-6 space-y-6">
+        
+        <div class="glass-card p-6 rounded-2xl space-y-5">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-chart-pie"></i> <span data-i18n="input_heading">1. Monthly Traffic & Audience Inputs</span>
+          </h2>
+
+          <!-- Content Niche -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="content_niche">Content Category / Niche</label>
+            <select id="nicheSelect" onchange="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="finance">Finance, Crypto & Investing (High RPM)</option>
+              <option value="tech">Tech Reviews & Software</option>
+              <option value="education">Education & Tutorials</option>
+              <option value="lifestyle">Lifestyle & Travel</option>
+              <option value="gaming">Gaming & Streaming</option>
+              <option value="entertainment" selected>General Entertainment / Vlogs</option>
+            </select>
+          </div>
+
+          <!-- Audience Country Mix -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="geo_tier">Primary Audience Location</label>
+            <select id="geoSelect" onchange="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="tier1" selected>Tier 1 (USA, UK, Canada, Australia)</option>
+              <option value="tier2">Tier 2 (EU, Japan, South Korea)</option>
+              <option value="tier3">Tier 3 / Global Mix (LATAM, Africa, Asia)</option>
+            </select>
+          </div>
+
+          <!-- Monthly View Volume Slider -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-2">
+              <span class="text-slate-300" data-i18n="monthly_views">Monthly Views</span>
+              <span id="monthlyViewsDisplay" class="text-indigo-400 font-bold text-sm">250,000</span>
+            </div>
+            <input type="range" id="viewsInput" min="10000" max="10000000" step="10000" value="250000" oninput="updateCalculations()" class="w-full accent-indigo-500 bg-slate-800 h-2 rounded-lg cursor-pointer">
+          </div>
+
+          <!-- TikTok Qualified Views % -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-2">
+              <span class="text-slate-300" data-i18n="qualified_views">Qualified Views Ratio (%)</span>
+              <span id="qualifiedDisplay" class="text-indigo-400 font-bold text-sm">55%</span>
+            </div>
+            <input type="range" id="qualifiedInput" min="10" max="90" step="5" value="55" oninput="updateCalculations()" class="w-full accent-indigo-500 bg-slate-800 h-2 rounded-lg cursor-pointer">
+            <p class="text-[10px] text-slate-500 mt-1" data-i18n="qualified_hint">Views that watch >5s on TikTok 1min+ videos or YouTube ad-enabled views.</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Output Comparison Cards -->
+      <div class="lg:col-span-6 space-y-4">
+        
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/30">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4" data-i18n="comparative_yield">Estimated Native Monthly Payouts</h3>
+
+          <!-- Platform 1: YouTube Long-Form -->
+          <div class="p-4 bg-slate-900/90 rounded-xl border border-slate-800 mb-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 text-lg">
+                <i class="fa-brands fa-youtube"></i>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white">YouTube Long-Form</h4>
+                <p class="text-[10px] text-slate-400">Est. RPM: <span id="ytLongRpm">$4.50</span></p>
+              </div>
+            </div>
+            <div id="ytLongPayout" class="text-2xl font-black text-emerald-400">$1,125</div>
+          </div>
+
+          <!-- Platform 2: TikTok Creator Rewards -->
+          <div class="p-4 bg-slate-900/90 rounded-xl border border-slate-800 mb-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 text-lg">
+                <i class="fa-brands fa-tiktok"></i>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white">TikTok Creator Rewards</h4>
+                <p class="text-[10px] text-slate-400">Est. Qualified RPM: <span id="ttRpm">$0.65</span></p>
+              </div>
+            </div>
+            <div id="ttPayout" class="text-2xl font-black text-indigo-400">$89</div>
+          </div>
+
+          <!-- Platform 3: YouTube Shorts -->
+          <div class="p-4 bg-slate-900/90 rounded-xl border border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 text-lg">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white">YouTube Shorts</h4>
+                <p class="text-[10px] text-slate-400">Est. RPM: <span id="ytShortsRpm">$0.06</span></p>
+              </div>
+            </div>
+            <div id="ytShortsPayout" class="text-2xl font-black text-amber-400">$15</div>
+          </div>
+
+          <!-- Key Takeaway Banner -->
+          <div class="mt-6 p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200">
+            <i class="fa-solid fa-lightbulb text-amber-400 me-2"></i>
+            <span data-i18n="takeaway_msg">Long-form content yields up to 75x higher native payout per view compared to short-form short loops.</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Platform Payout Revenue Simulator",
+        hero_desc: "Simulate and compare native platform payouts across YouTube Long-Form, YouTube Shorts, and TikTok Creator Rewards.",
+        input_heading: "1. Monthly Traffic & Audience Inputs",
+        content_niche: "Content Category / Niche",
+        geo_tier: "Primary Audience Location",
+        monthly_views: "Monthly Views",
+        qualified_views: "Qualified Views Ratio (%)",
+        qualified_hint: "Views that watch >5s on TikTok 1min+ videos or YouTube ad-enabled views.",
+        comparative_yield: "Estimated Native Monthly Payouts",
+        takeaway_msg: "Long-form content yields up to 75x higher native payout per view compared to short-form loops."
+      },
+      es: {
+        hero_title: "Simulador de Pagos de Plataformas",
+        hero_desc: "Simule y compare los pagos nativos de las plataformas entre YouTube de formato largo, YouTube Shorts y TikTok.",
+        input_heading: "1. Tráfico Mensual y Entradas de Audiencia",
+        content_niche: "Categoría de Contenido / Nicho",
+        geo_tier: "Ubicación Principal de la Audiencia",
+        monthly_views: "Visualizaciones Mensuales",
+        qualified_views: "Proporción de Vistas Cualificadas (%)",
+        qualified_hint: "Vistas que superan los 5 segundos en vídeos de TikTok o con anuncios en YouTube.",
+        comparative_yield: "Pagos Mensuales Nativos Estimados",
+        takeaway_msg: "El contenido de formato largo rinde hasta 75 veces más por reproducción que el formato corto."
+      },
+      fr: {
+        hero_title: "Simulateur de Revenus des Plateformes",
+        hero_desc: "Simulez et comparez les paiements natifs entre YouTube Format Long, YouTube Shorts et TikTok.",
+        input_heading: "1. Trafic Mensuel et Audience",
+        content_niche: "Catégorie de Contenu / Niche",
+        geo_tier: "Localisation Principale de l'Audience",
+        monthly_views: "Vues Mensuelles",
+        qualified_views: "Ratio de Vues Qualifiées (%)",
+        qualified_hint: "Vues de plus de 5s sur TikTok ou activées par la publicité sur YouTube.",
+        comparative_yield: "Estimations des Paiements Mensuels Natus",
+        takeaway_msg: "Le format long génère jusqu'à 75 fois plus de revenus par vue que les formats courts."
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    // RPM Matrices
+    const baseRPMs = {
+      finance: { ytLong: 18.00, ytShorts: 0.08, tt: 0.90 },
+      tech: { ytLong: 12.00, ytShorts: 0.06, tt: 0.70 },
+      education: { ytLong: 9.00, ytShorts: 0.05, tt: 0.60 },
+      lifestyle: { ytLong: 4.50, ytShorts: 0.04, tt: 0.50 },
+      gaming: { ytLong: 3.00, ytShorts: 0.03, tt: 0.40 },
+      entertainment: { ytLong: 2.50, ytShorts: 0.03, tt: 0.35 }
+    };
+
+    const geoMultipliers = { tier1: 1.0, tier2: 0.60, tier3: 0.25 };
+
+    function updateCalculations() {
+      const views = parseInt(document.getElementById('viewsInput').value);
+      const qualifiedPct = parseInt(document.getElementById('qualifiedInput').value) / 100;
+      const nicheKey = document.getElementById('nicheSelect').value;
+      const geoKey = document.getElementById('geoSelect').value;
+      const currKey = document.getElementById('currencySelector').value;
+
+      document.getElementById('monthlyViewsDisplay').innerText = views.toLocaleString();
+      document.getElementById('qualifiedDisplay').innerText = Math.round(qualifiedPct * 100) + '%';
+
+      const rates = baseRPMs[nicheKey] || baseRPMs.entertainment;
+      const geoMult = geoMultipliers[geoKey] || 1.0;
+
+      // Calculate RPMs in USD
+      const ytLongRPM = rates.ytLong * geoMult;
+      const ytShortsRPM = rates.ytShorts * geoMult;
+      const ttRPM = rates.tt * geoMult;
+
+      // Payouts
+      const ytLongPayoutUSD = (views / 1000) * ytLongRPM;
+      const ytShortsPayoutUSD = (views / 1000) * ytShortsRPM;
+      const ttPayoutUSD = ((views * qualifiedPct) / 1000) * ttRPM;
+
+      // Currency application
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('ytLongRpm').innerText = `${c}${(ytLongRPM * r).toFixed(2)}`;
+      document.getElementById('ytShortsRpm').innerText = `${c}${(ytShortsRPM * r).toFixed(2)}`;
+      document.getElementById('ttRpm').innerText = `${c}${(ttRPM * r).toFixed(2)}`;
+
+      document.getElementById('ytLongPayout').innerText = `${c}${Math.round(ytLongPayoutUSD * r).toLocaleString()}`;
+      document.getElementById('ytShortsPayout').innerText = `${c}${Math.round(ytShortsPayoutUSD * r).toLocaleString()}`;
+      document.getElementById('ttPayout').innerText = `${c}${Math.round(ttPayoutUSD * r).toLocaleString()}`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateCalculations();
+    };
+  </script>
+</body>
+</html>

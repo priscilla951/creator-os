@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — YouTube Retention Drop Simulator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-medium">Analytics Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">YouTube "Retention Drop" Analytics Simulator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Experiment with editing pacing, intro hooks, and pattern interrupts to see how they impact average view duration in real-time.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Sliders Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-sliders"></i> <span data-i18n="input_heading">1. Editing Pacing Sliders</span>
+          </h2>
+
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-300 mb-1">
+              <span data-i18n="intro_hook">Intro Hook Strength (0-10s)</span>
+              <span id="introVal" class="text-indigo-400 font-mono">Strong</span>
+            </div>
+            <input type="range" id="introSlider" min="1" max="3" value="3" oninput="updateSimulation()" class="w-full accent-indigo-500 cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500 mt-0.5">
+              <span>Boring / Slow</span>
+              <span>Hook-Driven</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-300 mb-1">
+              <span data-i18n="pattern_freq">Visual Pattern Interrupt Frequency</span>
+              <span id="interruptVal" class="text-indigo-400 font-mono">Every 15s</span>
+            </div>
+            <input type="range" id="interruptSlider" min="1" max="3" value="2" oninput="updateSimulation()" class="w-full accent-indigo-500 cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500 mt-0.5">
+              <span>Rare (Talking Head)</span>
+              <span>High (Dynamic B-Roll)</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-300 mb-1">
+              <span data-i18n="midroll_friction">Mid-Roll Ad Friction</span>
+              <span id="adVal" class="text-indigo-400 font-mono">Moderate</span>
+            </div>
+            <input type="range" id="adSlider" min="1" max="3" value="2" oninput="updateSimulation()" class="w-full accent-indigo-500 cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500 mt-0.5">
+              <span>None / Smooth</span>
+              <span>Abrupt Interrupt</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Graph & Metrics Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Simulated Audience Retention Curve</span>
+            <span id="avdBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">AVD: 54.2% (Viral Tier)</span>
+          </div>
+
+          <!-- Mock Graph Box -->
+          <div class="p-4 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-3">
+            <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+              <span>0:00 (Start)</span>
+              <span>5:00 (Midpoint)</span>
+              <span>10:00 (End)</span>
+            </div>
+            <div class="h-36 w-full bg-slate-950 rounded-xl border border-slate-800 relative flex items-end px-2 pb-2 gap-1 overflow-hidden" id="barChartContainer">
+              <!-- Dynamically populated bars -->
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-400 pt-1">
+              <span data-i18n="algorithm_reach">Algorithmic Reach Potential:</span>
+              <span id="reachDisplay" class="font-bold text-emerald-400">High Recommendation Velocity</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-chart-line text-indigo-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Retention Analytics Insight</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">The steepest drop-off always occurs in the first 30 seconds. Strong visual hooks prevent initial bounce rates and drive algorithmic homepage placement.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'YouTube "Retention Drop" Analytics Simulator',
+        hero_desc: 'Experiment with editing pacing, intro hooks, and pattern interrupts to see how they impact average view duration in real-time.',
+        input_heading: '1. Editing Pacing Sliders',
+        intro_hook: 'Intro Hook Strength (0-10s)',
+        pattern_freq: 'Visual Pattern Interrupt Frequency',
+        midroll_friction: 'Mid-Roll Ad Friction',
+        summary_title: 'Simulated Audience Retention Curve',
+        algorithm_reach: 'Algorithmic Reach Potential:',
+        tip_title: 'Retention Analytics Insight',
+        tip_desc: 'The steepest drop-off always occurs in the first 30 seconds. Strong visual hooks prevent initial bounce rates and drive algorithmic homepage placement.'
+      },
+      es: {
+        hero_title: 'Simulador de Retención de Audiencia en YouTube',
+        hero_desc: 'Experimenta con el ritmo de edición y ganchos de intro para ver su impacto.',
+        input_heading: '1. Controles de Edición',
+        intro_hook: 'Fuerza del Gancho Inicial (0-10s)',
+        pattern_freq: 'Frecuencia de Cambios Visuales',
+        midroll_friction: 'Fricción por Anuncios',
+        summary_title: 'Curva de Retención Simulada',
+        algorithm_reach: 'Potencial de Alcance Algorítmico:',
+        tip_title: 'Consejo de Retención',
+        tip_desc: 'La mayor caída ocurre en los primeros 30 segundos.'
+      },
+      fr: {
+        hero_title: "Simulateur de Taux de Rétention YouTube",
+        hero_desc: "Expérimentez avec le rythme de montage et l'accroche pour observer l'impact sur la durée de visionnage.",
+        input_heading: "1. Paramètres de Montage",
+        intro_hook: "Force de l'Accroche Initiale (0-10s)",
+        pattern_freq: "Fréquence des Interruptions Visuelles",
+        midroll_friction: "Friction des Publicités Mi-Parcours",
+        summary_title: "Courbe de Rétention Simulée",
+        algorithm_reach: "Potentiel de Portée Algorithmique :",
+        tip_title: "Conseil en Rétention",
+        tip_desc: "La chute la plus abrupte survient toujours dans les 30 premières secondes."
+      }
+    };
+
+    function updateSimulation() {
+      const intro = parseInt(document.getElementById('introSlider').value);
+      const interrupt = parseInt(document.getElementById('interruptSlider').value);
+      const ad = parseInt(document.getElementById('adSlider').value);
+
+      document.getElementById('introVal').innerText = intro === 3 ? 'Strong' : intro === 2 ? 'Moderate' : 'Weak';
+      document.getElementById('interruptVal').innerText = interrupt === 3 ? 'Every 10s' : interrupt === 2 ? 'Every 20s' : 'Rare';
+      document.getElementById('adVal').innerText = ad === 3 ? 'Heavy' : ad === 2 ? 'Moderate' : 'Smooth';
+
+      // Base retention curve calculation (12 checkpoints)
+      let baseCurve = [100, 75, 62, 55, 50, 46, 42, 39, 36, 34, 32, 30];
+
+      // Apply modifiers
+      const introMultiplier = intro === 3 ? 1.15 : intro === 2 ? 1.0 : 0.8;
+      const interruptMultiplier = interrupt === 3 ? 1.1 : interrupt === 2 ? 1.0 : 0.9;
+      const adMultiplier = ad === 3 ? 0.88 : ad === 2 ? 0.95 : 1.0;
+
+      const container = document.getElementById('barChartContainer');
+      container.innerHTML = '';
+
+      let totalSum = 0;
+      baseCurve.forEach((val, index) => {
+        // Apply multipliers with decay over time
+        let adjusted = val * introMultiplier * Math.pow(interruptMultiplier, 0.5);
+        if (index >= 5 && index <= 7) adjusted *= adMultiplier; // Mid-roll drop
+        adjusted = Math.min(100, Math.max(10, Math.round(adjusted)));
+        totalSum += adjusted;
+
+        const bar = document.createElement('div');
+        bar.className = "flex-1 bg-indigo-500 rounded-t transition-all duration-300";
+        bar.style.height = `${adjusted}%`;
+        container.appendChild(bar);
+      });
+
+      const avgAvd = Math.round(totalSum / baseCurve.length);
+
+      const badge = document.getElementById('avdBadge');
+      const reach = document.getElementById('reachDisplay');
+
+      if (avgAvd >= 50) {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold";
+        badge.innerText = `AVD: ${avgAvd}% (Viral Tier)`;
+        reach.className = "font-bold text-emerald-400";
+        reach.innerText = "High Recommendation Velocity";
+      } else if (avgAvd >= 35) {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold";
+        badge.innerText = `AVD: ${avgAvd}% (Standard Tier)`;
+        reach.className = "font-bold text-amber-400";
+        reach.innerText = "Moderate Browse & Search Traffic";
+      } else {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-semibold";
+        badge.innerText = `AVD: ${avgAvd}% (Low Performance)`;
+        reach.className = "font-bold text-red-400";
+        reach.innerText = "Algorithmic Flatline (Stalled)";
+      }
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateSimulation();
+    };
+  </script>
+</body>
+</html>

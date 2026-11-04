@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — UGC Retainer & Package Pricing Matrix</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">UGC Pricing Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+
+        <select id="currencySelector" onchange="updateUgcPricing()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">UGC Retainer & Package Pricing Matrix</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Calculate professional UGC video packages, monthly brand retainers, and digital usage licensing fee multipliers.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Inputs Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-video"></i> <span data-i18n="input_heading">1. UGC Package Specs</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="base_rate">Base Price Per UGC Video ($)</label>
+            <input type="number" id="baseVideoRate" value="250" oninput="updateUgcPricing()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="monthly_volume">Monthly Video Volume</label>
+            <input type="number" id="videoVolume" value="4" oninput="updateUgcPricing()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="usage_rights">Ad Usage Rights Duration</label>
+            <select id="usageRightsMultiplier" onchange="updateUgcPricing()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="1.0">Organic Only (No Whitelisting / Ad Spend)</option>
+              <option value="1.3">30 Days Paid Whitelisting / Ad Rights (+30%)</option>
+              <option value="1.6" selected>90 Days Paid Whitelisting / Ad Rights (+60%)</option>
+              <option value="2.0">180 Days Full Commercial Ad Rights (+100%)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="hooks_label">Additional Hooks / Variations per Video</label>
+            <select id="hookAddon" onchange="updateUgcPricing()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="0">1 Hook / CTA Only (Standard)</option>
+              <option value="50">3 Alternative Hooks per Video (+$50/video)</option>
+              <option value="100">5 Alternative Hooks + Angles (+$100/video)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Monthly Retainer Calculation</span>
+            <span id="packageBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">4 UGC Videos / Month</span>
+          </div>
+
+          <div class="text-center py-6 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="total_retainer_label">Recommended Monthly Brand Retainer</div>
+            <div id="totalRetainerDisplay" class="text-5xl font-black tracking-tight text-emerald-400 mb-2">$1,600</div>
+            <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider"><span data-i18n="per_video_label">Effective Rate Per Video:</span> <span id="perVideoDisplay" class="text-white">$400</span></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="licensing_fee_label">Ad Usage Licensing Fee</div>
+              <div id="licensingFeeDisplay" class="text-xl font-bold text-purple-300 mt-1">$600</div>
+            </div>
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="annual_contract_label">Annualized Contract Value</div>
+              <div id="annualContractDisplay" class="text-xl font-bold text-indigo-300 mt-1">$19,200</div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-briefcase text-indigo-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">UGC Retainer Strategy</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">Always secure 3-month or 6-month minimum retainers with brands to guarantee steady recurring income rather than one-off video deals.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "UGC Retainer & Package Pricing Matrix",
+        hero_desc: "Calculate professional UGC video packages, monthly brand retainers, and digital usage licensing fee multipliers.",
+        input_heading: "1. UGC Package Specs",
+        base_rate: "Base Price Per UGC Video ($)",
+        monthly_volume: "Monthly Video Volume",
+        usage_rights: "Ad Usage Rights Duration",
+        hooks_label: "Additional Hooks / Variations per Video",
+        summary_title: "Monthly Retainer Calculation",
+        total_retainer_label: "Recommended Monthly Brand Retainer",
+        per_video_label: "Effective Rate Per Video:",
+        licensing_fee_label: "Ad Usage Licensing Fee",
+        annual_contract_label: "Annualized Contract Value",
+        tip_title: "UGC Retainer Strategy",
+        tip_desc: "Always secure 3-month or 6-month minimum retainers with brands to guarantee steady recurring income rather than one-off video deals."
+      },
+      es: {
+        hero_title: "Matriz de Precios para Retenedores UGC",
+        hero_desc: "Calcula paquetes de videos UGC y tarifas de licencias de uso publicitario.",
+        input_heading: "1. Especificaciones del Paquete",
+        base_rate: "Precio Base por Video UGC ($)",
+        monthly_volume: "Volumen Mensual de Videos",
+        usage_rights: "Duración de Derechos Publicitarios",
+        hooks_label: "Variaciones de Ganchos por Video",
+        summary_title: "Cálculo de Retenedor Mensual",
+        total_retainer_label: "Retenedor Mensual Recomendado",
+        per_video_label: "Tarifa Efectiva por Video:",
+        licensing_fee_label: "Tarifa de Licenciamiento",
+        annual_contract_label: "Valor Anual del Contrato",
+        tip_title: "Estrategia de Retenedores",
+        tip_desc: "Asegura contratos de 3 a 6 meses con marcas para garantizar ingresos recurrentes."
+      },
+      fr: {
+        hero_title: "Matrice de Tarification Contenus UGC",
+        hero_desc: "Calculez vos forfaits de vidéos UGC et les frais de licence d'utilisation publicitaire.",
+        input_heading: "1. Spécifications du Forfait UGC",
+        base_rate: "Prix de Base par Vidéo UGC ($)",
+        monthly_volume: "Volume Mensuel de Vidéos",
+        usage_rights: "Durée des Droits d'Utilisation Publicitaire",
+        hooks_label: "Crochets / Variations par Vidéo",
+        summary_title: "Calcul du Contrat Mensuel",
+        total_retainer_label: "Retenue Mensuelle Recommandée",
+        per_video_label: "Tarif Effectif par Vidéo :",
+        licensing_fee_label: "Frais de Licence publicitaire",
+        annual_contract_label: "Valeur Annuelle du Contrat",
+        tip_title: "Stratégie de Contrat UGC",
+        tip_desc: "Sécurisez toujours des contrats de 3 à 6 mois minimum pour garantir un revenu récurrent."
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function updateUgcPricing() {
+      const baseRate = parseFloat(document.getElementById('baseVideoRate').value) || 0;
+      const volume = parseFloat(document.getElementById('videoVolume').value) || 0;
+      const usageMultiplier = parseFloat(document.getElementById('usageRightsMultiplier').value) || 1.0;
+      const hookAddon = parseFloat(document.getElementById('hookAddon').value) || 0;
+
+      // Bulk volume discount: 5+ videos get 10% off base rate, 10+ get 15% off
+      let volumeDiscount = 1.0;
+      if (volume >= 10) volumeDiscount = 0.85;
+      else if (volume >= 5) volumeDiscount = 0.90;
+
+      const adjustedVideoCost = (baseRate + hookAddon) * volumeDiscount;
+      const productionTotal = adjustedVideoCost * volume;
+      const licensingTotal = productionTotal * (usageMultiplier - 1.0);
+      const monthlyRetainerUSD = productionTotal + licensingTotal;
+      const annualContractUSD = monthlyRetainerUSD * 12;
+      const effectivePerVideoUSD = volume > 0 ? (monthlyRetainerUSD / volume) : 0;
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('packageBadge').innerText = `${volume} UGC Videos / Month`;
+      document.getElementById('totalRetainerDisplay').innerText = `${c}${Math.round(monthlyRetainerUSD * r).toLocaleString()}`;
+      document.getElementById('perVideoDisplay').innerText = `${c}${Math.round(effectivePerVideoUSD * r).toLocaleString()}`;
+      document.getElementById('licensingFeeDisplay').innerText = `${c}${Math.round(licensingTotal * r).toLocaleString()}`;
+      document.getElementById('annualContractDisplay').innerText = `${c}${Math.round(annualContractUSD * r).toLocaleString()}`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateUgcPricing();
+    };
+  </script>
+</body>
+</html>

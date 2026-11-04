@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Dead Time & Opportunity Cost Estimator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-medium">Efficiency Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+        <select id="currencySelector" onchange="updateOpportunityCost()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Dead Time & Opportunity Cost Estimator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Calculate the true financial loss of spending hours on low-leverage operational tasks instead of scaling creative output.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Inputs Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-hourglass-half"></i> <span data-i18n="input_heading">1. Time & Value Inputs</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="admin_hours">Low-Leverage Hours Per Week (Emails, Formatting, Admin)</label>
+            <input type="number" id="adminHoursInput" value="12" oninput="updateOpportunityCost()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="channel_value">Your Creative Hourly Value ($ / hr)</label>
+            <input type="number" id="channelValueInput" value="75" oninput="updateOpportunityCost()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="delegation_cost">Assistant / Editor Cost ($ / hr)</label>
+            <input type="number" id="delegationCostInput" value="20" oninput="updateOpportunityCost()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Opportunity Cost Audit</span>
+            <span id="costBadge" class="text-xs px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-semibold">High Revenue Leakage</span>
+          </div>
+
+          <div class="text-center py-6 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="annual_loss_label">Estimated Annual Revenue Left on Table</div>
+            <div id="annualLossDisplay" class="text-5xl font-black tracking-tight text-red-400 mb-2">$46,800</div>
+            <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider"><span data-i18n="monthly_loss_label">Monthly Dead Time Cost:</span> <span id="monthlyLossDisplay" class="text-white">$3,900</span></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="delegation_savings_label">Net Gain by Delegating</div>
+              <div id="delegationGainDisplay" class="text-xl font-bold text-emerald-400 mt-1">+$2,860 / mo</div>
+            </div>
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="hours_reclaimed_label">Weekly Hours Reclaimed</div>
+              <div id="hoursReclaimedDisplay" class="text-xl font-bold text-indigo-300 mt-1">12 Hours</div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-lightbulb text-amber-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Delegation Rule of Thumb</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">If your creative hourly value ($75/hr) exceeds an editor or assistant's rate ($20/hr), doing admin work yourself is a net financial loss.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Dead Time & Opportunity Cost Estimator',
+        hero_desc: 'Calculate the true financial loss of spending hours on low-leverage operational tasks instead of scaling creative output.',
+        input_heading: '1. Time & Value Inputs',
+        admin_hours: 'Low-Leverage Hours Per Week (Emails, Formatting, Admin)',
+        channel_value: 'Your Creative Hourly Value ($ / hr)',
+        delegation_cost: 'Assistant / Editor Cost ($ / hr)',
+        summary_title: 'Opportunity Cost Audit',
+        annual_loss_label: 'Estimated Annual Revenue Left on Table',
+        monthly_loss_label: 'Monthly Dead Time Cost:',
+        delegation_savings_label: 'Net Gain by Delegating',
+        hours_reclaimed_label: 'Weekly Hours Reclaimed',
+        tip_title: 'Delegation Rule of Thumb',
+        tip_desc: 'If your creative hourly value exceeds an editor or assistant\'s rate, doing admin work yourself is a net financial loss.'
+      },
+      es: {
+        hero_title: 'Estimador de Costo de Oportunidad y Tiempo Muerto',
+        hero_desc: 'Calcula la pérdida financiera real de realizar tareas operativas de bajo valor.',
+        input_heading: '1. Entradas de Tiempo y Valor',
+        admin_hours: 'Horas de Bajo Valor por Semana',
+        channel_value: 'Tu Valor Creativo por Hora ($ / hr)',
+        delegation_cost: 'Costo de Asistente o Editor ($ / hr)',
+        summary_title: 'Auditoría de Costo de Oportunidad',
+        annual_loss_label: 'Pérdida Anual Estimada',
+        monthly_loss_label: 'Costo Mensual de Tiempo Muerto:',
+        delegation_savings_label: 'Ganancia Neta al Delegar',
+        hours_reclaimed_label: 'Horas Semanales Recuperadas',
+        tip_title: 'Regla de Delegación',
+        tip_desc: 'Si tu valor por hora supera el costo de un asistente, hacer tareas administrativas es una pérdida neta.'
+      },
+      fr: {
+        hero_title: 'Estimateur de Coût d’Opportunité & Temps Mort',
+        hero_desc: 'Calculez la perte financière réelle engendrée par les tâches administratives répétitives.',
+        input_heading: '1. Entrées de Temps & Valeur',
+        admin_hours: 'Heures à faible levier par semaine (E-mails, Admin)',
+        channel_value: 'Votre Valeur Horaire Créative ($ / h)',
+        delegation_cost: 'Coût d’un Assistant / Monteur ($ / h)',
+        summary_title: "Audit de Coût d'Opportunité",
+        annual_loss_label: 'Revenu Annuel Potentiel Perdu',
+        monthly_loss_label: 'Coût Mensuel du Temps Mort :',
+        delegation_savings_label: 'Gain Net par Délégation',
+        hours_reclaimed_label: 'Heures Hebdomadaires Récupérées',
+        tip_title: 'Règle d’Or de la Délégation',
+        tip_desc: 'Si votre valeur horaire dépasse celle d’un assistant, faire vos tâches administratives vous coûte de l’argent.'
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function updateOpportunityCost() {
+      const hoursPerWeek = parseFloat(document.getElementById('adminHoursInput').value) || 0;
+      const creativeVal = parseFloat(document.getElementById('channelValueInput').value) || 0;
+      const assistantCost = parseFloat(document.getElementById('delegationCostInput').value) || 0;
+
+      const hoursPerMonth = hoursPerWeek * 4.33;
+      const monthlyLoss = hoursPerMonth * creativeVal;
+      const annualLoss = monthlyLoss * 12;
+
+      // If you hire an assistant for those hours instead:
+      const assistantMonthlyCost = hoursPerMonth * assistantCost;
+      const netMonthlyGain = monthlyLoss - assistantMonthlyCost;
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('annualLossDisplay').innerText = `${c}${Math.round(annualLoss * r).toLocaleString()}`;
+      document.getElementById('monthlyLossDisplay').innerText = `${c}${Math.round(monthlyLoss * r).toLocaleString()}`;
+      document.getElementById('delegationGainDisplay').innerText = `+${c}${Math.round(netMonthlyGain * r).toLocaleString()} / mo`;
+      document.getElementById('hoursReclaimedDisplay').innerText = `${Math.round(hoursPerWeek)} Hours`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateOpportunityCost();
+    };
+  </script>
+</body>
+</html>

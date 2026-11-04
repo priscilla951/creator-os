@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Fair Use & IP Risk Checker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">Compliance Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Fair Use & Intellectual Property Risk Checker</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Evaluate your usage of third-party audio, video, or images against Fair Use doctrine and platform copyright policies.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Diagnostic Questions -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-shield-halved"></i> <span data-i18n="input_heading">1. Usage Diagnostic</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="asset_type">Asset Type Being Used</label>
+            <select id="assetType" onchange="evaluateRisk()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="music">Commercial Music / Trending Audio</option>
+              <option value="movie">Movie / TV Show Footage</option>
+              <option value="youtube">Another Creator's Video</option>
+              <option value="image">Stock Photo / Graphic Art</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="purpose_label">Purpose & Context of Use</label>
+            <select id="usagePurpose" onchange="evaluateRisk()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="critique">Criticism, Review & Parody</option>
+              <option value="educational">Educational / News Reporting</option>
+              <option value="background">Background Music / B-Roll Overlay</option>
+              <option value="ad">Paid Brand Sponsorship / Ad Integration</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="duration_label">Sample Duration / Amount Used</label>
+            <select id="sampleDuration" onchange="evaluateRisk()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="short">Under 5 Seconds (Micro Clip)</option>
+              <option value="medium">5 to 15 Seconds (Segment)</option>
+              <option value="long">Over 15 Seconds (Extended Uncut)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="transform_label">Transformation Level</label>
+            <select id="transformLevel" onchange="evaluateRisk()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="high">High (Added Voiceover Commentary & Edits)</option>
+              <option value="medium">Medium (Speed/Pitch Edit or Visual Filter)</option>
+              <option value="none">None (Raw / Unedited Re-upload)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Risk Report Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Copyright Diagnostic Audit</span>
+            <span id="riskBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">SAFE (Low Risk)</span>
+          </div>
+
+          <div class="text-center py-6 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="risk_score_label">Overall Compliance Risk Score</div>
+            <div id="riskScoreDisplay" class="text-5xl font-black tracking-tight text-emerald-400 mb-2">15 / 100</div>
+            <div id="riskLevelText" class="text-xs font-bold text-slate-300 uppercase tracking-wider">Likely Fair Use Protected</div>
+          </div>
+
+          <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
+            <h3 class="text-xs font-bold text-indigo-300 uppercase tracking-wider" data-i18n="analysis_title">Legal & Platform Assessment</h3>
+            <p id="riskAnalysisDesc" class="text-xs text-slate-300 leading-relaxed">
+              Your usage is highly transformative and used for criticism/review. Maintain clear attribution in video descriptions to stay fully compliant.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-amber-950/40 border border-amber-500/20 text-xs text-amber-200 flex items-start gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-amber-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="disclaimer_title">Legal Disclaimer</p>
+              <p class="text-[11px] text-amber-300 mt-0.5" data-i18n="disclaimer_desc">This diagnostic tool provides platform risk estimation based on YouTube and Fair Use standards, not formal legal advice.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Fair Use & Intellectual Property Risk Checker",
+        hero_desc: "Evaluate your usage of third-party audio, video, or images against Fair Use doctrine and platform copyright policies.",
+        input_heading: "1. Usage Diagnostic",
+        asset_type: "Asset Type Being Used",
+        purpose_label: "Purpose & Context of Use",
+        duration_label: "Sample Duration / Amount Used",
+        transform_label: "Transformation Level",
+        summary_title: "Copyright Diagnostic Audit",
+        risk_score_label: "Overall Compliance Risk Score",
+        analysis_title: "Legal & Platform Assessment",
+        disclaimer_title: "Legal Disclaimer",
+        disclaimer_desc: "This diagnostic tool provides platform risk estimation based on YouTube and Fair Use standards, not formal legal advice."
+      },
+      es: {
+        hero_title: "Verificador de Riesgos de Propiedad Intelectual",
+        hero_desc: "Evalúa si el uso de música o videos cumple con las leyes de uso justo.",
+        input_heading: "1. Diagnóstico de Uso",
+        asset_type: "Tipo de Activo Utilizado",
+        purpose_label: "Propósito y Contexto",
+        duration_label: "Duración o Cantidad Usada",
+        transform_label: "Nivel de Transformación",
+        summary_title: "Auditoría de Derechos de Autor",
+        risk_score_label: "Puntuación de Riesgo",
+        analysis_title: "Evaluación de Plataforma",
+        disclaimer_title: "Aviso Legal",
+        disclaimer_desc: "Esta herramienta ofrece estimaciones de riesgo, no asesoramiento legal formal."
+      },
+      fr: {
+        hero_title: "Vérificateur de Risques de Droit d'Auteur & Fair Use",
+        hero_desc: "Évaluez si l'utilisation d'extraits audio ou vidéo respecte les règles de fair use.",
+        input_heading: "1. Diagnostic d'Utilisation",
+        asset_type: "Type d'Actif Utilisé",
+        purpose_label: "Objectif et Contexte",
+        duration_label: "Durée de l'Extrait",
+        transform_label: "Niveau de Transformation",
+        summary_title: "Audit de Conformité Droit d'Auteur",
+        risk_score_label: "Score de Risque Global",
+        analysis_title: "Évaluation de la Plateforme",
+        disclaimer_title: "Avertissement Légal",
+        disclaimer_desc: "Cet outil fournit des estimations de risque et non un conseil juridique formel."
+      }
+    };
+
+    function evaluateRisk() {
+      const asset = document.getElementById('assetType').value;
+      const purpose = document.getElementById('usagePurpose').value;
+      const duration = document.getElementById('sampleDuration').value;
+      const transform = document.getElementById('transformLevel').value;
+
+      let score = 10;
+
+      // Asset weights
+      if (asset === 'music') score += 35;
+      if (asset === 'movie') score += 20;
+      if (asset === 'youtube') score += 15;
+      if (asset === 'image') score += 10;
+
+      // Purpose weights
+      if (purpose === 'ad') score += 40;
+      if (purpose === 'background') score += 25;
+      if (purpose === 'educational') score += 5;
+      if (purpose === 'critique') score += 0;
+
+      // Duration weights
+      if (duration === 'long') score += 25;
+      if (duration === 'medium') score += 10;
+      if (duration === 'short') score += 0;
+
+      // Transformation weights
+      if (transform === 'none') score += 30;
+      if (transform === 'medium') score += 15;
+      if (transform === 'high') score -= 10;
+
+      score = Math.max(5, Math.min(98, score));
+
+      const badge = document.getElementById('riskBadge');
+      const display = document.getElementById('riskScoreDisplay');
+      const levelText = document.getElementById('riskLevelText');
+      const desc = document.getElementById('riskAnalysisDesc');
+
+      display.innerText = `${score} / 100`;
+
+      if (score < 35) {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold";
+        badge.innerText = "SAFE (Low Risk)";
+        display.className = "text-5xl font-black tracking-tight text-emerald-400 mb-2";
+        levelText.innerText = "Likely Fair Use Protected";
+        desc.innerText = "Your usage has strong transformative context and low commercial risk. Keep attribution links clear in your video description.";
+      } else if (score < 65) {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold";
+        badge.innerText = "MODERATE RISK";
+        display.className = "text-5xl font-black tracking-tight text-amber-400 mb-2";
+        levelText.innerText = "Possible Content ID Claim";
+        desc.innerText = "You risk automated monetization claims or partial revenue splitting. Consider cutting duration under 5 seconds or increasing voiceover commentary.";
+      } else {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-semibold";
+        badge.innerText = "CRITICAL VIOLATION RISK";
+        display.className = "text-5xl font-black tracking-tight text-red-400 mb-2";
+        levelText.innerText = "High Strike / Take-Down Threat";
+        desc.innerText = "Using untransformed media in commercial ads or extended unedited clips carries high copyright strike risk. Replace with royalty-free assets immediately.";
+      }
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      evaluateRisk();
+    };
+  </script>
+</body>
+</html>

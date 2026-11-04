@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Channel Valuation & Acquisition Estimator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-medium">Asset Valuation</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+
+        <select id="currencySelector" onchange="updateCalculations()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Channel Valuation & Acquisition Estimator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Estimate the total enterprise buyout value of your creator business based on monthly earnings, net profit margins, and asset stability.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Inputs Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-chart-line"></i> <span data-i18n="input_heading">1. Financial Baseline</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="monthly_profit">Average Monthly Net Profit ($)</label>
+            <input type="number" id="monthlyProfitInput" value="8500" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="business_age">Business Age & History</label>
+            <select id="ageMultiplier" onchange="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="2.0">Under 1 Year (Emerging)</option>
+              <option value="3.0" selected>1 to 3 Years (Established Track Record)</option>
+              <option value="4.0">3+ Years (Fully Diversified & Stable)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="defensibility">Audience & Brand Defensibility</label>
+            <select id="defensibilityMultiplier" onchange="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="0.8">High Platform Reliance (Algorithmic risk)</option>
+              <option value="1.0" selected>Balanced Ecosystem (YouTube + Socials)</option>
+              <option value="1.2">Owned Media Moat (Strong Email List + Community)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Valuation Results Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Estimated Enterprise Valuation</span>
+            <span id="multipleBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">3.2x Annual Profit Multiple</span>
+          </div>
+
+          <div class="text-center py-6 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="valuation_output">Estimated Business Buyout Value</div>
+            <div id="valuationDisplay" class="text-5xl font-black tracking-tight text-emerald-400 mb-2">$326,400</div>
+            <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider"><span data-i18n="annual_profit_label">Annual Net Profit Run-Rate:</span> <span id="annualProfitDisplay" class="text-white">$102,000</span></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="conservative_val">Conservative Valuation (Floor)</div>
+              <div id="floorValuationDisplay" class="text-xl font-bold text-slate-300 mt-1">$255,000</div>
+            </div>
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="aggressive_val">Aggressive Valuation (Ceiling)</div>
+              <div id="ceilingValuationDisplay" class="text-xl font-bold text-indigo-300 mt-1">$408,000</div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-shield-halved text-emerald-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Valuation Multiplier Secret</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">Private equity buyers pay higher multiples (3.5x–4.5x) for creator businesses that have standardized standard operating procedures (SOPs) and do not depend solely on the founder's face.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Channel Valuation & Acquisition Estimator",
+        hero_desc: "Estimate the total enterprise buyout value of your creator business based on monthly earnings, net profit margins, and asset stability.",
+        input_heading: "1. Financial Baseline",
+        monthly_profit: "Average Monthly Net Profit ($)",
+        business_age: "Business Age & History",
+        defensibility: "Audience & Brand Defensibility",
+        summary_title: "Estimated Enterprise Valuation",
+        valuation_output: "Estimated Business Buyout Value",
+        annual_profit_label: "Annual Net Profit Run-Rate:",
+        conservative_val: "Conservative Valuation (Floor)",
+        aggressive_val: "Aggressive Valuation (Ceiling)",
+        tip_title: "Valuation Multiplier Secret",
+        tip_desc: "Private equity buyers pay higher multiples (3.5x–4.5x) for creator businesses that have standardized standard operating procedures (SOPs) and do not depend solely on the founder's face."
+      },
+      es: {
+        hero_title: "Estimador de Valoración de Canales",
+        hero_desc: "Estime el valor de compraventa de su negocio de creador.",
+        input_heading: "1. Base Financiera",
+        monthly_profit: "Beneficio Neto Mensual Promedio ($)",
+        business_age: "Antigüedad del Negocio",
+        defensibility: "Defensibilidad de Marca",
+        summary_title: "Valoración Estimada de la Empresa",
+        valuation_output: "Valor de Adquisición Estimado",
+        annual_profit_label: "Tasa de Beneficio Anual:",
+        conservative_val: "Valoración Conservadora",
+        aggressive_val: "Valoración Agresiva",
+        tip_title: "Secreto de Multiplicadores",
+        tip_desc: "Los compradores pagan múltiplos más altos si el negocio no depende únicamente del creador."
+      },
+      fr: {
+        hero_title: "Estimateur de Valorisation de Chaîne",
+        hero_desc: "Estimez la valeur de rachat globale de votre entreprise de création.",
+        input_heading: "1. Base Financière",
+        monthly_profit: "Bénéfice Net Mensuel Moyen ($)",
+        business_age: "Âge de l'Entreprise",
+        defensibility: "Défensibilité de la Marque",
+        summary_title: "Valorisation Estimée de l'Entreprise",
+        valuation_output: "Valeur de Rachat Estimée",
+        annual_profit_label: "Bénéfice Net Annuel :",
+        conservative_val: "Valorisation Conservatrice",
+        aggressive_val: "Valorisation Agressive",
+        tip_title: "Secret des Multiplicateurs",
+        tip_desc: "Les investisseurs paient des multiples plus élevés pour les entreprises systématisées."
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function updateCalculations() {
+      const monthlyProfit = parseFloat(document.getElementById('monthlyProfitInput').value) || 0;
+      const ageMult = parseFloat(document.getElementById('ageMultiplier').value) || 3.0;
+      const defMult = parseFloat(document.getElementById('defensibilityMultiplier').value) || 1.0;
+
+      const annualProfit = monthlyProfit * 12;
+      const finalMultiple = ageMult * defMult;
+      const estimatedValuation = annualProfit * finalMultiple;
+
+      const floorValuation = annualProfit * (finalMultiple * 0.8);
+      const ceilingValuation = annualProfit * (finalMultiple * 1.25);
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('valuationDisplay').innerText = `${c}${Math.round(estimatedValuation * r).toLocaleString()}`;
+      document.getElementById('annualProfitDisplay').innerText = `${c}${Math.round(annualProfit * r).toLocaleString()}`;
+      document.getElementById('floorValuationDisplay').innerText = `${c}${Math.round(floorValuation * r).toLocaleString()}`;
+      document.getElementById('ceilingValuationDisplay').innerText = `${c}${Math.round(ceilingValuation * r).toLocaleString()}`;
+      document.getElementById('multipleBadge').innerText = `${finalMultiple.toFixed(1)}x Annual Profit Multiple`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateCalculations();
+    };
+  </script>
+</body>
+</html>

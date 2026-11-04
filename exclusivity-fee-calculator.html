@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Exclusivity & Contract Clause Fee Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-medium">Contract Protection</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+
+        <select id="currencySelector" onchange="updateCalculations()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Exclusivity & Contract Clause Fee Calculator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Calculate exact premium add-ons for brand exclusivity lockouts, whitelisting rights, and raw project file handovers.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Inputs Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-file-contract"></i> <span data-i18n="input_heading">1. Base Deal & Clauses</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="base_fee">Agreed Base Sponsorship Fee ($)</label>
+            <input type="number" id="baseFeeInput" value="3000" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="exclusivity_duration">Category Exclusivity Lockout</label>
+            <select id="exclusivityDuration" onchange="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="0">No Exclusivity (Standard)</option>
+              <option value="0.25">30-Day Competitor Lockout (+25%)</option>
+              <option value="0.50" selected>60-Day Competitor Lockout (+50%)</option>
+              <option value="0.90">90-Day Full Category Lockout (+90%)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="ad_rights">Paid Ad Rights & Whitelisting (Spark Ads)</label>
+            <select id="adRights" onchange="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="0">Organic Reach Only</option>
+              <option value="0.30" selected>30-Day Paid Spark Ads / Whitelisting (+30%)</option>
+              <option value="0.60">90-Day Omnichannel Paid Ad Rights (+60%)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="raw_files">Raw Project Files (.PRPROJ / Final Cut)</label>
+            <select id="rawFiles" onchange="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="0">Not Included (Creator Retains)</option>
+              <option value="500">Handover Raw Project Files (+$500 Flat Fee)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Total Revised Contract Value</span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold" data-i18n="protected_tag">Fully Protected</span>
+          </div>
+
+          <div class="text-center py-6 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="total_contract_output">Total Recommended Contract Price</div>
+            <div id="totalContractDisplay" class="text-5xl font-black tracking-tight text-emerald-400 mb-2">$5,550</div>
+            <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider"><span data-i18n="total_add_ons">Total Clause Add-on Value:</span> <span id="addOnsDisplay" class="text-white">+$2,550</span></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="exclusivity_fee_label">Exclusivity Surcharge</div>
+              <div id="exclusivityFeeDisplay" class="text-xl font-bold text-indigo-300 mt-1">$1,500</div>
+            </div>
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="ad_rights_fee_label">Ad Rights Surcharge</div>
+              <div id="adRightsFeeDisplay" class="text-xl font-bold text-indigo-300 mt-1">$900</div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-amber-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Contract Clause Warning</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">Never agree to a perpetual or unbounded exclusivity clause. Always define a strict end date so you retain freedom over future brand deals.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Exclusivity & Contract Clause Fee Calculator",
+        hero_desc: "Calculate exact premium add-ons for brand exclusivity lockouts, whitelisting rights, and raw project file handovers.",
+        input_heading: "1. Base Deal & Clauses",
+        base_fee: "Agreed Base Sponsorship Fee ($)",
+        exclusivity_duration: "Category Exclusivity Lockout",
+        ad_rights: "Paid Ad Rights & Whitelisting (Spark Ads)",
+        raw_files: "Raw Project Files (.PRPROJ / Final Cut)",
+        summary_title: "Total Revised Contract Value",
+        protected_tag: "Fully Protected",
+        total_contract_output: "Total Recommended Contract Price",
+        total_add_ons: "Total Clause Add-on Value:",
+        exclusivity_fee_label: "Exclusivity Surcharge",
+        ad_rights_fee_label: "Ad Rights Surcharge",
+        tip_title: "Contract Clause Warning",
+        tip_desc: "Never agree to a perpetual or unbounded exclusivity clause. Always define a strict end date so you retain freedom over future brand deals."
+      },
+      es: {
+        hero_title: "Calculadora de Cláusulas de Contrato y Exclusividad",
+        hero_desc: "Calcule recargos exactos por exclusividad de marca y derechos de publicidad.",
+        input_heading: "1. Base del Acuerdo y Cláusulas",
+        base_fee: "Tarifa Base de Patrocinio ($)",
+        exclusivity_duration: "Exclusividad de Categoría",
+        ad_rights: "Derechos de Publicidad Pagada",
+        raw_files: "Archivos de Proyecto Originales",
+        summary_title: "Valor Total Revisado del Contrato",
+        protected_tag: "Completamente Protegido",
+        total_contract_output: "Precio Total Recomendado",
+        total_add_ons: "Valor Total de Cláusulas:",
+        exclusivity_fee_label: "Recargo por Exclusividad",
+        ad_rights_fee_label: "Recargo por Anuncios",
+        tip_title: "Advertencia de Contrato",
+        tip_desc: "Nunca acepte una cláusula de exclusividad perpetua o indefinida."
+      },
+      fr: {
+        hero_title: "Calculateur de Frais d'Exclusivité & Clauses",
+        hero_desc: "Calculez des suppléments précis pour l'exclusivité de marque et les droits publicitaires.",
+        input_heading: "1. Base de l'Accord & Clauses",
+        base_fee: "Tarif de Base du Sponsoring ($)",
+        exclusivity_duration: "Exclusivité de Catégorie",
+        ad_rights: "Droits Publicitaires & Whitelisting",
+        raw_files: "Fichiers de Projet Bruts",
+        summary_title: "Valeur Totale Révisée du Contrat",
+        protected_tag: "Entièrement Protégé",
+        total_contract_output: "Prix Total Recommandé du Contrat",
+        total_add_ons: "Valeur Totale des Options :",
+        exclusivity_fee_label: "Supplément d'Exclusivité",
+        ad_rights_fee_label: "Supplément Droits Pub",
+        tip_title: "Avertissement Contractuel",
+        tip_desc: "N'acceptez jamais d'exclusivité perpétuelle sans date de fin définie."
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function updateCalculations() {
+      const baseFee = parseFloat(document.getElementById('baseFeeInput').value) || 0;
+      const exclPct = parseFloat(document.getElementById('exclusivityDuration').value) || 0;
+      const adPct = parseFloat(document.getElementById('adRights').value) || 0;
+      const rawFileFee = parseFloat(document.getElementById('rawFiles').value) || 0;
+
+      const exclusivityFee = baseFee * exclPct;
+      const adRightsFee = baseFee * adPct;
+      const totalAddons = exclusivityFee + adRightsFee + rawFileFee;
+      const totalContract = baseFee + totalAddons;
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('totalContractDisplay').innerText = `${c}${Math.round(totalContract * r).toLocaleString()}`;
+      document.getElementById('addOnsDisplay').innerText = `+${c}${Math.round(totalAddons * r).toLocaleString()}`;
+      document.getElementById('exclusivityFeeDisplay').innerText = `${c}${Math.round(exclusivityFee * r).toLocaleString()}`;
+      document.getElementById('adRightsFeeDisplay').innerText = `${c}${Math.round(adRightsFee * r).toLocaleString()}`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateCalculations();
+    };
+  </script>
+</body>
+</html>

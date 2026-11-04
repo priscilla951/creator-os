@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Burn Rate & Runway Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .text-gradient { background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <!-- Header Navigation -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-medium">Financial Modeling</span>
+        </div>
+      </a>
+      
+      <!-- Global Controls -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+
+        <select id="currencySelector" onchange="updateCalculations()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Hero Banner -->
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Creator Burn Rate & Runway Calculator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Calculate your monthly overhead expenses, evaluate liquid cash reserves, and determine your exact financial runway to maintain operational security.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <div class="glass-card p-6 rounded-2xl space-y-5">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-wallet"></i> <span data-i18n="input_heading">1. Liquid Reserves & Monthly Revenue</span>
+          </h2>
+
+          <!-- Total Liquid Cash Reserves -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-2">
+              <span class="text-slate-300" data-i18n="cash_reserves">Total Liquid Cash Reserves (Bank + Crypto + Savings)</span>
+              <span id="cashDisplay" class="text-emerald-400 font-bold text-sm">$25,000</span>
+            </div>
+            <input type="range" id="cashInput" min="1000" max="250000" step="1000" value="25000" oninput="updateCalculations()" class="w-full accent-emerald-500 bg-slate-800 h-2 rounded-lg cursor-pointer">
+          </div>
+
+          <!-- Average Monthly Revenue -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-2">
+              <span class="text-slate-300" data-i18n="monthly_revenue">Average Monthly Inflow / Revenue</span>
+              <span id="revenueDisplay" class="text-indigo-400 font-bold text-sm">$6,500</span>
+            </div>
+            <input type="range" id="revenueInput" min="0" max="50000" step="500" value="6500" oninput="updateCalculations()" class="w-full accent-indigo-500 bg-slate-800 h-2 rounded-lg cursor-pointer">
+          </div>
+        </div>
+
+        <!-- Monthly Overhead Expenses -->
+        <div class="glass-card p-6 rounded-2xl space-y-5">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-receipt"></i> <span data-i18n="expenses_heading">2. Production & Business Overhead Expenses</span>
+          </h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="exp_software">Software & AI Subscriptions (Adobe, Notion, etc.)</label>
+              <input type="number" id="expSoftware" value="150" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="exp_contractors">Editors & Team Contractors</label>
+              <input type="number" id="expContractors" value="2000" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="exp_gear">Gear Depreciation & Hardware Amortization</label>
+              <input type="number" id="expGear" value="400" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="exp_studio">Studio / Office Rent & Utilities</label>
+              <input type="number" id="expStudio" value="800" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Output Results Column -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/30 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="runway_title">Financial Runway Analysis</span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-semibold" data-i18n="secure_status">Secure Status</span>
+          </div>
+
+          <!-- Main Runway Display -->
+          <div class="text-center py-4 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="total_runway">Calculated Financial Runway</div>
+            <div id="runwayDisplay" class="text-5xl font-black tracking-tight text-white mb-2">14.2</div>
+            <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider" data-i18n="months_buffer">Months of Full Operational Buffer</div>
+          </div>
+
+          <!-- Key Financial Metric Cards -->
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="total_burn">Total Monthly Burn</div>
+              <div id="burnDisplay" class="text-lg font-bold text-rose-400">$3,350</div>
+            </div>
+            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="net_cashflow">Net Monthly Flow</div>
+              <div id="netFlowDisplay" class="text-lg font-bold text-emerald-400">+$3,150</div>
+            </div>
+          </div>
+
+          <!-- Health Warning Banner -->
+          <div id="healthBanner" class="p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/20 text-xs text-emerald-200 flex items-start gap-3">
+            <i class="fa-solid fa-shield-check text-emerald-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="health_good_title">Strong Liquidity Position</p>
+              <p class="text-[11px] text-emerald-300 mt-0.5" data-i18n="health_good_desc">Your business is cash-flow positive. Reserves exceed 12 months of operational overhead.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Creator Burn Rate & Runway Calculator",
+        hero_desc: "Calculate your monthly overhead expenses, evaluate liquid cash reserves, and determine your exact financial runway.",
+        input_heading: "1. Liquid Reserves & Monthly Revenue",
+        cash_reserves: "Total Liquid Cash Reserves",
+        monthly_revenue: "Average Monthly Inflow / Revenue",
+        expenses_heading: "2. Production & Business Overhead Expenses",
+        exp_software: "Software & AI Subscriptions",
+        exp_contractors: "Editors & Team Contractors",
+        exp_gear: "Gear Depreciation & Hardware",
+        exp_studio: "Studio / Office Rent & Utilities",
+        runway_title: "Financial Runway Analysis",
+        secure_status: "Secure Status",
+        total_runway: "Calculated Financial Runway",
+        months_buffer: "Months of Full Operational Buffer",
+        total_burn: "Total Monthly Burn",
+        net_cashflow: "Net Monthly Flow",
+        health_good_title: "Strong Liquidity Position",
+        health_good_desc: "Your business is cash-flow positive. Reserves exceed 12 months of operational overhead."
+      },
+      es: {
+        hero_title: "Calculadora de Tasa de Quemado y Margen",
+        hero_desc: "Calcule sus gastos mensuales generales, reservas de efectivo y determine su margen financiero exacto.",
+        input_heading: "1. Reservas Líquidas e Ingresos Mensuales",
+        cash_reserves: "Reservas Totales de Efectivo Líquido",
+        monthly_revenue: "Entrada / Ingreso Mensual Promedio",
+        expenses_heading: "2. Gastos Generales de Producción y Negocio",
+        exp_software: "Suscripciones de Software y IA",
+        exp_contractors: "Editores y Contratistas",
+        exp_gear: "Depreciación de Equipos",
+        exp_studio: "Alquiler de Estudio / Oficina",
+        runway_title: "Análisis de Margen Financiero",
+        secure_status: "Estado Seguro",
+        total_runway: "Margen Financiero Calculado",
+        months_buffer: "Meses de Amortiguador Operativo",
+        total_burn: "Gasto Mensual Total",
+        net_cashflow: "Flujo Neto Mensual",
+        health_good_title: "Posición de Liquidez Sólida",
+        health_good_desc: "Su negocio tiene un flujo de caja positivo. Las reservas superan los 12 meses."
+      },
+      fr: {
+        hero_title: "Calculateur de Burn Rate et Autonomie",
+        hero_desc: "Calculez vos frais généraux mensuels, vos réserves de liquidités et déterminez votre autonomie financière.",
+        input_heading: "1. Réserves de Liquidités et Revenus",
+        cash_reserves: "Réserves Totales de Liquidités",
+        monthly_revenue: "Revenu Mensuel Moyen",
+        expenses_heading: "2. Frais Généraux de Production",
+        exp_software: "Abonnements Logiciels et IA",
+        exp_contractors: "Monteurs et Prestataires",
+        exp_gear: "Amortissement du Matériel",
+        exp_studio: "Loyer Studio / Bureau",
+        runway_title: "Analyse d'Autonomie Financière",
+        secure_status: "Statut Sécurisé",
+        total_runway: "Autonomie Financière Calculée",
+        months_buffer: "Mois de Tampon Opérationnel",
+        total_burn: "Brûlage Mensuel Total",
+        net_cashflow: "Flux Net Mensuel",
+        health_good_title: "Forte Position de Liquidité",
+        health_good_desc: "Votre entreprise génère un flux positif. Vos réserves dépassent 12 mois."
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function updateCalculations() {
+      const cash = parseFloat(document.getElementById('cashInput').value);
+      const revenue = parseFloat(document.getElementById('revenueInput').value);
+      
+      const software = parseFloat(document.getElementById('expSoftware').value) || 0;
+      const contractors = parseFloat(document.getElementById('expContractors').value) || 0;
+      const gear = parseFloat(document.getElementById('expGear').value) || 0;
+      const studio = parseFloat(document.getElementById('expStudio').value) || 0;
+
+      const totalBurnUSD = software + contractors + gear + studio;
+      const netFlowUSD = revenue - totalBurnUSD;
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('cashDisplay').innerText = `${c}${Math.round(cash * r).toLocaleString()}`;
+      document.getElementById('revenueDisplay').innerText = `${c}${Math.round(revenue * r).toLocaleString()}`;
+      document.getElementById('burnDisplay').innerText = `${c}${Math.round(totalBurnUSD * r).toLocaleString()}`;
+
+      const netElem = document.getElementById('netFlowDisplay');
+      const formattedNet = `${netFlowUSD >= 0 ? '+' : ''}${c}${Math.round(netFlowUSD * r).toLocaleString()}`;
+      netElem.innerText = formattedNet;
+      netElem.className = `text-lg font-bold ${netFlowUSD >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+
+      let runwayMonths = 99.9;
+      if (netFlowUSD < 0) {
+        const netBurn = Math.abs(netFlowUSD);
+        runwayMonths = cash / netBurn;
+      }
+
+      const runwayDisplay = document.getElementById('runwayDisplay');
+      if (netFlowUSD >= 0) {
+        runwayDisplay.innerText = "∞";
+        runwayDisplay.className = "text-5xl font-black tracking-tight text-emerald-400 mb-2";
+      } else {
+        runwayDisplay.innerText = runwayMonths.toFixed(1);
+        runwayDisplay.className = "text-5xl font-black tracking-tight text-white mb-2";
+      }
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateCalculations();
+    };
+  </script>
+</body>
+</html>

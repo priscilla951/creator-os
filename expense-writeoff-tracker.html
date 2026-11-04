@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Expense & Write-Off Categorizer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-medium">Expense Tracker</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+
+        <select id="currencySelector" onchange="renderExpenses()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Expense & Write-Off Categorizer</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Log business software, gear, and operational expenses to automatically calculate your tax-deductible write-off totals.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Input & Form Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-receipt"></i> <span data-i18n="input_heading">1. Add Business Expense</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="exp_name">Expense Name / Vendor</label>
+            <input type="text" id="expenseName" placeholder="e.g. Adobe Creative Cloud" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="exp_amount">Amount ($)</label>
+            <input type="number" id="expenseAmount" placeholder="54.99" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="exp_category">Category</label>
+            <select id="expenseCategory" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="Software & Subscriptions">Software & Subscriptions</option>
+              <option value="Hardware & Gear">Hardware & Camera Gear</option>
+              <option value="Home Office & Internet">Home Office & Internet</option>
+              <option value="Marketing & Advertising">Marketing & Advertising</option>
+              <option value="Travel & Professional">Travel & Professional Services</option>
+            </select>
+          </div>
+
+          <button onclick="addExpense()" class="w-full py-3 rounded-xl accent-gradient text-white font-bold text-sm shadow-lg shadow-indigo-500/20 hover:opacity-95 transition" data-i18n="add_btn">
+            Log Write-Off Expense
+          </button>
+        </div>
+      </div>
+
+      <!-- Overview & List Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Total Deductible Write-Offs</span>
+            <span id="itemCountBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">0 Items Logged</span>
+          </div>
+
+          <div class="text-center py-5 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="total_deductible_label">Total Tax-Deductible Amount</div>
+            <div id="totalDeductibleDisplay" class="text-4xl font-black tracking-tight text-emerald-400">$0.00</div>
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider" data-i18n="logged_list_title">Logged Expense Ledger</h3>
+            <div id="expenseListContainer" class="space-y-2 max-h-[250px] overflow-y-auto pr-1">
+              <div class="text-center py-6 text-xs text-slate-500 italic" data-i18n="empty_state">No expenses logged yet. Add your first expense on the left!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Expense & Write-Off Categorizer",
+        hero_desc: "Log business software, gear, and operational expenses to automatically calculate your tax-deductible write-off totals.",
+        input_heading: "1. Add Business Expense",
+        exp_name: "Expense Name / Vendor",
+        exp_amount: "Amount ($)",
+        exp_category: "Category",
+        add_btn: "Log Write-Off Expense",
+        summary_title: "Total Deductible Write-Offs",
+        total_deductible_label: "Total Tax-Deductible Amount",
+        logged_list_title: "Logged Expense Ledger",
+        empty_state: "No expenses logged yet. Add your first expense on the left!"
+      },
+      es: {
+        hero_title: "Categorizador de Gastos y Deducciones",
+        hero_desc: "Registra gastos operativos y de software para calcular tus deducciones de impuestos.",
+        input_heading: "1. Agregar Gasto de Negocio",
+        exp_name: "Nombre del Gasto / Proveedor",
+        exp_amount: "Monto ($)",
+        exp_category: "Categoría",
+        add_btn: "Registrar Gasto Deductible",
+        summary_title: "Deducciones Totales",
+        total_deductible_label: "Monto Total Deducible de Impuestos",
+        logged_list_title: "Registro de Gastos",
+        empty_state: "No hay gastos registrados todavía."
+      },
+      fr: {
+        hero_title: "Catalyseur de Frais & Déductions Fiscales",
+        hero_desc: "Enregistrez vos frais professionnels pour calculer automatiquement vos déductions d'impôts.",
+        input_heading: "1. Ajouter une Dépense",
+        exp_name: "Nom de la Dépense / Fournisseur",
+        exp_amount: "Montant ($)",
+        exp_category: "Catégorie",
+        add_btn: "Enregistrer la Dépense",
+        summary_title: "Total des Déductions",
+        total_deductible_label: "Montant Total Déductible",
+        logged_list_title: "Registre des Dépenses",
+        empty_state: "Aucune dépense enregistrée pour le moment."
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    let expenses = JSON.parse(localStorage.getItem('creator_os_expenses')) || [
+      { name: 'Adobe Creative Cloud', amount: 54.99, category: 'Software & Subscriptions' },
+      { name: 'Sony Microphone', amount: 299.00, category: 'Hardware & Gear' },
+      { name: 'Fast Fiber Internet (Monthly)', amount: 80.00, category: 'Home Office & Internet' }
+    ];
+
+    function addExpense() {
+      const name = document.getElementById('expenseName').value.trim();
+      const amount = parseFloat(document.getElementById('expenseAmount').value);
+      const category = document.getElementById('expenseCategory').value;
+
+      if (!name || isNaN(amount) || amount <= 0) {
+        alert('Please enter a valid expense name and amount.');
+        return;
+      }
+
+      expenses.push({ name, amount, category });
+      localStorage.setItem('creator_os_expenses', JSON.stringify(expenses));
+
+      document.getElementById('expenseName').value = '';
+      document.getElementById('expenseAmount').value = '';
+      renderExpenses();
+    }
+
+    function deleteExpense(index) {
+      expenses.splice(index, 1);
+      localStorage.setItem('creator_os_expenses', JSON.stringify(expenses));
+      renderExpenses();
+    }
+
+    function renderExpenses() {
+      const container = document.getElementById('expenseListContainer');
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      let totalUSD = 0;
+      container.innerHTML = '';
+
+      if (expenses.length === 0) {
+        container.innerHTML = `<div class="text-center py-6 text-xs text-slate-500 italic">No expenses logged yet. Add your first expense on the left!</div>`;
+        document.getElementById('totalDeductibleDisplay').innerText = `${c}0.00`;
+        document.getElementById('itemCountBadge').innerText = `0 Items Logged`;
+        return;
+      }
+
+      expenses.forEach((item, index) => {
+        totalUSD += item.amount;
+        const convertedAmt = (item.amount * r).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        
+        const div = document.createElement('div');
+        div.className = "flex items-center justify-between p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-xs";
+        div.innerHTML = `
+          <div>
+            <div class="font-bold text-slate-200">${item.name}</div>
+            <div class="text-[10px] text-slate-400 mt-0.5">${item.category}</div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="font-bold text-emerald-400">${c}${convertedAmt}</span>
+            <button onclick="deleteExpense(${index})" class="text-slate-500 hover:text-red-400 transition"><i class="fa-solid fa-trash-can"></i></button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      const finalConvertedTotal = (totalUSD * r).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('totalDeductibleDisplay').innerText = `${c}${finalConvertedTotal}`;
+      document.getElementById('itemCountBadge').innerText = `${expenses.length} Items Logged`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      renderExpenses();
+    };
+  </script>
+</body>
+</html>

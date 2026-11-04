@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Burnout Runway & Workspace Velocity Index</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-pink-500/10 text-pink-400 border border-pink-500/20 font-medium">Wellness & Velocity</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Creator "Burnout Runway" & Velocity Index</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Evaluate your content backlog buffer against fatigue levels to calculate your safe vacation runway without risking algorithmic momentum.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Inputs Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-battery-half"></i> <span data-i18n="input_heading">1. Workload & Backlog</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="backlog_count">Finished / Scheduled Content Items in Backlog</label>
+            <input type="number" id="backlogInput" value="4" oninput="updateBurnoutRunway()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="pub_frequency">Publishing Frequency (Posts / Videos Per Month)</label>
+            <input type="number" id="frequencyInput" value="4" oninput="updateBurnoutRunway()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-300 mb-1">
+              <span data-i18n="fatigue_level">Current Fatigue / Stress Level (1-10)</span>
+              <span id="fatigueVal" class="text-pink-400 font-mono">7 / 10</span>
+            </div>
+            <input type="range" id="fatigueSlider" min="1" max="10" value="7" oninput="updateBurnoutRunway()" class="w-full accent-pink-500 cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500 mt-0.5">
+              <span>Rested & Energized</span>
+              <span>Severe Burnout</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Runway & Risk Assessment</span>
+            <span id="riskBadge" class="text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">MODERATE BURNOUT RISK</span>
+          </div>
+
+          <div class="text-center py-6 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="runway_days_label">Safe Content Vacation Buffer</div>
+            <div id="runwayDisplay" class="text-5xl font-black tracking-tight text-indigo-300 mb-2">30 Days</div>
+            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider"><span data-i18n="risk_score_label">Burnout Risk Index:</span> <span id="riskScoreDisplay" class="text-pink-400 font-bold">68 / 100</span></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="velocity_status">Algorithm Velocity Impact</div>
+              <div id="velocityDisplay" class="text-sm font-bold text-emerald-400 mt-1">Protected Buffer</div>
+            </div>
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="action_recommended">Recommended Action</div>
+              <div id="recommendationDisplay" class="text-sm font-bold text-amber-300 mt-1">Schedule 2-Week Break</div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-pink-950/40 border border-pink-500/20 text-xs text-pink-200 flex items-start gap-3">
+            <i class="fa-solid fa-heart-pulse text-pink-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Mental Health & Velocity Strategy</p>
+              <p class="text-[11px] text-pink-300 mt-0.5" data-i18n="tip_desc">Always build at least a 30-day scheduled buffer before stepping away for extended rest. Batching content in low-stress sprints protects channel momentum.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Creator "Burnout Runway" & Velocity Index',
+        hero_desc: 'Evaluate your content backlog buffer against fatigue levels to calculate your safe vacation runway without risking algorithmic momentum.',
+        input_heading: '1. Workload & Backlog',
+        backlog_count: 'Finished / Scheduled Content Items in Backlog',
+        pub_frequency: 'Publishing Frequency (Posts / Videos Per Month)',
+        fatigue_level: 'Current Fatigue / Stress Level (1-10)',
+        summary_title: 'Runway & Risk Assessment',
+        runway_days_label: 'Safe Content Vacation Buffer',
+        risk_score_label: 'Burnout Risk Index:',
+        velocity_status: 'Algorithm Velocity Impact',
+        action_recommended: 'Recommended Action',
+        tip_title: 'Mental Health & Velocity Strategy',
+        tip_desc: 'Always build at least a 30-day scheduled buffer before stepping away for extended rest. Batching content in low-stress sprints protects channel momentum.'
+      },
+      es: {
+        hero_title: 'Índice de Margen de Desgaste y Velocidad Creativa',
+        hero_desc: 'Evalúa tu reserva de contenido contra los niveles de fatiga para calcular un descanso seguro.',
+        input_heading: '1. Carga de Trabajo y Reserva',
+        backlog_count: 'Contenido Finalizado / Programado en Reserva',
+        pub_frequency: 'Frecuencia de Publicación (Mensual)',
+        fatigue_level: 'Nivel de Nivel de Estrés / Fatiga (1-10)',
+        summary_title: 'Evaluación de Margen y Riesgo',
+        runway_days_label: 'Margen Seguro de Vacaciones',
+        risk_score_label: 'Índice de Riesgo de Desgaste:',
+        velocity_status: 'Impacto en Velocidad del Algoritmo',
+        action_recommended: 'Acción Recomendada',
+        tip_title: 'Estrategia de Salud Mental',
+        tip_desc: 'Construye al menos 30 días de reserva programada antes de tomar un descanso prolongado.'
+      },
+      fr: {
+        hero_title: "Indice d'Épuisement Créatif & Réserve de Contenu",
+        hero_desc: "Évaluez votre réserve de contenu en fonction de votre fatigue pour planifier des vacances sans risquer votre portée.",
+        input_heading: "1. Charge de Travail & Réserve",
+        backlog_count: "Contenus Prêts / Programmés en Réserve",
+        pub_frequency: "Fréquence de Publication (Par Mois)",
+        fatigue_level: "Niveau de Fatigue / Stress (1-10)",
+        summary_title: "Évaluation de la Réserve & Risque",
+        runway_days_label: "Réserve de Vacances Sécurisée",
+        risk_score_label: "Indice de Risque d'Épuisement :",
+        velocity_status: "Impact sur l'Algorithme",
+        action_recommended: "Action Recommandée",
+        tip_title: "Stratégie de Santé Mentale",
+        tip_desc: "Créez toujours une réserve d'au moins 30 jours avant de prendre un repos prolongé."
+      }
+    };
+
+    function updateBurnoutRunway() {
+      const backlog = parseFloat(document.getElementById('backlogInput').value) || 0;
+      const frequency = parseFloat(document.getElementById('frequencyInput').value) || 1;
+      const fatigue = parseInt(document.getElementById('fatigueSlider').value) || 1;
+
+      document.getElementById('fatigueVal').innerText = `${fatigue} / 10`;
+
+      // Runway in days: (Backlog / Monthly Frequency) * 30 days
+      const runwayDays = Math.round((backlog / frequency) * 30);
+
+      // Risk score: calculated by high fatigue weighted against low backlog days
+      let riskScore = (fatigue * 7) + (30 - Math.min(30, runwayDays));
+      riskScore = Math.max(10, Math.min(99, Math.round(riskScore)));
+
+      document.getElementById('runwayDisplay').innerText = `${runwayDays} Days`;
+      document.getElementById('riskScoreDisplay').innerText = `${riskScore} / 100`;
+
+      const badge = document.getElementById('riskBadge');
+      const velocity = document.getElementById('velocityDisplay');
+      const rec = document.getElementById('recommendationDisplay');
+
+      if (riskScore > 70) {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-semibold";
+        badge.innerText = "CRITICAL BURNOUT WARNING";
+        velocity.innerText = "High Risk of Stall";
+        velocity.className = "text-sm font-bold text-red-400 mt-1";
+        rec.innerText = "Immediate Batch & Rest";
+        rec.className = "text-sm font-bold text-red-300 mt-1";
+      } else if (riskScore > 40) {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold";
+        badge.innerText = "MODERATE BURNOUT RISK";
+        velocity.innerText = "Protected Buffer";
+        velocity.className = "text-sm font-bold text-emerald-400 mt-1";
+        rec.innerText = "Schedule 2-Week Break";
+        rec.className = "text-sm font-bold text-amber-300 mt-1";
+      } else {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold";
+        badge.innerText = "LOW RISK (HEALTHY VELOCITY)";
+        velocity.innerText = "Optimal Momentum";
+        velocity.className = "text-sm font-bold text-emerald-400 mt-1";
+        rec.innerText = "Maintain Current Pace";
+        rec.className = "text-sm font-bold text-emerald-300 mt-1";
+      }
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateBurnoutRunway();
+    };
+  </script>
+</body>
+</html>

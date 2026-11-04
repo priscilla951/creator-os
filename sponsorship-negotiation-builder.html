@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Sponsorship Negotiation Script Builder</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Negotiation Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+        <select id="currencySelector" onchange="updateNegotiation()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Sponsorship Negotiation Script Builder</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Calculate valuation gaps between brand offers and your target rates to auto-generate high-converting counter-proposal emails.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Inputs Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-handshake"></i> <span data-i18n="input_heading">1. Offer & Strategy Specs</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="brand_name">Brand / Sponsor Name</label>
+            <input type="text" id="brandNameInput" value="Acme Tech Co." oninput="updateNegotiation()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="target_rate">Your Target Rate ($)</label>
+              <input type="number" id="targetRateInput" value="2500" oninput="updateNegotiation()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="brand_offer">Brand Lowball Offer ($)</label>
+              <input type="number" id="brandOfferInput" value="1500" oninput="updateNegotiation()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="stance_label">Negotiation Stance</label>
+            <select id="negotiationStance" onchange="updateNegotiation()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="firm">Firm on Rate (Protect Valuation)</option>
+              <option value="deliverable">Adjust Scope (Fewer Deliverables)</option>
+              <option value="bundle" selected>Value-Add Bundle (Add Social Post for Target)</option>
+            </select>
+          </div>
+
+          <button onclick="copyScript()" class="w-full py-3 rounded-xl accent-gradient text-white font-bold text-sm shadow-lg shadow-indigo-500/20 hover:opacity-95 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-copy"></i> <span data-i18n="copy_btn">Copy Script to Clipboard</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Results Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Valuation Gap Analysis</span>
+            <span id="gapBadge" class="text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">40.0% Below Target</span>
+          </div>
+
+          <!-- Counter-Proposal Email Script Box -->
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold text-indigo-300 uppercase tracking-wider" data-i18n="script_title">Generated Email Response Script</h3>
+            <div id="emailScriptDisplay" class="p-4 bg-slate-900/90 rounded-xl border border-slate-800 font-mono text-xs text-slate-200 leading-relaxed whitespace-pre-line select-all min-h-[220px]">
+              Loading negotiation template...
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/20 text-xs text-emerald-200 flex items-start gap-3">
+            <i class="fa-solid fa-lightbulb text-emerald-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Negotiation Strategy Tip</p>
+              <p class="text-[11px] text-emerald-300 mt-0.5" data-i18n="tip_desc">Never drop your price without reducing deliverables or adding rights limitations. Maintaining rate integrity signals enterprise quality to brand managers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Sponsorship Negotiation Script Builder',
+        hero_desc: 'Calculate valuation gaps between brand offers and your target rates to auto-generate high-converting counter-proposal emails.',
+        input_heading: '1. Offer & Strategy Specs',
+        brand_name: 'Brand / Sponsor Name',
+        target_rate: 'Your Target Rate ($)',
+        brand_offer: 'Brand Lowball Offer ($)',
+        stance_label: 'Negotiation Stance',
+        copy_btn: 'Copy Script to Clipboard',
+        summary_title: 'Valuation Gap Analysis',
+        script_title: 'Generated Email Response Script',
+        tip_title: 'Negotiation Strategy Tip',
+        tip_desc: 'Never drop your price without reducing deliverables or adding rights limitations. Maintaining rate integrity signals enterprise quality to brand managers.'
+      },
+      es: {
+        hero_title: 'Generador de Guiones de Negociación de Patrocinios',
+        hero_desc: 'Calcula brechas de valoración para generar correos de respuesta profesionales.',
+        input_heading: '1. Especificaciones de la Oferta',
+        brand_name: 'Nombre de la Marca',
+        target_rate: 'Tu Tarifa Objetivo ($)',
+        brand_offer: 'Oferta de la Marca ($)',
+        stance_label: 'Postura de Negociación',
+        copy_btn: 'Copiar Guion al Portapapeles',
+        summary_title: 'Análisis de Brecha de Valoración',
+        script_title: 'Guion de Correo Generado',
+        tip_title: 'Consejo de Negociación',
+        tip_desc: 'Nunca bajes tu precio sin reducir los entregables correspondientes.'
+      },
+      fr: {
+        hero_title: 'Générateur de Scripts de Négociation de Sponsorings',
+        hero_desc: 'Calculez l’écart de valorisation pour générer des e-mails de contre-proposition.',
+        input_heading: '1. Spécifications de l’Offre',
+        brand_name: 'Nom de la Marque',
+        target_rate: 'Votre Tarif Cible ($)',
+        brand_offer: 'Offre Initiale de la Marque ($)',
+        stance_label: 'Posture de Négociation',
+        copy_btn: 'Copier le Script dans le Presse-papier',
+        summary_title: 'Analyse de l’Écart de Valorisation',
+        script_title: 'Script d’E-mail Généré',
+        tip_title: 'Conseil de Négociation',
+        tip_desc: 'Ne réduisez jamais votre prix sans réduire les livrables associés.'
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function updateNegotiation() {
+      const brand = document.getElementById('brandNameInput').value.trim() || 'Brand Team';
+      const targetUSD = parseFloat(document.getElementById('targetRateInput').value) || 0;
+      const offerUSD = parseFloat(document.getElementById('brandOfferInput').value) || 0;
+      const stance = document.getElementById('negotiationStance').value;
+
+      const gapPct = targetUSD > 0 ? (((targetUSD - offerUSD) / targetUSD) * 100).toFixed(1) : 0;
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      const targetCurr = `${c}${Math.round(targetUSD * r).toLocaleString()}`;
+      const offerCurr = `${c}${Math.round(offerUSD * r).toLocaleString()}`;
+
+      const badge = document.getElementById('gapBadge');
+      if (offerUSD >= targetUSD) {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold";
+        badge.innerText = "Target Rate Met";
+      } else {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold";
+        badge.innerText = `${gapPct}% Below Target`;
+      }
+
+      let scriptText = "";
+
+      if (stance === 'firm') {
+        scriptText = `Hi ${brand} Team,\n\nThanks so much for reaching out with the proposal of ${offerCurr}! I'd love to partner together on this.\n\nBased on our current engagement rates and historic conversions for similar placements, our baseline fee for a full dedicated integration is ${targetCurr}.\n\nIf that budget works on your side, let me know and I can send over the agreement right away!`;
+      } else if (stance === 'deliverable') {
+        scriptText = `Hi ${brand} Team,\n\nThanks for your offer of ${offerCurr}! We'd be excited to feature your product.\n\nWhile our standard rate for a dedicated integration is ${targetCurr}, we could adjust the scope to fit your ${offerCurr} budget by offering a 30-second mid-roll segment instead of a full dedicated feature.\n\nLet me know if that scope adjustment works for your campaign goals!`;
+      } else {
+        scriptText = `Hi ${brand} Team,\n\nThanks for sending over the proposal! We are very interested in collaborating with ${brand}.\n\nOur target rate for this placement is ${targetCurr}. To make this an easy win for your team at that rate, I'd be happy to bundle in a bonus dedicated post on X / Instagram story mention (valued at ${c}${Math.round(300 * r)}) at no extra charge.\n\nLet me know if we can lock this in!`;
+      }
+
+      document.getElementById('emailScriptDisplay').innerText = scriptText;
+    }
+
+    function copyScript() {
+      const text = document.getElementById('emailScriptDisplay').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Email script copied to clipboard!');
+      });
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateNegotiation();
+    };
+  </script>
+</body>
+</html>

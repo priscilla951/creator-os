@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Bio Link & UTM Campaign Builder</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Link & Campaign Hub</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Bio Link & UTM Campaign Builder</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Generate custom UTM campaign links for Instagram bio, TikTok bio, and YouTube descriptions to track lead sources with precision.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Inputs Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-link"></i> <span data-i18n="input_heading">1. Campaign Parameters</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="target_url">Target Destination URL</label>
+            <input type="url" id="targetUrlInput" value="https://mywebsite.com/course" oninput="buildUtmUrl()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="campaign_source">Campaign Source (utm_source)</label>
+            <select id="campaignSourceSelect" onchange="buildUtmUrl()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+              <option value="instagram" selected>Instagram Bio</option>
+              <option value="tiktok">TikTok Bio</option>
+              <option value="youtube">YouTube Description</option>
+              <option value="newsletter">Email Newsletter</option>
+              <option value="x_twitter">X / Twitter Profile</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="campaign_medium">Campaign Medium (utm_medium)</label>
+            <input type="text" id="campaignMediumInput" value="social_bio" oninput="buildUtmUrl()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="campaign_name">Campaign Name (utm_campaign)</label>
+            <input type="text" id="campaignNameInput" value="summer_launch" oninput="buildUtmUrl()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Generated Trackable Link</span>
+            <button onclick="copyUtmUrl()" class="text-xs px-3 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-semibold hover:bg-indigo-500/30 transition flex items-center gap-1.5">
+              <i class="fa-solid fa-copy"></i> <span data-i18n="copy_btn">Copy URL</span>
+            </button>
+          </div>
+
+          <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 text-indigo-300 font-mono text-xs break-all leading-relaxed" id="utmOutput">
+            https://mywebsite.com/course?utm_source=instagram&utm_medium=social_bio&utm_campaign=summer_launch
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-chart-pie text-emerald-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Attribution Tracking Secret</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">Always use distinct `utm_source` tags for YouTube description links versus Instagram bio links so you know which platform yields actual sales.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Bio Link & UTM Campaign Builder",
+        hero_desc: "Generate custom UTM campaign links for Instagram bio, TikTok bio, and YouTube descriptions to track lead sources with precision.",
+        input_heading: "1. Campaign Parameters",
+        target_url: "Target Destination URL",
+        campaign_source: "Campaign Source (utm_source)",
+        campaign_medium: "Campaign Medium (utm_medium)",
+        campaign_name: "Campaign Name (utm_campaign)",
+        summary_title: "Generated Trackable Link",
+        copy_btn: "Copy URL",
+        tip_title: "Attribution Tracking Secret",
+        tip_desc: "Always use distinct utm_source tags for YouTube description links versus Instagram bio links so you know which platform yields actual sales."
+      },
+      es: {
+        hero_title: "Creador de Enlaces Bio y Campañas UTM",
+        hero_desc: "Genera enlaces con parámetros UTM para rastrear de dónde vienen tus ventas.",
+        input_heading: "1. Parámetros de la Campaña",
+        target_url: "URL de Destino",
+        campaign_source: "Fuente de Campaña (utm_source)",
+        campaign_medium: "Medio de Campaña (utm_medium)",
+        campaign_name: "Nombre de Campaña (utm_campaign)",
+        summary_title: "Enlace Rastreable Generado",
+        copy_btn: "Copiar URL",
+        tip_title: "Secreto de Rastreo",
+        tip_desc: "Usa etiquetas utm_source distintas para cada red social."
+      },
+      fr: {
+        hero_title: "Générateur de Liens Bio & Campagnes UTM",
+        hero_desc: "Générez des liens UTM personnalisés pour suivre la provenance de vos clients.",
+        input_heading: "1. Paramètres de la Campagne",
+        target_url: "URL de Destination",
+        campaign_source: "Source de Campagne (utm_source)",
+        campaign_medium: "Support de Campagne (utm_medium)",
+        campaign_name: "Nom de la Campagne (utm_campaign)",
+        summary_title: "Lien Traçable Généré",
+        copy_btn: "Copier l'URL",
+        tip_title: "Secret de Suivi",
+        tip_desc: "Utilisez des balises utm_source distinctes pour chaque réseau."
+      }
+    };
+
+    function buildUtmUrl() {
+      const baseUrl = document.getElementById('targetUrlInput').value.trim() || 'https://mywebsite.com';
+      const source = document.getElementById('campaignSourceSelect').value;
+      const medium = document.getElementById('campaignMediumInput').value.trim() || 'social';
+      const campaign = document.getElementById('campaignNameInput').value.trim() || 'promo';
+
+      try {
+        const url = new URL(baseUrl);
+        url.searchParams.set('utm_source', source);
+        url.searchParams.set('utm_medium', medium);
+        url.searchParams.set('utm_campaign', campaign);
+        document.getElementById('utmOutput').innerText = url.toString();
+      } catch (e) {
+        document.getElementById('utmOutput').innerText = `${baseUrl}?utm_source=${source}&utm_medium=${medium}&utm_campaign=${campaign}`;
+      }
+    }
+
+    function copyUtmUrl() {
+      const text = document.getElementById('utmOutput').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('UTM Link copied to clipboard!');
+      });
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      buildUtmUrl();
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Content Repurposing ROI Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .text-gradient { background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <!-- Header Navigation -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-medium">Workflow Leverage</span>
+        </div>
+      </a>
+      
+      <!-- Global Controls -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+
+        <select id="currencySelector" onchange="updateCalculations()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Hero Banner -->
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Content Repurposing ROI Calculator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Calculate your time leverage, audience multiplication, and output scaling when turning long-form media into short clips.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Controls Column -->
+      <div class="lg:col-span-6 space-y-6">
+        
+        <div class="glass-card p-6 rounded-2xl space-y-5">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-scissors"></i> <span data-i18n="input_heading">1. Production Parameters</span>
+          </h2>
+
+          <!-- Long-Form Hours Slider -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-2">
+              <span class="text-slate-300" data-i18n="long_hours">Long-Form Production Time (Hours)</span>
+              <span id="hoursDisplay" class="text-indigo-400 font-bold text-sm">6 hrs</span>
+            </div>
+            <input type="range" id="hoursInput" min="1" max="30" step="1" value="6" oninput="updateCalculations()" class="w-full accent-indigo-500 bg-slate-800 h-2 rounded-lg cursor-pointer">
+          </div>
+
+          <!-- Number of Derived Shorts / Tweets -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-2">
+              <span class="text-slate-300" data-i18n="clips_count">Derived Short Assets (Clips / Threads)</span>
+              <span id="clipsDisplay" class="text-indigo-400 font-bold text-sm">8 pieces</span>
+            </div>
+            <input type="range" id="clipsInput" min="2" max="30" step="1" value="8" oninput="updateCalculations()" class="w-full accent-indigo-500 bg-slate-800 h-2 rounded-lg cursor-pointer">
+          </div>
+
+          <!-- Base Audience Reach per Long-form -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-2">
+              <span class="text-slate-300" data-i18n="base_reach">Base Long-Form Views</span>
+              <span id="reachDisplay" class="text-indigo-400 font-bold text-sm">15,000</span>
+            </div>
+            <input type="range" id="reachInput" min="1000" max="200000" step="1000" value="15000" oninput="updateCalculations()" class="w-full accent-indigo-500 bg-slate-800 h-2 rounded-lg cursor-pointer">
+          </div>
+
+          <!-- Monetization Value per 1k Views -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="value_per_view">Estimated Value per 1,000 Impressions (USD)</label>
+            <input type="number" id="rpmValueInput" value="12" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Output Results Column -->
+      <div class="lg:col-span-6 space-y-6">
+        
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/30 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Leverage & ROI Forecast</span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold" data-i18n="leverage_tag">High Leverage</span>
+          </div>
+
+          <!-- Main Total Reach Display -->
+          <div class="text-center py-5 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="total_projected_reach">Projected Total Ecosystem Reach</div>
+            <div id="totalReachDisplay" class="text-5xl font-black tracking-tight text-emerald-400 mb-2">55,000</div>
+            <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider"><span data-i18n="output_value">Total Estimated Value Generated:</span> <span id="valueDisplay" class="text-white">$660</span></div>
+          </div>
+
+          <!-- Key Metrics Grid -->
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="efficiency_gain">Time Efficiency Gain</div>
+              <div id="efficiencyDisplay" class="text-xl font-black text-white">4.8x</div>
+            </div>
+            <div class="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="assets_created">Total Published Assets</div>
+              <div id="assetsDisplay" class="text-xl font-bold text-indigo-300">9 items</div>
+            </div>
+          </div>
+
+          <!-- Pro Tip Banner -->
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-bolt text-amber-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Workflow Leverage Secret</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">Top creators delegate clipping to VA's, turning 1 long-form session into a 7-day multi-platform content machine.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Content Repurposing ROI Calculator",
+        hero_desc: "Calculate your time leverage, audience multiplication, and output scaling when turning long-form media into short clips.",
+        input_heading: "1. Production Parameters",
+        long_hours: "Long-Form Production Time (Hours)",
+        clips_count: "Derived Short Assets (Clips / Threads)",
+        base_reach: "Base Long-Form Views",
+        value_per_view: "Estimated Value per 1,000 Impressions (USD)",
+        summary_title: "Leverage & ROI Forecast",
+        leverage_tag: "High Leverage",
+        total_projected_reach: "Projected Total Ecosystem Reach",
+        output_value: "Total Estimated Value Generated:",
+        efficiency_gain: "Time Efficiency Gain",
+        assets_created: "Total Published Assets",
+        tip_title: "Workflow Leverage Secret",
+        tip_desc: "Top creators delegate clipping to VA's, turning 1 long-form session into a 7-day multi-platform content machine."
+      },
+      es: {
+        hero_title: "Calculadora de ROI de Reutilización de Contenido",
+        hero_desc: "Calcule su apalancamiento de tiempo y multiplicación de audiencia al convertir contenido largo en clips cortos.",
+        input_heading: "1. Parámetros de Producción",
+        long_hours: "Tiempo de Producción (Horas)",
+        clips_count: "Activos Cortos Derivados (Clips / Hilos)",
+        base_reach: "Visualizaciones Base",
+        value_per_view: "Valor Estimado por 1,000 Impresiones (USD)",
+        summary_title: "Pronóstico de Apalancamiento y ROI",
+        leverage_tag: "Alto Apalancamiento",
+        total_projected_reach: "Alcance Total Proyectado en el Ecosistema",
+        output_value: "Valor Total Generado:",
+        efficiency_gain: "Ganancia de Eficiencia",
+        assets_created: "Activos Publicados",
+        tip_title: "Secreto de Eficiencia",
+        tip_desc: "Delegar la edición de clips transforma una sesión larga en una máquina de contenido de 7 días."
+      },
+      fr: {
+        hero_title: "Calculateur de ROI de Réutilisation de Contenu",
+        hero_desc: "Calculez votre levier temporel et la multiplication de votre audience en transformant du long format en clips courts.",
+        input_heading: "1. Paramètres de Production",
+        long_hours: "Temps de Production (Heures)",
+        clips_count: "Actifs Courts Dérivés (Clips / Threads)",
+        base_reach: "Vues Long Format de Base",
+        value_per_view: "Valeur Estimée pour 1 000 Impressions (USD)",
+        summary_title: "Prévision de Levier & ROI",
+        leverage_tag: "Effet de Levier Élevé",
+        total_projected_reach: "Portée Totale Proyectée de l'Écosystème",
+        output_value: "Valeur Totale Générée :",
+        efficiency_gain: "Gain d'Efficacité Temporelle",
+        assets_created: "Total des Actifs Publiés",
+        tip_title: "Secret de Productivité",
+        tip_desc: "Déléguer le découpage en clips transforme une session de tournage en machine de contenu multiplateforme."
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function updateCalculations() {
+      const hours = parseInt(document.getElementById('hoursInput').value) || 1;
+      const clips = parseInt(document.getElementById('clipsInput').value) || 1;
+      const baseReach = parseInt(document.getElementById('reachInput').value) || 0;
+      const rpm = parseFloat(document.getElementById('rpmValueInput').value) || 0;
+
+      document.getElementById('hoursDisplay').innerText = `${hours} hrs`;
+      document.getElementById('clipsDisplay').innerText = `${clips} pieces`;
+      document.getElementById('reachDisplay').innerText = baseReach.toLocaleString();
+
+      // Assuming each short brings in ~25% of the base reach on average across shorts platforms
+      const shortsTotalReach = clips * (baseReach * 0.25);
+      const totalReach = baseReach + shortsTotalReach;
+      
+      const totalValueUSD = (totalReach / 1000) * rpm;
+      const totalAssets = clips + 1;
+      const efficiency = (totalAssets / hours).toFixed(1);
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('totalReachDisplay').innerText = Math.round(totalReach).toLocaleString();
+      document.getElementById('valueDisplay').innerText = `${c}${Math.round(totalValueUSD * r).toLocaleString()}`;
+      document.getElementById('efficiencyDisplay').innerText = `${efficiency}x`;
+      document.getElementById('assetsDisplay').innerText = `${totalAssets} items`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateCalculations();
+    };
+  </script>
+</body>
+</html>

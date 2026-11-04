@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Tax Reserve & Write-off Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-medium">Tax Protection</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+        <select id="currencySelector" onchange="updateCalculations()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Tax Reserve & Expense Calculator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Calculate precise quarterly tax withholdings, track tax-deductible gear purchases, and set aside cash reserves safely.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div class="lg:col-span-6 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-calculator"></i> <span data-i18n="input_heading">1. Annual Financial Estimates</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="annual_gross">Estimated Annual Gross Income</label>
+            <input type="number" id="annualGrossInput" value="95000" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="business_expenses">Annual Write-offs / Business Expenses</label>
+            <input type="number" id="expensesInput" value="18000" oninput="updateCalculations()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-2">
+              <span class="text-slate-300" data-i18n="tax_bracket">Estimated Effective Tax Rate (%)</span>
+              <span id="taxRateDisplay" class="text-indigo-400 font-bold text-sm">25%</span>
+            </div>
+            <input type="range" id="taxRateInput" min="10" max="45" step="1" value="25" oninput="updateCalculations()" class="w-full accent-indigo-500 bg-slate-800 h-2 rounded-lg cursor-pointer">
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-6 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-rose-500/30 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Tax Withholding Target</span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold" data-i18n="quarterly_tag">Set Aside Monthly</span>
+          </div>
+
+          <div class="text-center py-5 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="monthly_reserve">Monthly Tax Reserve Target</div>
+            <div id="monthlyTaxDisplay" class="text-5xl font-black tracking-tight text-rose-400 mb-2">$1,604</div>
+            <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider"><span data-i18n="quarterly_payment">Quarterly Tax Payment:</span> <span id="quarterlyTaxDisplay" class="text-white">$4,813</span></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="taxable_income">Taxable Net Income</div>
+              <div id="taxableNetDisplay" class="text-xl font-black text-white">$77,000</div>
+            </div>
+            <div class="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="tax_savings">Tax Saved via Write-offs</div>
+              <div id="writeoffSavingsDisplay" class="text-xl font-bold text-emerald-400">$4,500</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "Tax Reserve & Expense Calculator",
+        hero_desc: "Calculate precise quarterly tax withholdings, track tax-deductible gear purchases, and set aside cash reserves safely.",
+        input_heading: "1. Annual Financial Estimates",
+        annual_gross: "Estimated Annual Gross Income",
+        business_expenses: "Annual Write-offs / Business Expenses",
+        tax_bracket: "Estimated Effective Tax Rate (%)",
+        summary_title: "Tax Withholding Target",
+        quarterly_tag: "Set Aside Monthly",
+        monthly_reserve: "Monthly Tax Reserve Target",
+        quarterly_payment: "Quarterly Tax Payment:",
+        taxable_income: "Taxable Net Income",
+        tax_savings: "Tax Saved via Write-offs"
+      },
+      es: {
+        hero_title: "Calculadora de Reserva de Impuestos",
+        hero_desc: "Calcule retenciones trimestrales de impuestos y rastree compras deducibles.",
+        input_heading: "1. Estimaciones Financieras Anuales",
+        annual_gross: "Ingreso Bruto Anual Estimado",
+        business_expenses: "Deducciones y Gastos Anuales",
+        tax_bracket: "Tasa Impositiva Efectiva (%)",
+        summary_title: "Objetivo de Retención de Impuestos",
+        quarterly_tag: "Apartar Mensualmente",
+        monthly_reserve: "Reserva Mensual de Impuestos",
+        quarterly_payment: "Pago Trimestral de Impuestos:",
+        taxable_income: "Ingreso Neto Imponible",
+        tax_savings: "Ahorro por Deducciones"
+      },
+      fr: {
+        hero_title: "Calculateur de Réserve Fiscale",
+        hero_desc: "Calculez vos retenues fiscales trimestrielles et suivez vos déductions d'équipement.",
+        input_heading: "1. Estimations Financières Annuelles",
+        annual_gross: "Revenu Brut Annuel Estimé",
+        business_expenses: "Déductions & Frais Professionnels",
+        tax_bracket: "Taux d'Imposition Effectif (%)",
+        summary_title: "Cible de Retenue Fiscale",
+        quarterly_tag: "Mettre de Côté Mensuellement",
+        monthly_reserve: "Réserve Mensuelle d'Impôts",
+        quarterly_payment: "Paiement Trimestriel d'Impôts :",
+        taxable_income: "Revenu Net Imposable",
+        tax_savings: "Économies sur Déductions"
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function updateCalculations() {
+      const grossUSD = parseFloat(document.getElementById('annualGrossInput').value) || 0;
+      const expensesUSD = parseFloat(document.getElementById('expensesInput').value) || 0;
+      const ratePct = (parseFloat(document.getElementById('taxRateInput').value) || 0) / 100;
+
+      document.getElementById('taxRateDisplay').innerText = `${Math.round(ratePct * 100)}%`;
+
+      const taxableNetUSD = Math.max(0, grossUSD - expensesUSD);
+      const annualTaxUSD = taxableNetUSD * ratePct;
+      const monthlyTaxUSD = annualTaxUSD / 12;
+      const quarterlyTaxUSD = annualTaxUSD / 4;
+      const taxSavedUSD = expensesUSD * ratePct;
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('monthlyTaxDisplay').innerText = `${c}${Math.round(monthlyTaxUSD * r).toLocaleString()}`;
+      document.getElementById('quarterlyTaxDisplay').innerText = `${c}${Math.round(quarterlyTaxUSD * r).toLocaleString()}`;
+      document.getElementById('taxableNetDisplay').innerText = `${c}${Math.round(taxableNetUSD * r).toLocaleString()}`;
+      document.getElementById('writeoffSavingsDisplay').innerText = `${c}${Math.round(taxSavedUSD * r).toLocaleString()}`;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateCalculations();
+    };
+  </script>
+</body>
+</html>

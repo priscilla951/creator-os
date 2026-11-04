@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — YouTube Title & Thumbnail A/B Split-Test Simulator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-medium">A/B Packaging Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">YouTube Title & Thumbnail A/B Split-Test Simulator</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Test competing titles and thumbnail image URLs side-by-side inside simulated YouTube desktop and mobile feed layouts.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Inputs Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-5">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-sliders"></i> <span data-i18n="input_heading">1. Packaging Variants</span>
+          </h2>
+
+          <!-- Option A -->
+          <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800 space-y-3">
+            <div class="text-xs font-bold text-indigo-300 uppercase">Option A Variant</div>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1" data-i18n="title_a">Title A</label>
+              <input type="text" id="titleAInput" value="I Built a Multi-Million Dollar Creator OS in 7 Days" oninput="updateSimulator()" class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 outline-none">
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1" data-i18n="thumb_a">Thumbnail Image URL A</label>
+              <input type="url" id="thumbAInput" value="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=60" oninput="updateSimulator()" class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 outline-none">
+            </div>
+          </div>
+
+          <!-- Option B -->
+          <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800 space-y-3">
+            <div class="text-xs font-bold text-purple-300 uppercase">Option B Variant</div>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1" data-i18n="title_b">Title B</label>
+              <input type="text" id="titleBInput" value="Why I Quit SaaS to Build Free Open-Source Tools" oninput="updateSimulator()" class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 outline-none">
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1" data-i18n="thumb_b">Thumbnail Image URL B</label>
+              <input type="url" id="thumbBInput" value="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&auto=format&fit=crop&q=60" oninput="updateSimulator()" class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 outline-none">
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-lightbulb text-amber-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Community Polling Tip</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">Screenshot both preview cards below to create an instant A/B vote on your X/Twitter or Discord community.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 space-y-6 shadow-2xl">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Side-by-Side YouTube Feed Simulation</span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-semibold"><i class="fa-brands fa-youtube mr-1"></i> Desktop Layout</span>
+          </div>
+
+          <!-- Comparison Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Card A -->
+            <div class="space-y-3 bg-slate-900/90 p-4 rounded-2xl border border-slate-800">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-indigo-400 uppercase">Option A Preview</span>
+                <span class="text-[10px] text-slate-500 font-mono">16:9 Aspect</span>
+              </div>
+              <div class="aspect-video w-full rounded-xl overflow-hidden bg-slate-950 border border-slate-800 relative">
+                <img id="imgPreviewA" src="" alt="Thumb A" class="w-full h-full object-cover">
+                <div class="absolute bottom-2 right-2 bg-black/80 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">12:45</div>
+              </div>
+              <div class="flex items-start gap-3 pt-1">
+                <div class="h-9 w-9 rounded-full bg-indigo-600 flex-shrink-0 flex items-center justify-center font-bold text-xs text-white">AR</div>
+                <div>
+                  <h4 id="displayTitleA" class="text-xs font-bold text-slate-100 line-clamp-2 leading-snug">Title A</h4>
+                  <p class="text-[11px] text-slate-400 mt-1">Alex Rivera • <span class="text-slate-400">12K views • 2 hours ago</span></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card B -->
+            <div class="space-y-3 bg-slate-900/90 p-4 rounded-2xl border border-slate-800">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-purple-400 uppercase">Option B Preview</span>
+                <span class="text-[10px] text-slate-500 font-mono">16:9 Aspect</span>
+              </div>
+              <div class="aspect-video w-full rounded-xl overflow-hidden bg-slate-950 border border-slate-800 relative">
+                <img id="imgPreviewB" src="" alt="Thumb B" class="w-full h-full object-cover">
+                <div class="absolute bottom-2 right-2 bg-black/80 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">12:45</div>
+              </div>
+              <div class="flex items-start gap-3 pt-1">
+                <div class="h-9 w-9 rounded-full bg-purple-600 flex-shrink-0 flex items-center justify-center font-bold text-xs text-white">AR</div>
+                <div>
+                  <h4 id="displayTitleB" class="text-xs font-bold text-slate-100 line-clamp-2 leading-snug">Title B</h4>
+                  <p class="text-[11px] text-slate-400 mt-1">Alex Rivera • <span class="text-slate-400">12K views • 2 hours ago</span></p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: "YouTube Title & Thumbnail A/B Split-Test Simulator",
+        hero_desc: "Test competing titles and thumbnail image URLs side-by-side inside simulated YouTube desktop and mobile feed layouts.",
+        input_heading: "1. Packaging Variants",
+        title_a: "Title A",
+        thumb_a: "Thumbnail Image URL A",
+        title_b: "Title B",
+        thumb_b: "Thumbnail Image URL B",
+        tip_title: "Community Polling Tip",
+        tip_desc: "Screenshot both preview cards below to create an instant A/B vote on your X/Twitter or Discord community.",
+        summary_title: "Side-by-Side YouTube Feed Simulation"
+      },
+      es: {
+        hero_title: "Simulador de Pruebas A/B para Títulos y Miniaturas de YouTube",
+        hero_desc: "Prueba títulos y miniaturas cara a cara en simulaciones de feeds de YouTube.",
+        input_heading: "1. Variantes de Presentación",
+        title_a: "Título A",
+        thumb_a: "URL de Miniatura A",
+        title_b: "Título B",
+        thumb_b: "URL de Miniatura B",
+        tip_title: "Consejo de Votación",
+        tip_desc: "Haz captura de pantalla para encuestar a tu comunidad.",
+        summary_title: "Simulación de Feed de YouTube"
+      },
+      fr: {
+        hero_title: "Simulateur de Tests A/B Titres & Miniatures YouTube",
+        hero_desc: "Testez des titres et miniatures en comparatif direct dans des flux YouTube simulés.",
+        input_heading: "1. Variantes de Packaging",
+        title_a: "Titre A",
+        thumb_a: "URL de Miniature A",
+        title_b: "Titre B",
+        thumb_b: "URL de Miniature B",
+        tip_title: "Astuce de Sondage",
+        tip_desc: "Capturez les aperçus pour sonder votre communauté.",
+        summary_title: "Simulation Côtelée YouTube"
+      }
+    };
+
+    function updateSimulator() {
+      const titleA = document.getElementById('titleAInput').value.trim() || 'Title A';
+      const thumbA = document.getElementById('thumbAInput').value.trim() || '';
+      const titleB = document.getElementById('titleBInput').value.trim() || 'Title B';
+      const thumbB = document.getElementById('thumbBInput').value.trim() || '';
+
+      document.getElementById('displayTitleA').innerText = titleA;
+      document.getElementById('imgPreviewA').src = thumbA;
+      document.getElementById('displayTitleB').innerText = titleB;
+      document.getElementById('imgPreviewB').src = thumbB;
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateSimulator();
+    };
+  </script>
+</body>
+</html>

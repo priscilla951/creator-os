@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Stream Layout Drag-&-Drop Sandbox</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+    .canvas-box { aspect-ratio: 16 / 9; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-medium">Broadcast Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Stream Layout Drag-&-Drop Sandbox</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Design your broadcast overlays, webcams, and alert zones visually, then export your configuration straight to OBS JSON.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Toolbox Column -->
+      <div class="lg:col-span-4 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-purple-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-layer-group"></i> <span data-i18n="input_heading">1. Scene Elements</span>
+          </h2>
+
+          <div class="space-y-2">
+            <button onclick="addElement('Gameplay Feed', 'w-3/5 h-3/5 bg-slate-800 border-2 border-dashed border-slate-600', '🎮')" class="w-full p-3 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold text-left flex items-center gap-3 transition">
+              <span class="text-base">🎮</span> <span data-i18n="add_gameplay">Add Gameplay Capture Box</span>
+            </button>
+            <button onclick="addElement('Webcam Frame', 'w-1/4 h-1/3 bg-purple-950/60 border-2 border-purple-500', '📷')" class="w-full p-3 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold text-left flex items-center gap-3 transition">
+              <span class="text-base">📷</span> <span data-i18n="add_webcam">Add Webcam Overlay</span>
+            </button>
+            <button onclick="addElement('Live Chat Box', 'w-1/5 h-2/5 bg-slate-900/90 border border-slate-700', '💬')" class="w-full p-3 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold text-left flex items-center gap-3 transition">
+              <span class="text-base">💬</span> <span data-i18n="add_chat">Add Live Chat Box</span>
+            </button>
+            <button onclick="addElement('Alert Banner', 'w-1/3 h-16 bg-pink-950/60 border border-pink-500', '🔔')" class="w-full p-3 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold text-left flex items-center gap-3 transition">
+              <span class="text-base">🔔</span> <span data-i18n="add_alert">Add Alert Overlay Banner</span>
+            </button>
+          </div>
+
+          <button onclick="exportOBSJson()" class="w-full py-3.5 rounded-xl accent-gradient text-white font-bold text-sm shadow-lg shadow-purple-500/20 hover:opacity-95 transition flex items-center justify-center gap-2 mt-4">
+            <i class="fa-solid fa-file-code"></i> <span data-i18n="export_btn">Export OBS Scene JSON</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Canvas Workspace Column -->
+      <div class="lg:col-span-8 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-purple-500/35 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">1920x1080 Broadcast Canvas</span>
+            <span id="elementsCountBadge" class="text-xs px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-semibold">0 Elements Active</span>
+          </div>
+
+          <!-- Sandbox Canvas Workspace -->
+          <div id="canvasWorkspace" class="w-full canvas-box bg-slate-950 rounded-2xl border border-slate-800 relative overflow-hidden p-4 flex flex-wrap gap-4 items-center justify-center">
+            <div id="canvasPlaceholder" class="text-center text-slate-500 text-xs">
+              <i class="fa-solid fa-desktop text-3xl mb-2"></i>
+              <p>Click elements on the left to populate your stream layout canvas</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-purple-950/40 border border-purple-500/20 text-xs text-purple-200 flex items-start gap-3">
+            <i class="fa-solid fa-lightbulb text-purple-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Stream Overlay Rule</p>
+              <p class="text-[11px] text-purple-300 mt-0.5" data-i18n="tip_desc">Always keep your webcam overlay in the bottom corners or upper corners where gameplay action is least active.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Stream Layout Drag-&-Drop Sandbox',
+        hero_desc: 'Design your broadcast overlays, webcams, and alert zones visually, then export your configuration straight to OBS JSON.',
+        input_heading: '1. Scene Elements',
+        add_gameplay: 'Add Gameplay Capture Box',
+        add_webcam: 'Add Webcam Overlay',
+        add_chat: 'Add Live Chat Box',
+        add_alert: 'Add Alert Overlay Banner',
+        export_btn: 'Export OBS Scene JSON',
+        summary_title: '1920x1080 Broadcast Canvas',
+        tip_title: 'Stream Overlay Rule',
+        tip_desc: 'Always keep your webcam overlay in the bottom corners or upper corners where gameplay action is least active.'
+      },
+      es: {
+        hero_title: 'Sandbox de Diseño de Transmisión',
+        hero_desc: 'Diseña tus capas de transmisión y exporta la configuración a OBS JSON.',
+        input_heading: '1. Elementos de Escena',
+        add_gameplay: 'Agregar Cuadro de Gameplay',
+        add_webcam: 'Agregar Superposición de Webcam',
+        add_chat: 'Agregar Cuadro de Chat',
+        add_alert: 'Agregar Banner de Alertas',
+        export_btn: 'Exportar JSON de OBS',
+        summary_title: 'Lienzo de Transmisión 1920x1080',
+        tip_title: 'Regla de Superposición',
+        tip_desc: 'Mantén tu webcam en las esquinas donde haya menos acción.'
+      },
+      fr: {
+        hero_title: "Sandbox de Mise en Page de Stream",
+        hero_desc: "Concevez vos superpositions de diffusion et exportez votre configuration au format OBS JSON.",
+        input_heading: "1. Éléments de Scène",
+        add_gameplay: "Ajouter la Capture de Jeu",
+        add_webcam: "Ajouter la Webcam",
+        add_chat: "Ajouter le Chat en Direct",
+        add_alert: "Ajouter une Bannière d'Alerte",
+        export_btn: "Exporter le JSON OBS",
+        summary_title: "Canevas de Diffusion 1920x1080",
+        tip_title: "Règle de Superposition",
+        tip_desc: "Gardez toujours votre webcam dans les coins où l'action de jeu est la moins active."
+      }
+    };
+
+    let activeElements = [];
+
+    function addElement(name, classList, icon) {
+      document.getElementById('canvasPlaceholder').classList.add('hidden');
+      
+      const workspace = document.getElementById('canvasWorkspace');
+      const item = document.createElement('div');
+      item.className = `${classList} rounded-xl p-3 flex flex-col justify-between shadow-lg relative cursor-move select-none animate-fade-in`;
+      item.innerHTML = `
+        <div class="flex justify-between items-center text-[10px] font-bold text-slate-300 opacity-80">
+          <span>${icon} ${name}</span>
+          <button onclick="this.parentElement.parentElement.remove(); updateCount();" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="text-center text-[10px] text-slate-500">[Scene Layer]</div>
+      `;
+
+      workspace.appendChild(item);
+      activeElements.push({ name: name, type: icon });
+      updateCount();
+    }
+
+    function updateCount() {
+      const workspace = document.getElementById('canvasWorkspace');
+      const count = workspace.querySelectorAll('.cursor-move').length;
+      document.getElementById('elementsCountBadge').innerText = `${count} Elements Active`;
+      if (count === 0) {
+        document.getElementById('canvasPlaceholder').classList.remove('hidden');
+      }
+    }
+
+    function exportOBSJson() {
+      const sceneData = {
+        scene_name: "CreatorOS Custom Broadcast Scene",
+        resolution: { width: 1920, height: 1080 },
+        sources: activeElements,
+        engine: "CreatorOS Stream Lab"
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(sceneData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "creator-os-obs-scene.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS — Production Cost-Per-Minute ROI Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl accent-gradient flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/20">C</div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">Creator<span class="text-indigo-400">OS</span></span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-medium">ROI Efficiency Lab</span>
+        </div>
+      </a>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <select id="languageSelector" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="en">🌐 English</option>
+          <option value="es">🌐 Español</option>
+          <option value="fr">🌐 Français</option>
+        </select>
+        <select id="currencySelector" onchange="updateRoiCalc()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 outline-none font-semibold cursor-pointer">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="ZAR">ZAR (R)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+        <span data-i18n="hero_title">Production Cost-Per-Minute & ROI Tracker</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base" data-i18n="hero_desc">
+        Calculate your true operational cost per production minute by weighing time investment against actual video revenue.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Inputs Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="input_heading">1. Time & Cost Inputs</span>
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="hours_spent">Total Hours Spent (Scripting, Filming, Editing)</label>
+            <input type="number" id="hoursSpentInput" value="18" oninput="updateRoiCalc()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="hourly_wage">Desired Self-Wage / Hourly Value ($)</label>
+            <input type="number" id="hourlyWageInput" value="35" oninput="updateRoiCalc()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="video_length">Final Video Length (Minutes)</label>
+            <input type="number" id="videoLengthInput" value="12" oninput="updateRoiCalc()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="video_revenue">Total Video Revenue (AdSense + Sponsors) ($)</label>
+            <input type="number" id="videoRevenueInput" value="950" oninput="updateRoiCalc()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 outline-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl border-indigo-500/35 sticky top-20 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="summary_title">Production Efficiency Audit</span>
+            <span id="roiBadge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">PROFITABLE ROI</span>
+          </div>
+
+          <div class="text-center py-6 bg-slate-900/60 rounded-2xl border border-slate-800">
+            <div class="text-xs text-slate-400 mb-1" data-i18n="cpm_label">True Cost Per Production Minute</div>
+            <div id="cpmDisplay" class="text-5xl font-black tracking-tight text-indigo-300 mb-2">$52.50</div>
+            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider"><span data-i18n="net_profit_label">Net Production Profit:</span> <span id="netProfitDisplay" class="text-emerald-400 font-bold">+$320.00</span></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="total_cost_label">Total Production Investment</div>
+              <div id="totalCostDisplay" class="text-xl font-bold text-amber-400 mt-1">$630.00</div>
+            </div>
+            <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+              <div class="text-[10px] uppercase font-bold text-slate-500" data-i18n="roi_multiplier_label">Return on Investment (ROI)</div>
+              <div id="roiMultiplierDisplay" class="text-xl font-bold text-emerald-400 mt-1">1.51x</div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/20 text-xs text-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-lightbulb text-amber-400 text-base mt-0.5"></i>
+            <div>
+              <p class="font-bold" data-i18n="tip_title">Workflow Efficiency Tip</p>
+              <p class="text-[11px] text-indigo-300 mt-0.5" data-i18n="tip_desc">If your ROI multiplier dips below 1.0x, consider template-driven editing or repurposing long-form assets into short-form formats to reduce time input costs.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const i18n = {
+      en: {
+        hero_title: 'Production Cost-Per-Minute & ROI Tracker',
+        hero_desc: 'Calculate your true operational cost per production minute by weighing time investment against actual video revenue.',
+        input_heading: '1. Time & Cost Inputs',
+        hours_spent: 'Total Hours Spent (Scripting, Filming, Editing)',
+        hourly_wage: 'Desired Self-Wage / Hourly Value ($)',
+        video_length: 'Final Video Length (Minutes)',
+        video_revenue: 'Total Video Revenue (AdSense + Sponsors) ($)',
+        summary_title: 'Production Efficiency Audit',
+        cpm_label: 'True Cost Per Production Minute',
+        net_profit_label: 'Net Production Profit:',
+        total_cost_label: 'Total Production Investment',
+        roi_multiplier_label: 'Return on Investment (ROI)',
+        tip_title: 'Workflow Efficiency Tip',
+        tip_desc: 'If your ROI multiplier dips below 1.0x, consider template-driven editing or repurposing long-form assets into short-form formats to reduce time input costs.'
+      },
+      es: {
+        hero_title: 'Rastreador de Costo por Minuto y ROI de Producción',
+        hero_desc: 'Calcula tu costo operativo por minuto de producción comparando tiempo e ingresos.',
+        input_heading: '1. Inversión de Tiempo y Costos',
+        hours_spent: 'Horas Totales Invertidas',
+        hourly_wage: 'Valor por Hora Deseado ($)',
+        video_length: 'Duración del Video (Minutos)',
+        video_revenue: 'Ingresos Totales del Video ($)',
+        summary_title: 'Auditoría de Eficiencia',
+        cpm_label: 'Costo Real por Minuto de Producción',
+        net_profit_label: 'Beneficio Neto:',
+        total_cost_label: 'Inversión Total de Producción',
+        roi_multiplier_label: 'Retorno de Inversión (ROI)',
+        tip_title: 'Consejo de Eficiencia',
+        tip_desc: 'Si el multiplicador de ROI cae por debajo de 1.0x, optimiza tu proceso de edición.'
+      },
+      fr: {
+        hero_title: 'Suivi du Coût par Minute & ROI de Production',
+        hero_desc: 'Calculez votre coût par minute de production en comparant le temps investi aux revenus générés.',
+        input_heading: '1. Entrées de Temps & Coûts',
+        hours_spent: 'Heures Totales Passées (Écriture, Tournage, Montage)',
+        hourly_wage: 'Valeur Horaire Souhaitée ($)',
+        video_length: 'Durée Finale de la Vidéo (Minutes)',
+        video_revenue: 'Revenu Total de la Vidéo (AdSense + Sponsors) ($)',
+        summary_title: 'Audit d’Efficacité de Production',
+        cpm_label: 'Vrai Coût par Minute de Production',
+        net_profit_label: 'Bénéfice Net de Production :',
+        total_cost_label: 'Investissement Total de Production',
+        roi_multiplier_label: 'Retour sur Investissement (ROI)',
+        tip_title: "Conseil d'Efficacité",
+        tip_desc: "Si votre multiplicateur de ROI descend sous 1.0x, automatisez vos montages ou recyclez vos formats."
+      }
+    };
+
+    const currencyRates = {
+      USD: { symbol: '$', rate: 1.0 },
+      EUR: { symbol: '€', rate: 0.92 },
+      GBP: { symbol: '£', rate: 0.79 },
+      ZAR: { symbol: 'R', rate: 18.50 }
+    };
+
+    function updateRoiCalc() {
+      const hours = parseFloat(document.getElementById('hoursSpentInput').value) || 0;
+      const wage = parseFloat(document.getElementById('hourlyWageInput').value) || 0;
+      const minutes = parseFloat(document.getElementById('videoLengthInput').value) || 1;
+      const revenue = parseFloat(document.getElementById('videoRevenueInput').value) || 0;
+
+      const totalInvestment = hours * wage;
+      const costPerMinute = minutes > 0 ? (totalInvestment / minutes) : 0;
+      const netProfit = revenue - totalInvestment;
+      const roiMultiplier = totalInvestment > 0 ? (revenue / totalInvestment).toFixed(2) : 0;
+
+      const currKey = document.getElementById('currencySelector').value;
+      const curr = currencyRates[currKey] || currencyRates.USD;
+      const c = curr.symbol;
+      const r = curr.rate;
+
+      document.getElementById('cpmDisplay').innerText = `${c}${(costPerMinute * r).toFixed(2)}`;
+      document.getElementById('totalCostDisplay').innerText = `${c}${Math.round(totalInvestment * r).toLocaleString()}`;
+      document.getElementById('netProfitDisplay').innerText = `${netProfit >= 0 ? '+' : ''}${c}${Math.round(netProfit * r).toLocaleString()}`;
+      document.getElementById('roiMultiplierDisplay').innerText = `${roiMultiplier}x`;
+
+      const badge = document.getElementById('roiBadge');
+      const profitDisplay = document.getElementById('netProfitDisplay');
+
+      if (netProfit >= 0) {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold";
+        badge.innerText = "PROFITABLE ROI";
+        profitDisplay.className = "text-emerald-400 font-bold";
+      } else {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-semibold";
+        badge.innerText = "UNPROFITABLE TIME SINK";
+        profitDisplay.className = "text-red-400 font-bold";
+      }
+    }
+
+    function changeLanguage(langKey) {
+      const dict = i18n[langKey] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) element.innerText = dict[key];
+      });
+      localStorage.setItem('creator_os_lang', langKey);
+    }
+
+    window.onload = function() {
+      const savedLang = localStorage.getItem('creator_os_lang') || 'en';
+      document.getElementById('languageSelector').value = savedLang;
+      changeLanguage(savedLang);
+      updateRoiCalc();
+    };
+  </script>
+</body>
+</html>
