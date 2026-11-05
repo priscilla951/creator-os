@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator OS — Financial Calculators & Tools for Digital Creators</title>
+    <link rel="canonical" href="https://priscilla951.github.io/creator-os/">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-22PK32RDLT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-22PK32RDLT');
+    </script>
+
+    <!-- Open Graph / Social Media Metadata -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://priscilla951.github.io/creator-os/">
+    <meta property="og:title" content="Creator OS — Financial Calculators & Tools for Digital Creators">
+    <meta property="og:description" content="Access free financial calculators, revenue projection tools, and multi-language business workflows built specifically for digital creators.">
+    <meta property="og:image" content="https://priscilla951.github.io/creator-os/preview-image.png">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://priscilla951.github.io/creator-os/">
+    <meta name="twitter:title" content="Creator OS — Financial Calculators & Tools for Digital Creators">
+    <meta name="twitter:description" content="Access free financial calculators, revenue projection tools, and multi-language business workflows built specifically for digital creators.">
+    <meta name="twitter:image" content="https://priscilla951.github.io/creator-os/preview-image.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white pb-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
+        
+        <!-- Creator OS Header Style -->
+        <header class="flex items-center justify-between bg-slate-900/90 border border-slate-800 p-4 rounded-2xl shadow-xl mb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 via-indigo-600 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <span class="text-white font-black text-lg">C</span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-lg font-black tracking-tight text-white" data-i18n="title">CreatorOS</h1>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">60/60</span>
+                    </div>
+                    <p class="text-xs text-slate-400 font-medium" data-i18n="subtitle">Complete Operational Suite</p>
+                </div>
+            </div>
+
+            <!-- Language Dropdown -->
+            <div class="flex items-center gap-1.5 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl shadow-inner">
+                <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+                <select id="languageSelect" onchange="changeLanguage(this.value)" class="bg-transparent text-xs text-slate-200 font-semibold focus:outline-none cursor-pointer">
+                    <option value="en" class="bg-slate-900 text-white">English</option>
+                    <option value="es" class="bg-slate-900 text-white">Español</option>
+                    <option value="fr" class="bg-slate-900 text-white">Français</option>
+                    <option value="pt" class="bg-slate-900 text-white">Português</option>
+                </select>
+            </div>
+        </header>
+
+        <!-- Attractive Explanatory Hero Banner -->
+        <div class="relative overflow-hidden bg-gradient-to-br from-indigo-950/60 via-slate-900 to-violet-950/40 border border-indigo-500/30 p-6 sm:p-8 rounded-3xl shadow-2xl mb-8 text-center">
+            <div class="absolute -top-12 -right-12 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-fuchsia-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-3">
+                <span class="w-2 h-2 rounded-full bg-indigo-400 animate-ping"></span>
+                The Ultimate Creator Toolkit
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">Supercharge Your Digital Empire</h2>
+            <p class="text-sm text-slate-300 max-w-xl mx-auto leading-relaxed" data-i18n="heroDesc">
+                Welcome to your all-in-one command center. Explore professional-grade calculators, automated contract builders, engagement trackers, and monetization engines built to scale your content and secure your revenue.
+            </p>
+        </div>
+
+        <!-- Section Banner -->
+        <div class="mb-5 px-1">
+            <h3 class="text-lg font-black text-white" data-i18n="heading">All Operational Utilities</h3>
+            <p class="text-xs text-slate-400 mt-0.5" data-i18n="desc">Tap any tool card below to launch its dedicated module instantly.</p>
+        </div>
+
+        <!-- Tool Cards Stack Matching Your Exact Filenames -->
+        <div class="grid gap-3 sm:grid-cols-1">
+            
+            <a href="youtube-retention-simulator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">YouTube Retention Simulator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Analyze audience drop-off curves and script hook pacing to maximize average view duration benchmarks.</p>
+            </a>
+
+            <a href="youtube-ab-simulator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">YouTube A/B Simulator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Simulate thumbnail and title split-test performance metrics to predict higher click-through potential.</p>
+            </a>
+
+            <a href="vtuber-puppet-animator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">VTuber Puppet Animator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Test tracking frame rates, expression triggers, and rigging parameters for virtual avatar streaming.</p>
+            </a>
+
+            <a href="voiceover-video-syncer.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Voiceover Video Syncer</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Calculate audio timing intervals and script pacing benchmarks to match video timelines perfectly.</p>
+            </a>
+
+            <a href="utm-link-builder.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">UTM Link Builder</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Generate custom campaign tracking URLs with precise source, medium, and campaign parameter tags.</p>
+            </a>
+
+            <a href="ugc-pricing-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">UGC Pricing Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Price user-generated content packages, video hooks, and usage rights for brand partnerships.</p>
+            </a>
+
+            <a href="thumbnail-contrast-inspector.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Thumbnail Contrast Inspector</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Inspect visual clarity and thumbnail readability across mobile feed display conditions.</p>
+            </a>
+
+            <a href="thumbnail-contrast-checker.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Thumbnail Contrast Checker</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Verify color separation and visual punch for high click-through rates.</p>
+            </a>
+
+            <a href="teleprompter-voice-pacer.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Teleprompter Voice Pacer</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Calibrate speech delivery velocity and word counts for seamless video recording.</p>
+            </a>
+
+            <a href="teleprompter-studio.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Teleprompter Studio</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Manage scrolling script displays, font sizes, and recording paces effortlessly.</p>
+            </a>
+
+            <a href="tax-reserve-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Tax Reserve Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Calculate exact financial percentages to set aside for quarterly tax liabilities.</p>
+            </a>
+
+            <a href="tax-expense-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Tax Expense Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Track business deductions and write-offs for accurate financial reporting.</p>
+            </a>
+
+            <a href="streamer-soundboard.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Streamer Soundboard</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Trigger audio effects and alerts instantly during live stream broadcasts.</p>
+            </a>
+
+            <a href="stream-layout-sandbox.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Stream Layout Sandbox</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Design and test web camera overlays, chat boxes, and alert widget placements.</p>
+            </a>
+
+            <a href="sponsorship-pitch-generator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Sponsorship Pitch Generator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Draft high-converting brand pitch emails and partnership proposals.</p>
+            </a>
+
+            <a href="sponsor-pipeline-crm.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Sponsor Pipeline CRM</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Track brand deals from initial outreach to contract signing and payment fulfillment.</p>
+            </a>
+
+            <a href="spatial-audio-simulator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Spatial Audio Simulator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Test immersive 3D sound positioning and headphone audio staging parameters.</p>
+            </a>
+
+            <a href="safe-zone-overlay-tester.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Safe Zone Overlay Tester</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Ensure important video UI elements avoid mobile platform cropping and interface buttons.</p>
+            </a>
+
+            <a href="revenue-diversification-audit.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Revenue Diversification Audit</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Audit income streams to protect your business against platform monetization shifts.</p>
+            </a>
+
+            <a href="retention-speed-ramper.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Retention Speed Ramper</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Calculate pacing adjustments to eliminate dead air and keep viewer retention high.</p>
+            </a>
+
+            <a href="repurposing-roi-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Repurposing ROI Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Measure the time-saving return on investment of turning long-form videos into shorts.</p>
+            </a>
+
+            <a href="rate-card-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Rate Card Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Build professional pricing matrices for sponsored deliverables and content packages.</p>
+            </a>
+
+            <a href="production-roi-tracker.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Production ROI Tracker</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Track time and financial investments against final video earnings.</p>
+            </a>
+
+            <a href="product-margin-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Product Margin Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Calculate net margins on digital products and merchandise sales.</p>
+            </a>
+
+            <a href="product-launch-simulator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Product Launch Simulator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Forecast sales trajectories and funnel conversion outcomes for digital product drops.</p>
+            </a>
+
+            <a href="platform-payout-simulator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Platform Payout Simulator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Simulate net earnings after platform revenue shares and processing fees.</p>
+            </a>
+
+            <a href="opportunity-cost-estimator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Opportunity Cost Estimator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Evaluate whether taking on specific brand deals or projects is truly profitable.</p>
+            </a>
+
+            <a href="newsletter-revenue-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Newsletter Revenue Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Project sponsor earnings and paid subscription revenue for email newsletters.</p>
+            </a>
+
+            <a href="multicam-workspace.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Multicam Workspace</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Coordinate multi-angle video recording sync points and timeline assets.</p>
+            </a>
+
+            <a href="mic-frequency-visualizer.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Mic Frequency Visualizer</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Test audio input frequencies and microphone clarity levels in real time.</p>
+            </a>
+
+            <a href="media-kit-builder.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Media Kit Builder</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Compile professional stats, audience demographics, and past campaign results for sponsors.</p>
+            </a>
+
+            <a href="master-hook-generator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Master Hook Generator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Generate high-retention video opening hooks designed to stop the scroll instantly.</p>
+            </a>
+
+            <a href="link-in-bio-generator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Link in Bio Generator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Create custom landing page destinations for social media profile links.</p>
+            </a>
+
+            <a href="lead-magnet-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Lead Magnet Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Estimate conversion value and email opt-in performance metrics.</p>
+            </a>
+
+            <a href="invoice-tracker.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Invoice Tracker</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Monitor pending payments, client invoicing timelines, and cash flow status.</p>
+            </a>
+
+            <a href="instant-replay-buffer.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Instant Replay Buffer</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Manage rolling video memory buffers for quick live-stream highlight capturing.</p>
+            </a>
+
+            <a href="fair-use-risk-checker.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Fair Use Risk Checker</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Evaluate copyrighted asset inclusion risks and commentary transformativeness.</p>
+            </a>
+
+            <a href="face-lighting-simulator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Face Lighting Simulator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Test studio key light and fill light angles for clean video production aesthetics.</p>
+            </a>
+
+            <a href="expense-writeoff-tracker.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Expense Writeoff Tracker</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Record business deductions, gear purchases, and software subscriptions.</p>
+            </a>
+
+            <a href="exclusivity-fee-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Exclusivity Fee Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Calculate fair compensation when brands request category exclusivity clauses.</p>
+            </a>
+
+            <a href="deliverables-tracker.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Deliverables Tracker</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Keep track of sponsored video assets, posting schedules, and client checklists.</p>
+            </a>
+
+            <a href="contract-invoice-generator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Contract & Invoice Generator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Draft legal partnership agreements paired with itemized client billing sheets.</p>
+            </a>
+
+            <a href="content-repurposing-roi.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Content Repurposing ROI</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Measure audience reach expansion achieved by slicing long videos into clips.</p>
+            </a>
+
+            <a href="content-repurposing-planner.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Content Repurposing Planner</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Map out multi-platform content distribution schedules from a single video source.</p>
+            </a>
+
+            <a href="color-accessibility-tester.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Color Accessibility Tester</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Test contrast ratios and visual legibility for graphics and brand overlays.</p>
+            </a>
+
+            <a href="cold-outreach-engine.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Cold Outreach Engine</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Craft customized partnership inquiry templates to secure brand sponsorships.</p>
+            </a>
+
+            <a href="client-invoice-generator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Client Invoice Generator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Generate clean, professional payment billing invoices for digital creator services.</p>
+            </a>
+
+            <a href="channel-valuation-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Channel Valuation Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Estimate total creator channel worth using engagement depth and revenue multipliers.</p>
+            </a>
+
+            <a href="carousel-splitter.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Carousel Splitter</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Slice vertical infographics into swipeable multi-platform carousel slide files.</p>
+            </a>
+
+            <a href="burnout-runway-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Burnout Runway Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Measure workload density against rest thresholds for sustainable production.</p>
+            </a>
+
+            <a href="burn-rate-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Burn Rate Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Monitor operational overhead and project monthly capital depletion timelines.</p>
+            </a>
+
+            <a href="brand-deal-engine.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Brand Deal Engine</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Generate pricing quotations and manage multi-variable sponsorship negotiations.</p>
+            </a>
+
+            <a href="bio-link-rotator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Bio Link Rotator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Rotate dynamic destination links seamlessly from a single profile URL.</p>
+            </a>
+
+            <a href="affiliate-roi-calculator.html" class="group block p-4 bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/60 rounded-2xl transition-all shadow-lg">
+                <div class="flex items-center justify-between mb-1">
+                    <h4 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Affiliate ROI Calculator</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Module</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2">Calculate net commission returns and evaluate promotion campaign profitability.</p>
+            </a>
+
+        </div>
+
+        <!-- Privacy Notice / Footer Section -->
+        <footer class="mt-12 pt-6 border-t border-slate-800 text-center text-xs text-slate-500 space-y-2">
+            <p>&copy; 2026 Creator OS. All calculations and operations run locally in your browser for absolute privacy and security.</p>
+            <p>No personal data, inputs, or sensitive financial information are ever stored, transmitted, or tracked on external servers.</p>
+        </footer>
+    </div>
+
+    <!-- Translation Script Logic -->
+    <script>
+        const translations = {
+            en: { 
+                title: "CreatorOS", 
+                subtitle: "Complete Operational Suite", 
+                heroDesc: "Welcome to your all-in-one command center. Explore professional-grade calculators, automated contract builders, engagement trackers, and monetization engines built to scale your content and secure your revenue.",
+                heading: "All Operational Utilities", 
+                desc: "Tap any tool card below to launch its dedicated module instantly." 
+            },
+            es: { 
+                title: "CreatorOS", 
+                subtitle: "Suite Operativa Completa", 
+                heroDesc: "Bienvenido a tu centro de mando todo en uno. Explora calculadoras de nivel profesional, creadores de contratos automáticos y motores de monetización para escalar tu contenido.",
+                heading: "Todas las Utilidades Operativas", 
+                desc: "Toca cualquier tarjeta para abrir su módulo al instante." 
+            },
+            fr: { 
+                title: "CreatorOS", 
+                subtitle: "Suite Opérationnelle Complète", 
+                heroDesc: "Bienvenue dans votre centre de commande tout-en-un. Explorez des outils professionnels, calculateurs et moteurs de monétisation pour développer votre audience.",
+                heading: "Tous les Utilitaires Opérationnels", 
+                desc: "Appuyez sur n'importe quelle carte pour lancer son module." 
+            },
+            pt: { 
+                title: "CreatorOS", 
+                subtitle: "Suíte Operacional Completa", 
+                heroDesc: "Bem-vindo ao seu centro de comando completo. Explore calculadoras profissionais, criadores de contratos e motores de monetização para expandir seu canal.",
+                heading: "Todos os Utilitários Operacionais", 
+                desc: "Toque em qualquer cartão para abrir o módulo dedicado." 
+            }
+        };
+
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll("[data-i18n]");
+            elements.forEach(el => {
+                const key = el.getAttribute("data-i18n");
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+        }
+    </script>
+</body>
+</html>
